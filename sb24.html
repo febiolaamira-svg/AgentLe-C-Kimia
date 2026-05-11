@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sintaks 4 • Menyajikan Hasil Karya</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --shadow: 0 20px 80px rgba(0,0,0,.55);
+      --shadow2: 0 10px 40px rgba(0,0,0,.35);
+      --r-xl: 28px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    html,body{ min-height:100%; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars, .grain, .vignette{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation: twinkle 6s ease-in-out infinite;
+    }
+
+    @keyframes twinkle{
+      0%,100%{opacity:.46}
+      50%{opacity:.66}
+    }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .vignette{
+      inset:-20%;
+      background: radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.50), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:950;
+      box-shadow: 0 10px 38px rgba(0,0,0,.28);
+    }
+
+    .brand-title{
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      margin-top:2px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .btn, .btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:850;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+
+    .btn{
+      background: rgba(255,255,255,.06);
+    }
+
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow: 0 12px 38px rgba(255,79,216,.13);
+    }
+
+    .btn:hover, .btn-primary:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.24);
+    }
+
+    main{
+      position:relative;
+      z-index:2;
+    }
+
+    .wrap{
+      padding: clamp(18px, 4vw, 46px);
+      display:flex;
+      justify-content:center;
+    }
+
+    .container{
+      width:min(1120px, 100%);
+      display:grid;
+      gap:16px;
+    }
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background: linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+    }
+
+    .hero{
+      padding:8px 0 4px;
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size: clamp(32px, 4.2vw, 54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+
+    .title .accent{
+      background: linear-gradient(90deg, var(--mag), var(--vio), var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+
+    .subtitle{
+      margin:12px 0 0;
+      max-width:860px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
+
+    .card-inner{
+      padding: clamp(18px, 2.6vw, 28px);
+    }
+
+    h2, h3{
+      margin:0 0 10px;
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+
+    h2{
+      font-size: clamp(22px, 2.4vw, 30px);
+    }
+
+    h3{
+      font-size: 18px;
+    }
+
+    .muted{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .goal-box{
+      margin-top:14px;
+      padding:16px 18px;
+      border-radius:20px;
+      background:#ffffff;
+      color:#161616;
+      border:2px solid rgba(255,79,216,.36);
+      box-shadow:
+        0 14px 46px rgba(0,0,0,.28),
+        0 0 0 6px rgba(255,79,216,.08);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .goal-box::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:10px;
+      background: linear-gradient(180deg, var(--mag), var(--vio), var(--blue));
+    }
+
+    .goal-box strong{
+      color:#6f24d9;
+    }
+
+    .goal-box p{
+      margin:0;
+      padding-left:14px;
+      line-height:1.7;
+      font-weight:650;
+    }
+
+    .step{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:14px;
+      padding:16px;
+      border-radius:20px;
+      border:1px solid rgba(255,79,216,.25);
+      background:rgba(255,79,216,.07);
+      margin-top:14px;
+    }
+
+    .num{
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background: linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.55));
+      box-shadow: 0 10px 30px rgba(255,79,216,.14);
+    }
+
+    .task-box{
+      margin-top:12px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+    }
+
+    .task-box ol, .task-box ul{
+      margin:8px 0 0 20px;
+      padding:0;
+      color:rgba(255,255,255,.78);
+      line-height:1.7;
+    }
+
+    .task-box li{
+      margin:6px 0;
+    }
+
+    .padlet-box{
+      margin-top:14px;
+      padding:18px;
+      border-radius:24px;
+      background:
+        radial-gradient(500px 220px at 0% 0%, rgba(255,79,216,.18), transparent 60%),
+        radial-gradient(500px 220px at 100% 100%, rgba(45,108,255,.16), transparent 60%),
+        rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:var(--shadow2);
+      display:grid;
+      gap:12px;
+    }
+
+    .padlet-link{
+      width:fit-content;
+    }
+    .comment-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:12px;
+    }
+
+    @media (max-width: 860px){
+      .comment-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .comment-card{
+      border-radius:18px;
+      padding:14px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(255,255,255,.78);
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .checklist{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .check-item{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.055);
+      color:rgba(255,255,255,.78);
+      line-height:1.6;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .check-item input{
+      margin-top:4px;
+      accent-color:#7c4dff;
+    }
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(102,242,165,.28);
+      background:rgba(102,242,165,.10);
+      color:rgba(255,255,255,.88);
+      line-height:1.7;
+      font-weight:800;
+    }
+
+    .result-box.show{
+      display:block;
+    }
+
+    .footer-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">4</div>
+      <div>
+        <div class="brand-title">Sintaks 4 PBL</div>
+        <div class="brand-sub">Mengembangkan dan Menyajikan Hasil Karya</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="h1.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#padlet">Buka Padlet</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+
+      <div class="pill">
+        <span class="hex"></span>
+        <span>Problem Based Learning • Present</span>
+      </div>
+
+      <section class="hero">
+        <h1 class="title">
+          📌 Mengembangkan dan <span class="accent">Menyajikan Hasil Karya</span>
+        </h1>
+
+        <p class="subtitle">
+  Pada tahap ini, setiap kelompok menyusun hasil investigasi tetapan kesetimbangan menjadi laporan mini.
+  Laporan memuat pembahasan Kc, Kp, hubungan keduanya, lalu diunggah ke Padlet untuk ditanggapi oleh kelompok lain.
+</p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🎯 Tujuan Kegiatan</h2>
+
+          <div class="goal-box">
+            <p>
+  Peserta didik mampu <strong>menyajikan hasil investigasi tetapan kesetimbangan secara runtut</strong>,
+  menjelaskan hasil perhitungan Kc, membedakan Kc dan Kp, serta menyimpulkan hubungan keduanya
+  pada reaksi kesetimbangan gas.
+</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🧭 Langkah Kegiatan</h2>
+
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <h3>Susun Laporan Mini Kelompok</h3>
+              <p class="muted">
+                Gunakan hasil perhitungan pada kegiatan sebelumnya sebagai bahan laporan.
+                Laporan dapat dibuat dalam bentuk teks, gambar, PDF, atau dokumen singkat.
+              </p>
+
+              <div class="task-box">
+                <strong>Isi laporan mini:</strong>
+                <ol>
+                  <li>Siapa nama kelompok dan anggotanya?</li>
+                  <li>Reaksi kesetimbangan apa yang sedang dibahas?</li>
+                  <li>Bagaimana rumus Kc untuk reaksi tersebut?</li>
+                  <li>Bagaimana hasil nilai Kc dari percobaan yang sudah dihitung?</li>
+                  <li>Apakah nilai Kc mendekati konstan? Jelaskan singkat.</li>
+                  <li>Apa itu Kp dan kapan digunakan?</li>
+                  <li>Apa perbedaan Kc dan Kp?</li>
+                  <li>Bagaimana hubungan Kc dan Kp?</li>
+                  <li>Apa kesimpulan kelompokmu?</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" id="padlet">
+            <div class="num">2</div>
+            <div>
+              <h3>Unggah Hasil ke Padlet</h3>
+              <p class="muted">
+  Unggah laporan mini kelompokmu pada kolom Padlet sesuai nomor kelompok.
+  Pastikan laporan memuat hasil investigasi Kc, pembahasan Kp, perbedaan Kc dan Kp,
+  serta hubungan keduanya.
+</p>
+
+              <div class="padlet-box">
+  <p class="muted" style="margin:0;">
+    Klik tombol berikut untuk membuka Padlet. Setelah terbuka, pilih kolom sesuai nomor kelompokmu,
+    lalu unggah laporan mini tentang Kc dan Kp yang sudah dibuat.
+  </p>
+
+  <a
+    class="btn-primary padlet-link"
+    href="https://padlet.com/appbeechem/galeri-hasil-investigasi-kc-dan-kp-9p4cu50awcb391rm"
+    target="_blank"
+    rel="noopener">
+    📌 Buka Padlet
+  </a>
+</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <h3>Beri Komentar pada Kelompok Lain</h3>
+              <p class="muted">
+  Setelah mengunggah laporan, baca hasil kelompok lain. Berikan minimal satu komentar
+  atau pertanyaan yang membangun berdasarkan konsep Kc, Kp, atau hubungan Kc dan Kp.
+</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>✅ Checklist Sebelum Lanjut</h2>
+          <p class="muted">
+            Centang semua bagian berikut setelah kelompokmu menyelesaikan tugas pada Padlet.
+          </p>
+
+          <div class="checklist">
+            <label class="check-item">
+              <input type="checkbox" class="check" />
+              <span>Laporan mini sudah memuat reaksi kesetimbangan dan rumus Kc.</span>
+            </label>
+
+            <label class="check-item">
+              <input type="checkbox" class="check" />
+              <span>Laporan mini sudah memuat ringkasan nilai Kc dari setiap percobaan.</span>
+            </label>
+
+            <label class="check-item">
+              <input type="checkbox" class="check" />
+              <span>Kelompok sudah menuliskan analisis pola nilai Kc.</span>
+            </label>
+
+            <label class="check-item">
+              <input type="checkbox" class="check" />
+              <span>Kelompok sudah mengunggah laporan mini ke Padlet.</span>
+            </label>
+
+            <label class="check-item">
+              <input type="checkbox" class="check" />
+              <span>Kelompok sudah memberi komentar atau pertanyaan pada hasil kelompok lain.</span>
+            </label>
+          </div>
+
+          <div id="hasilChecklist" class="result-box">
+            ✅ Bagus! Kelompokmu telah menyelesaikan tahap mengembangkan dan menyajikan hasil karya.
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="sb23.html">⬅ Kembali ke Investigasi</a>
+        <a class="btn-primary" href="sb25.html">Lanjut ke Quiz ➜</a>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const checks = document.querySelectorAll(".check");
+    const hasilChecklist = document.getElementById("hasilChecklist");
+
+    checks.forEach((check) => {
+      check.addEventListener("change", cekChecklist);
+    });
+
+    let dataSB24SudahTersimpan = false;
+
+function cekChecklist(){
+  const semuaTercentang = Array.from(checks).every((item) => item.checked);
+
+  if(semuaTercentang){
+    hasilChecklist.classList.add("show");
+
+    if(!dataSB24SudahTersimpan){
+      simpanKeDataSB2({
+        halaman: "sb24",
+        judul: "Mengembangkan dan Menyajikan Hasil Karya",
+        skor: 100,
+        status: "checklist selesai",
+        ringkasan: "Kelompok menyelesaikan laporan mini, unggah Padlet, dan komentar kelompok lain.",
+        jawaban: {
+          laporanMemuatReaksiDanKc: true,
+          laporanMemuatNilaiKc: true,
+          analisisPolaKc: true,
+          unggahPadlet: true,
+          komentarKelompokLain: true
+        }
+      });
+
+      dataSB24SudahTersimpan = true;
+    }
+  } else {
+    hasilChecklist.classList.remove("show");
+  }
+}
+  </script>
+  <script>
+const SB2_STORAGE_KEY = "dataAdminGuruSB2";
+
+function ambilIdentitasSB2(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB2(payload){
+  const identitas = ambilIdentitasSB2(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB2_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB2_STORAGE_KEY, JSON.stringify(dataLama));
+
+  return dataBaru;
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 2,
+    pageKey: "sb24",
+    pageTitle: "Sub Bab 2 — Menyajikan Hasil Karya"
+  });
+});
+</script>
+</body>
+</html>

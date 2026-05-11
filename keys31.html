@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB31 — Orientasi Le Chatelier</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .choice {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      margin-top: 10px;
+    }
+
+    .choice.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+    }
+
+    .choice.incorrect {
+      border-color: rgba(239,68,68,.22);
+      background: rgba(239,68,68,.08);
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 3</b>
+          <span>keys31.html • Orientasi Masalah Le Chatelier</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb3.html">📊 Data Sub Bab 3</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan panduan orientasi Sub Bab 3. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Konsep Utama SB31</h2>
+
+        <div class="answer">
+          <p>
+            Asas Le Chatelier menyatakan bahwa jika suatu sistem kesetimbangan diberi gangguan,
+            misalnya perubahan konsentrasi, tekanan, volume, atau suhu, maka sistem akan bergeser ke arah
+            yang mengurangi atau meminimalkan pengaruh gangguan tersebut.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Sistem yang diamati</div>
+          <p>
+            <span class="formula">[Co(H₂O)₆]<sup>2+</sup> + 4Cl<sup>-</sup> ⇌ [CoCl₄]<sup>2-</sup> + 6H₂O</span>
+          </p>
+          <ul>
+            <li><b>[Co(H₂O)₆]<sup>2+</sup></b> dominan berwarna <b>merah muda</b>.</li>
+            <li><b>[CoCl₄]<sup>2-</sup></b> dominan berwarna <b>biru</b>.</li>
+            <li>Perubahan warna menunjukkan adanya pergeseran posisi kesetimbangan.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Pertanyaan Pemantik</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Pertanyaan</th>
+              <th>Jawaban Valid</th>
+              <th>Pembahasan Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Apa yang menyebabkan larutan berubah dari merah muda menjadi biru?</td>
+              <td>Kesetimbangan bergeser ke kanan sehingga spesies biru [CoCl₄]<sup>2-</sup> lebih dominan.</td>
+              <td>Warna biru menandakan terbentuk lebih banyak kompleks tetrachlorocobaltate(II).</td>
+            </tr>
+            <tr>
+              <td>Jika ion Cl<sup>-</sup> ditambahkan, ke arah mana kesetimbangan bergeser?</td>
+              <td>Bergeser ke kanan, ke arah pembentukan [CoCl₄]<sup>2-</sup>.</td>
+              <td>Karena Cl<sup>-</sup> adalah reaktan, penambahan Cl<sup>-</sup> membuat sistem mengonsumsi Cl<sup>-</sup> dengan bergeser ke kanan.</td>
+            </tr>
+            <tr>
+              <td>Jika ion Cl<sup>-</sup> dikurangi, bagaimana warna yang mungkin terjadi?</td>
+              <td>Kesetimbangan bergeser ke kiri dan warna cenderung kembali merah muda.</td>
+              <td>Sistem berusaha mengganti ion Cl<sup>-</sup> yang berkurang dengan menguraikan [CoCl₄]<sup>2-</sup>.</td>
+            </tr>
+            <tr>
+              <td>Bagaimana perubahan suhu memengaruhi arah pergeseran?</td>
+              <td>Suhu dapat menggeser kesetimbangan ke arah reaksi endoterm atau eksoterm, bergantung pada sifat reaksinya.</td>
+              <td>Untuk sistem kobalt klorida, pemanasan umumnya menggeser ke arah biru, sedangkan pendinginan menggeser ke arah merah muda.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Jawaban Sementara yang Benar</h2>
+
+        <p class="muted">
+          Pada halaman siswa, semua pilihan jawaban sementara berikut dapat dianggap benar sebagai hipotesis awal,
+          asalkan siswa memberi alasan yang logis berdasarkan Asas Le Chatelier.
+        </p>
+
+        <div class="choice correct">
+          <h3>✅ Jika ion Cl⁻ bertambah, kesetimbangan kemungkinan bergeser ke arah larutan biru.</h3>
+          <p>
+            Benar. Penambahan Cl⁻ menambah konsentrasi reaktan di sisi kiri.
+            Sistem akan mengurangi gangguan tersebut dengan mengonsumsi Cl⁻, sehingga kesetimbangan bergeser ke kanan
+            membentuk lebih banyak [CoCl₄]²⁻ yang berwarna biru.
+          </p>
+        </div>
+
+        <div class="choice correct">
+          <h3>✅ Jika ion Cl⁻ berkurang, kesetimbangan kemungkinan bergeser ke arah larutan merah muda.</h3>
+          <p>
+            Benar. Ketika Cl⁻ berkurang, sistem akan bergeser ke kiri untuk menghasilkan kembali komponen di sisi kiri.
+            Akibatnya, [Co(H₂O)₆]²⁺ lebih dominan dan warna larutan cenderung merah muda.
+          </p>
+        </div>
+
+        <div class="choice correct">
+          <h3>✅ Perubahan suhu kemungkinan dapat mengubah arah pergeseran kesetimbangan.</h3>
+          <p>
+            Benar. Suhu memengaruhi kesetimbangan karena sistem akan bergeser ke arah yang menyerap atau melepaskan kalor
+            untuk mengurangi perubahan suhu yang diberikan.
+          </p>
+        </div>
+
+        <div class="choice correct">
+          <h3>✅ Perubahan warna menunjukkan adanya perubahan komposisi zat dalam sistem setimbang.</h3>
+          <p>
+            Benar. Warna merah muda atau biru menunjukkan spesies kompleks yang lebih dominan.
+            Jadi perubahan warna menjadi tanda bahwa komposisi zat dalam sistem mengalami perubahan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Alasan Siswa yang Ideal</h2>
+
+        <div class="answer">
+          <h3>Contoh jawaban lengkap</h3>
+          <p>
+            Menurut Asas Le Chatelier, jika sistem kesetimbangan diberi gangguan, sistem akan bergeser
+            untuk mengurangi pengaruh gangguan tersebut. Pada sistem
+            [Co(H₂O)₆]²⁺ + 4Cl⁻ ⇌ [CoCl₄]²⁻ + 6H₂O, penambahan ion Cl⁻ akan membuat sistem bergeser ke kanan
+            karena Cl⁻ berada di sisi reaktan. Pergeseran ke kanan menghasilkan lebih banyak [CoCl₄]²⁻ yang berwarna biru.
+            Jika ion Cl⁻ dikurangi, sistem bergeser ke kiri sehingga [Co(H₂O)₆]²⁺ lebih dominan dan warna larutan menjadi merah muda.
+            Perubahan suhu juga dapat memengaruhi arah pergeseran karena sistem akan menyesuaikan diri terhadap perubahan kalor.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Standar Penilaian Guru</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Siswa memilih jawaban yang sesuai dan mampu menjelaskan hubungan antara penambahan/pengurangan Cl⁻,
+              arah pergeseran, warna larutan, dan Asas Le Chatelier.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Siswa memilih jawaban yang benar, tetapi alasan masih singkat atau belum menghubungkan secara jelas
+              antara ion Cl⁻, arah pergeseran, dan warna.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Siswa hanya menebak warna tanpa menjelaskan arah pergeseran kesetimbangan atau belum memahami peran Cl⁻
+              dalam persamaan reaksi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB31</h2>
+
+        <div class="answer">
+          <p>
+            Kunci utama SB31 adalah memahami bahwa perubahan warna pada sistem kobalt klorida terjadi karena
+            pergeseran kesetimbangan. Penambahan ion Cl⁻ menggeser kesetimbangan ke kanan sehingga larutan menjadi biru.
+            Pengurangan ion Cl⁻ menggeser kesetimbangan ke kiri sehingga larutan menjadi merah muda.
+            Perubahan suhu juga dapat memengaruhi arah pergeseran kesetimbangan sesuai Asas Le Chatelier.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="h1.html">⬅ Kembali ke Peta</a>
+          <div>
+            <a class="btn blue" href="datasb3.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys32.html">Lanjut Kunci SB32 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

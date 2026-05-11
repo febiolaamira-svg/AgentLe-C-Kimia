@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 3 • Mengorganisasikan Peserta Didik</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --orange:#ff8a00;
+      --red:#ff5c8a;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+      --line:rgba(255,255,255,.14);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1180px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:940px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+    @media(max-width:900px){.grid-2{grid-template-columns:1fr;}}
+
+    .white-box{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.32);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .white-box h3,.white-box h2{color:#111827;}
+    .white-box p{margin:8px 0 0; color:#374151; font-weight:650;}
+
+    .saved-box{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(102,242,165,.35);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .saved-box h3{color:#15803d;}
+    .saved-list{margin:10px 0 0; padding-left:20px;}
+    .saved-list li{margin:6px 0; font-weight:700;}
+    .empty-note{color:#7c2d12; background:#fff7ed; border:1px solid #fdba74; padding:12px; border-radius:16px; font-weight:800;}
+
+    .group-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    @media(max-width:950px){.group-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:520px){.group-grid{grid-template-columns:1fr;}}
+
+    .group-card{
+      border:2px solid rgba(255,79,216,.55);
+      background:linear-gradient(135deg, rgba(255,79,216,.22), rgba(124,77,255,.24));
+      border-radius:22px;
+      padding:18px 14px;
+      min-height:105px;
+      text-align:center;
+      cursor:pointer;
+      transition:transform .12s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease;
+      display:grid;
+      place-items:center;
+      gap:8px;
+      color:#ffffff;
+      box-shadow:0 12px 32px rgba(124,77,255,.18);
+    }
+    .group-card:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.75); background:linear-gradient(135deg, rgba(255,79,216,.42), rgba(124,77,255,.42)); box-shadow:0 16px 42px rgba(255,79,216,.24);}
+    .group-card.selected{border-color:var(--green); background:linear-gradient(135deg, rgba(255,79,216,.60), rgba(124,77,255,.62)); box-shadow:0 0 0 5px rgba(102,242,165,.16), 0 18px 48px rgba(124,77,255,.28);}
+    .group-num{font-size:22px; font-weight:950;}
+    .group-sub{display:none;}
+
+    .role-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.role-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:520px){.role-grid{grid-template-columns:1fr;}}
+    .role-card{
+      padding:14px;
+      border-radius:18px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(45,108,255,.22);
+      line-height:1.6;
+      font-weight:700;
+    }
+    .role-card strong{color:#1d4ed8; display:block; margin-bottom:4px;}
+
+    .steps{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+    .step{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:12px;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.13);
+      line-height:1.65;
+    }
+    .num{
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.82));
+      font-weight:950;
+      box-shadow:0 10px 30px rgba(255,79,216,.14);
+    }
+
+    .resource-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.resource-grid{grid-template-columns:1fr;}}
+    .resource-card{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      border:2px solid rgba(124,77,255,.28);
+      padding:18px;
+      box-shadow:var(--shadow2);
+      display:grid;
+      gap:12px;
+      align-content:start;
+    }
+    .resource-card h3{color:#111827; margin:0;}
+    .resource-card p{color:#374151; margin:0; line-height:1.65; font-weight:650;}
+    .resource-card .btn,.resource-card .btn-primary{width:max-content;}
+
+    .resource-card .btn-primary{
+      background:linear-gradient(135deg, #4c1d95, #1e3a8a);
+      color:#ffffff;
+      border:2px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 26px rgba(30,58,138,.28);
+    }
+
+    .resource-card .btn-primary:hover,
+    .resource-card .btn-primary:focus,
+    .resource-card .btn-primary:active,
+    .resource-card .btn-primary:visited{
+      background:linear-gradient(135deg, #3b0764, #172554);
+      color:#ffffff;
+      border-color:rgba(255,255,255,.35);
+      text-decoration:none;
+    }
+
+    .video-wrap{
+      margin-top:4px;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.12);
+      overflow:hidden;
+      background:#111827;
+      aspect-ratio:16/9;
+      box-shadow:0 12px 32px rgba(15,23,42,.18);
+    }
+
+    .handout-wrap{
+      margin-top:4px;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.12);
+      overflow:hidden;
+      background:#ffffff;
+      height:620px;
+      box-shadow:0 12px 32px rgba(15,23,42,.18);
+    }
+
+    .handout-wrap iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+      background:#ffffff;
+    }
+
+    iframe{width:100%; height:100%; border:0; display:block;}
+
+    .prediction-box{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.28);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 14px 36px rgba(15,23,42,.15);
+    }
+
+    .prediction-card{
+  overflow:visible;
+}
+
+.prediction-box{
+  position:relative;
+  overflow:visible;
+}
+
+    .field-group{
+      display:grid;
+      gap:8px;
+    }
+
+    .field-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#312e81;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .field-label span{
+      width:24px;
+      height:24px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color:#ffffff;
+      background:linear-gradient(135deg, #ff4fd8, #7c4dff);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .field-help{
+      margin:0;
+      color:#4b5563;
+      font-size:13px;
+      line-height:1.55;
+      font-weight:650;
+    }
+
+    .input-line,.textarea-box{
+      width:100%;
+      border-radius:18px;
+      padding:14px 15px;
+      border:2px solid #c7d2fe;
+      background:#f9fafb;
+      color:#111827;
+      font-family:inherit;
+      font-weight:700;
+      outline:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+    }
+    .textarea-box{min-height:190px; resize:vertical; line-height:1.65;}
+    .input-line::placeholder,.textarea-box::placeholder{color:#6b7280; font-weight:650;}
+    .input-line:focus,.textarea-box:focus{border-color:#7c4dff; background:#ffffff; box-shadow:0 0 0 5px rgba(124,77,255,.15);}
+
+    .feedback{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(102,242,165,.28);
+      background:rgba(102,242,165,.10);
+      color:#d8ffe8;
+      line-height:1.6;
+      font-weight:850;
+    }
+
+    .footer-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .prediction-box{
+  position: relative;
+  overflow: visible;
+}
+
+.prediction-decoration{
+  position:absolute;
+  right:-200px;   /* makin negatif = makin keluar ke kanan */
+  top:200px;      /* naik/turun gambar */
+  width:250px;    /* ukuran gambar */
+  z-index:5;
+  pointer-events:none;
+  filter:drop-shadow(0 14px 24px rgba(0,0,0,.25));
+  animation:predFloat 3.8s ease-in-out infinite;
+}
+
+@keyframes predFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+
+@media(max-width: 900px){
+  .prediction-decoration{
+    width: 120px;
+    right: -28px;
+    top: -18px;
+    opacity: .95;
+  }
+}
+
+@media(max-width: 700px){
+  .prediction-decoration{
+    width: 95px;
+    right: -10px;
+    top: -10px;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">LC</div>
+      <div>
+        <div class="brand-title">Sub Bab 3</div>
+        <div class="brand-sub">Mengorganisasikan Peserta Didik untuk Belajar</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="h1.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#kelompok">Pilih Kelompok</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>PBL • Organisasi Belajar</span></div>
+
+      <section class="hero">
+        <h1 class="title">👥 Mengorganisasikan <span class="accent">Penyelidikan</span></h1>
+        <p class="subtitle">
+          Pada tahap ini, peserta didik membentuk kelompok, membaca handout dan petunjuk percobaan virtual,
+          serta menyiapkan dugaan awal sebelum melakukan penyelidikan pada halaman berikutnya.
+          Virtual lab belum ditampilkan di halaman ini.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Jawaban Sementara dari Halaman Sebelumnya</h2>
+          <div id="jawabanTersimpan" class="saved-box">
+            <h3>Memuat jawaban sementara...</h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="kelompok">
+        <div class="card-inner">
+          <h2>👥 Pilih Kelompok</h2>
+          <p class="muted">
+            Pilih kelompok sesuai arahan guru. Pilihan kelompok akan disimpan dan digunakan saat masuk ke tahap percobaan virtual.
+          </p>
+
+          <div class="group-grid">
+            <button class="group-card" type="button" onclick="pilihKelompok('Kelompok 1')">
+              <span class="group-num">Kelompok 1</span>
+            </button>
+            <button class="group-card" type="button" onclick="pilihKelompok('Kelompok 2')">
+              <span class="group-num">Kelompok 2</span>
+            </button>
+            <button class="group-card" type="button" onclick="pilihKelompok('Kelompok 3')">
+              <span class="group-num">Kelompok 3</span>
+            </button>
+            <button class="group-card" type="button" onclick="pilihKelompok('Kelompok 4')">
+              <span class="group-num">Kelompok 4</span>
+            </button>
+            <button class="group-card" type="button" onclick="pilihKelompok('Kelompok 5')">
+              <span class="group-num">Kelompok 5</span>
+            </button>
+          </div>
+
+          <div id="feedbackKelompok" class="feedback"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📚 Sumber Belajar Sebelum Percobaan</h2>
+          <p class="muted">
+            Bacalah handout dan tonton video penguatan terlebih dahulu agar peserta didik memahami tujuan percobaan virtual.
+          </p>
+
+          <div class="resource-grid">
+            <div class="resource-card">
+              <h3>📄 Handout Materi</h3>
+              <p>
+                Handout ditampilkan langsung pada halaman ini. Peserta didik dapat membaca materi pendukung sebelum masuk ke percobaan virtual.
+              </p>
+              <a class="btn-primary" href="https://drive.google.com/file/d/19r1e18Q-fEXFTjYb6nFGYfhqK0pJogt6/view" target="_blank" rel="noopener">
+                Buka Handout di Tab Baru
+              </a>
+              <div class="handout-wrap">
+                <iframe
+                  src="https://drive.google.com/file/d/19r1e18Q-fEXFTjYb6nFGYfhqK0pJogt6/preview"
+                  title="Handout Faktor Pergeseran Kesetimbangan"
+                  loading="lazy"
+                  allow="autoplay">
+                </iframe>
+              </div>
+            </div>
+
+            <div class="resource-card">
+              <h3>🎥 Video Penguatan</h3>
+              <p>
+                Video pendukung: <b>Cobalt Complexes (LeChatelier’s Principle)</b>. Gunakan video ini untuk memperkuat pemahaman sebelum percobaan virtual.
+              </p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn-primary" href="https://www.youtube.com/watch?v=XqboaYTTxo8" target="_blank" rel="noopener">
+                  Buka Video Cobalt Complexes
+                </a>
+                <a class="btn-primary" href="https://www.youtube.com/watch?v=za4tQoj-QZs" target="_blank" rel="noopener">
+                  Video Materi Singkat
+                </a>
+              </div>
+              <div class="video-wrap">
+                <iframe
+                  src="https://www.youtube.com/embed/XqboaYTTxo8"
+                  title="Cobalt Complexes LeChatelier's Principle"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
+
+              <p style="color:#374151; margin:8px 0 0; line-height:1.65; font-weight:650;">
+                Video materi singkat berikut dapat digunakan untuk menguatkan kembali konsep Asas Le Chatelier sebelum peserta didik masuk ke percobaan virtual.
+              </p>
+              <div class="video-wrap">
+                <iframe
+                  src="https://www.youtube.com/embed/za4tQoj-QZs"
+                  title="Video Materi Singkat Asas Le Chatelier"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card prediction-card">
+  <div class="card-inner">
+    <h2>✍️ Prediksi Awal Kelompok Sebelum Percobaan</h2>
+          <p class="muted">
+            Pada bagian ini, peserta didik menuliskan dugaan awal tentang <b>apa yang akan terjadi pada warna larutan kobalt klorida</b>
+            ketika sistem diberi perlakuan. Dugaan ini belum harus benar, karena nanti akan dibandingkan dengan hasil percobaan virtual.
+          </p>
+
+          <div class="white-box" style="margin-top:14px;">
+            <h3>Yang Diprediksi Kelompok</h3>
+            <p>
+              Diskusikan bersama kelompokmu, lalu tuliskan prediksi terhadap tiga perlakuan berikut:
+            </p>
+            <ol style="margin:10px 0 0 20px; padding:0; color:#374151; font-weight:700; line-height:1.7;">
+              <li>Jika <b>HCl ditambahkan</b>, apakah warna larutan cenderung menjadi lebih biru atau lebih merah muda? Mengapa?</li>
+              <li>Jika <b>AgNO₃ ditambahkan</b>, apakah warna larutan cenderung menjadi lebih biru atau lebih merah muda? Mengapa?</li>
+              <li>Jika <b>suhu diubah</b>, apakah warna larutan dapat berubah? Jelaskan dugaan kelompokmu.</li>
+            </ol>
+          </div>
+
+          <div class="prediction-box">
+  <img
+    class="prediction-decoration"
+    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiyGpQedeqKBwxRyzVPjcw90e3lz0RDi8WVYE0em-vAnKFV0IVccNRdpe5RD2RA8cxDOXTIqGPSxPRxF5Nrv5j6FlwfPh6hen3Y-hmfXaD1rERRTUMzR-lPKp2BGV0FgqiNwmMl7sFsaxN6Zw84B7-nyc0gEdnwqvVMDAYOoLmcTRDCoyXpQ-zn8cnQ2wrV/s1536/ChatGPT%20Image%2030%20Jan%202026,%2014.30.18.png"
+    alt="Hiasan prediksi kelompok"
+    loading="lazy"
+  >
+            <div class="field-group">
+              <label class="field-label" for="namaAnggota"><span>1</span> Nama Anggota Kelompok</label>
+              <input id="namaAnggota" class="input-line" type="text" placeholder="Contoh: Aulia, Bima, Citra, Deni">
+              <p class="field-help">Tuliskan nama anggota kelompok dan pisahkan dengan tanda koma.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="prediksiKelompok"><span>2</span> Prediksi Awal Kelompok</label>
+              <textarea id="prediksiKelompok" class="textarea-box" placeholder="Tuliskan prediksi kelompok dengan format berikut:
+
+1. Jika HCl ditambahkan, kami menduga warna larutan akan ... 
+  Alasan:
+2. Jika AgNO₃ ditambahkan, kami menduga warna larutan akan ...
+  Alasan:
+3. Jika suhu diubah, kami menduga warna larutan akan ... 
+  Alasan:"></textarea>
+              <p class="field-help">Prediksi belum harus benar. Jawaban ini akan dibandingkan dengan hasil percobaan virtual pada halaman berikutnya.</p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn-primary" type="button" onclick="simpanOrganisasi()">Simpan Prediksi Kelompok</button>
+            <button class="btn" type="button" onclick="hapusOrganisasi()">Hapus</button>
+          </div>
+
+          <div id="feedbackOrganisasi" class="feedback"></div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="sb31.html">⬅ Kembali ke Orientasi</a>
+        <a class="btn-primary" href="sb33.html" onclick="return cekSebelumLab()">Lanjut ke Percobaan Virtual ➜</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function getUserKeySB3(){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  const email =
+    user.email ||
+    user.uid ||
+    user.name ||
+    user.nama ||
+    "tanpa-user";
+
+  return String(email)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function storageKeySB3(namaKey){
+  return namaKey + "_" + getUserKeySB3();
+}
+    let kelompokDipilih = localStorage.getItem(storageKeySB3('kelompokSubBab3')) || '';
+
+    function tampilkanJawabanSementara(){
+      const box = document.getElementById('jawabanTersimpan');
+      const dataTersimpan = localStorage.getItem(storageKeySB3('orientasiSubBab3'));
+
+      if(!dataTersimpan){
+        box.innerHTML = `
+          <h3>Belum ada jawaban sementara</h3>
+          <div class="empty-note">
+            Jawaban sementara dari halaman orientasi belum ditemukan. Peserta didik dapat kembali ke halaman sebelumnya untuk mengisi jawaban awal.
+          </div>
+        `;
+        return;
+      }
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        const pilihan = data.pilihan || [];
+        const alasan = data.alasan || '-';
+        const list = pilihan.length
+          ? `<ol class="saved-list">${pilihan.map((item) => `<li>${item}</li>`).join('')}</ol>`
+          : '<div class="empty-note">Tidak ada pilihan centang yang disimpan.</div>';
+
+        box.innerHTML = `
+          <h3>Jawaban sementara tersimpan</h3>
+          <p><b>Pilihan jawaban sementara:</b></p>
+          ${list}
+          <p style="margin-top:12px;"><b>Alasan singkat:</b><br>${alasan}</p>
+        `;
+      } catch(e){
+        localStorage.removeItem(storageKeySB3('orientasiSubBab3'));
+        tampilkanJawabanSementara();
+      }
+    }
+
+    function pilihKelompok(namaKelompok){
+      kelompokDipilih = namaKelompok;
+      localStorage.setItem(storageKeySB3('kelompokSubBab3'), namaKelompok);
+
+      document.querySelectorAll('.group-card').forEach((card) => {
+        card.classList.remove('selected');
+        if(card.innerText.includes(namaKelompok)){
+          card.classList.add('selected');
+        }
+      });
+
+      const fb = document.getElementById('feedbackKelompok');
+      fb.style.display = 'block';
+      fb.innerHTML = `✅ ${namaKelompok} berhasil dipilih. Lanjutkan membaca sumber belajar dan tuliskan dugaan awal kelompok.`;
+    }
+
+    function muatKelompokTersimpan(){
+      if(!kelompokDipilih) return;
+      document.querySelectorAll('.group-card').forEach((card) => {
+        if(card.innerText.includes(kelompokDipilih)){
+          card.classList.add('selected');
+        }
+      });
+    }
+
+    function simpanOrganisasi(){
+      const anggota = document.getElementById('namaAnggota').value.trim();
+      const prediksi = document.getElementById('prediksiKelompok').value.trim();
+      const fb = document.getElementById('feedbackOrganisasi');
+
+      if(!kelompokDipilih){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Pilih kelompok terlebih dahulu.';
+        return;
+      }
+
+      if(!anggota || !prediksi){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Isi nama anggota kelompok dan dugaan awal sebelum menyimpan.';
+        return;
+      }
+
+      const data = {
+        kelompok: kelompokDipilih,
+        anggota: anggota,
+        prediksi: prediksi,
+        waktuSimpan: new Date().toLocaleString('id-ID')
+      };
+
+      localStorage.setItem(storageKeySB3('organisasiSubBab3'), JSON.stringify(data));
+
+      simpanKeDataSB3({
+        halaman: "sb32",
+        judul: "Mengorganisasikan Peserta Didik untuk Belajar",
+        kelompok: kelompokDipilih,
+        skor: 100,
+        status: "prediksi kelompok disimpan",
+        ringkasan: "Kelompok, anggota, dan prediksi awal sebelum percobaan virtual sudah disimpan.",
+        jawaban: {
+        kelompok: kelompokDipilih,
+        anggota: anggota,
+        prediksi: prediksi
+      }
+  });
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(102,242,165,.28)';
+      fb.style.background = 'rgba(102,242,165,.10)';
+      fb.style.color = '#d8ffe8';
+      fb.innerHTML = '✅ Prediksi awal kelompok berhasil disimpan. Kamu dapat melanjutkan ke percobaan virtual.';
+    }
+
+    function hapusOrganisasi(){
+      document.getElementById('namaAnggota').value = '';
+      document.getElementById('prediksiKelompok').value = '';
+      localStorage.removeItem(storageKeySB3('organisasiSubBab3'));
+
+      const fb = document.getElementById('feedbackOrganisasi');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(255,224,130,.35)';
+      fb.style.background = 'rgba(255,224,130,.10)';
+      fb.style.color = '#fff2bd';
+      fb.innerHTML = 'Prediksi awal kelompok sudah dihapus.';
+    }
+
+    function muatOrganisasi(){
+      const dataTersimpan = localStorage.getItem(storageKeySB3('organisasiSubBab3'));
+      if(!dataTersimpan) return;
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        document.getElementById('namaAnggota').value = data.anggota || '';
+        document.getElementById('prediksiKelompok').value = data.prediksi || '';
+      } catch(e){
+        localStorage.removeItem(storageKeySB3('organisasiSubBab3'));
+      }
+    }
+
+    function cekSebelumLab(){
+      const dataTersimpan = localStorage.getItem(storageKeySB3('organisasiSubBab3'));
+      if(!dataTersimpan){
+        return confirm('Prediksi awal kelompok belum disimpan. Tetap lanjut ke halaman percobaan virtual?');
+      }
+      return true;
+    }
+
+    tampilkanJawabanSementara();
+    muatKelompokTersimpan();
+    muatOrganisasi();
+  </script>
+  <script>
+const SB3_STORAGE_KEY = "dataAdminGuruSB3";
+
+function ambilIdentitasSB3(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem(storageKeySB3("kelompokSubBab3")) || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB3(payload){
+  const identitas = ambilIdentitasSB3(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const keyDataGuruLokal = storageKeySB3(SB3_STORAGE_KEY);
+  const dataLama = JSON.parse(localStorage.getItem(keyDataGuruLokal)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(keyDataGuruLokal, JSON.stringify(dataLama));
+
+  if (typeof AppDB !== "undefined" && AppDB.saveAnswer) {
+    AppDB.saveAnswer({
+      subBab: 3,
+      pageKey: payload.halaman || "sb3",
+      pageTitle: payload.judul || "Sub Bab 3",
+      answers: {
+        ...(payload.jawaban || {}),
+        _localUser: {
+          nama: identitas.nama,
+          kelas: identitas.kelas,
+          kelompok: identitas.kelompok,
+          email: identitas.email
+        }
+      },
+      score: payload.skor ?? null,
+      status: payload.status || "tersimpan"
+    }).catch((error) => {
+      console.error("Gagal menyimpan Sub Bab 3 ke Firebase:", error);
+    });
+  }
+
+  return dataBaru;
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 3,
+    pageKey: "sb32",
+    pageTitle: "Sub Bab 3 — Mengorganisasikan Peserta Didik"
+  });
+});
+</script>
+</body>
+</html>

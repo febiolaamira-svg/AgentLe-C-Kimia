@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Halaman 7 — Drill Soal Sub Bab 1</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.84);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .question {
+      border-radius: 18px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.78);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .qtop {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .qnum {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      border: 1px solid rgba(43,124,255,.15);
+      color: #1b4bb2;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .topic {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,122,0,.12);
+      border: 1px solid rgba(255,122,0,.18);
+      color: #9a3d00;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .optionList {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .option {
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.70);
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .option.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+      font-weight: 900;
+    }
+
+    .option.incorrect {
+      border-color: rgba(239,68,68,.18);
+      background: rgba(239,68,68,.06);
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 1</b>
+          <span>Halaman 7 • Drill Soal Sub Bab 1</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb1.html">📊 Data Sub Bab 1</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci Cepat</h2>
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Topik</th>
+              <th>Kunci</th>
+              <th>Jawaban Benar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Reaksi satu arah</td><td>B</td><td>→</td></tr>
+            <tr><td>2</td><td>Reaksi dua arah</td><td>B</td><td>⇌</td></tr>
+            <tr><td>3</td><td>Contoh reaksi dua arah</td><td>C</td><td>N₂(g) + 3H₂(g) ⇌ 2NH₃(g)</td></tr>
+            <tr><td>4</td><td>Kesetimbangan dinamis</td><td>B</td><td>Laju reaksi maju sama dengan laju reaksi balik</td></tr>
+            <tr><td>5</td><td>Sistem tertutup</td><td>B</td><td>Zat tidak keluar sehingga reaksi balik tetap terjadi</td></tr>
+            <tr><td>6</td><td>Ciri makroskopis</td><td>A</td><td>Warna dan konsentrasi tampak tetap</td></tr>
+            <tr><td>7</td><td>Homogen</td><td>B</td><td>Semua zat berada pada fase yang sama</td></tr>
+            <tr><td>8</td><td>Heterogen</td><td>C</td><td>Zat-zat berada pada lebih dari satu fase</td></tr>
+            <tr><td>9</td><td>Contoh homogen</td><td>B</td><td>Homogen</td></tr>
+            <tr><td>10</td><td>Contoh heterogen</td><td>B</td><td>Heterogen</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Jawaban dan Pembahasan Lengkap</h2>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 1</span>
+            <span class="topic">Reaksi satu arah dan dua arah</span>
+          </div>
+          <h3>Simbol yang benar untuk reaksi satu arah atau irreversible adalah…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. ⇌</div>
+            <div class="option correct">B. →</div>
+            <div class="option incorrect">C. ↔</div>
+            <div class="option incorrect">D. =</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B. →</b>. Reaksi satu arah atau irreversible dituliskan dengan panah satu arah
+              karena reaksi dianggap berlangsung dari reaktan menuju produk. Produk yang terbentuk tidak mudah kembali
+              menjadi reaktan pada kondisi yang sama.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 2</span>
+            <span class="topic">Reaksi satu arah dan dua arah</span>
+          </div>
+          <h3>Simbol yang benar untuk reaksi dua arah atau reversible adalah…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. →</div>
+            <div class="option correct">B. ⇌</div>
+            <div class="option incorrect">C. =</div>
+            <div class="option incorrect">D. ↘</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B. ⇌</b>. Simbol ini menunjukkan bahwa reaksi dapat berlangsung dua arah,
+              yaitu reaksi maju dari reaktan ke produk dan reaksi balik dari produk ke reaktan.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 3</span>
+            <span class="topic">Contoh reaksi reversible</span>
+          </div>
+          <h3>Contoh reaksi dua arah yang benar adalah…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. AgNO₃(aq) + NaCl(aq) → AgCl(s) + NaNO₃(aq)</div>
+            <div class="option incorrect">B. 2Mg(s) + O₂(g) → 2MgO(s)</div>
+            <div class="option correct">C. N₂(g) + 3H₂(g) ⇌ 2NH₃(g)</div>
+            <div class="option incorrect">D. C(s) + O₂(g) → CO₂(g)</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>C. N₂(g) + 3H₂(g) ⇌ 2NH₃(g)</b>.
+              Reaksi ini menggunakan tanda panah dua arah, sehingga menunjukkan bahwa reaksi dapat berlangsung maju dan balik.
+              Reaksi pembentukan amonia merupakan contoh penting reaksi kesetimbangan dalam industri Haber.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 4</span>
+            <span class="topic">Kesetimbangan dinamis</span>
+          </div>
+          <h3>Pada kesetimbangan dinamis, yang benar adalah…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. Reaksi berhenti total</div>
+            <div class="option correct">B. Laju reaksi maju sama dengan laju reaksi balik</div>
+            <div class="option incorrect">C. Produk habis bereaksi</div>
+            <div class="option incorrect">D. Reaktan selalu bertambah</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B. Laju reaksi maju sama dengan laju reaksi balik</b>.
+              Kesetimbangan disebut dinamis karena reaksi tidak berhenti. Pada tingkat mikroskopis, reaksi maju
+              dan reaksi balik tetap berlangsung. Namun, karena lajunya sama, jumlah reaktan dan produk tampak tetap
+              secara makroskopis.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 5</span>
+            <span class="topic">Sistem tertutup</span>
+          </div>
+          <h3>Mengapa reaksi dua arah perlu berlangsung dalam sistem tertutup untuk mencapai kesetimbangan?</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. Agar suhu selalu naik</div>
+            <div class="option correct">B. Agar zat tidak keluar dari sistem sehingga reaksi balik tetap dapat terjadi</div>
+            <div class="option incorrect">C. Agar reaksi menjadi satu arah</div>
+            <div class="option incorrect">D. Agar produk cepat habis</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B</b>. Sistem tertutup diperlukan agar reaktan dan produk tetap berada
+              di dalam sistem. Jika zat keluar dari sistem, reaksi balik dapat terganggu sehingga kesetimbangan sulit
+              tercapai atau sulit dipertahankan.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 6</span>
+            <span class="topic">Ciri makroskopis kesetimbangan</span>
+          </div>
+          <h3>Secara makroskopis, keadaan setimbang ditunjukkan oleh…</h3>
+          <div class="optionList">
+            <div class="option correct">A. Warna dan konsentrasi tampak tetap</div>
+            <div class="option incorrect">B. Semua partikel berhenti bergerak</div>
+            <div class="option incorrect">C. Reaktan hilang seluruhnya</div>
+            <div class="option incorrect">D. Produk selalu bertambah</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>A. Warna dan konsentrasi tampak tetap</b>.
+              Secara makroskopis, sistem setimbang terlihat tidak mengalami perubahan lagi. Namun, pada tingkat partikel,
+              reaksi tetap berlangsung. Inilah alasan kesetimbangan disebut dinamis.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 7</span>
+            <span class="topic">Kesetimbangan homogen</span>
+          </div>
+          <h3>Kesetimbangan homogen adalah kesetimbangan yang…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. Melibatkan lebih dari satu fase</div>
+            <div class="option correct">B. Semua zatnya berada pada fase yang sama</div>
+            <div class="option incorrect">C. Selalu menghasilkan endapan</div>
+            <div class="option incorrect">D. Hanya terjadi pada zat padat</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B</b>. Kesetimbangan homogen terjadi jika semua zat yang terlibat berada
+              pada fase yang sama, misalnya semuanya gas atau semuanya berada dalam satu fase larutan.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 8</span>
+            <span class="topic">Kesetimbangan heterogen</span>
+          </div>
+          <h3>Kesetimbangan heterogen adalah kesetimbangan yang…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. Semua zat berada pada fase gas</div>
+            <div class="option incorrect">B. Semua zat berada pada fase larutan</div>
+            <div class="option correct">C. Zat-zatnya berada pada lebih dari satu fase</div>
+            <div class="option incorrect">D. Tidak dapat balik</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>C</b>. Kesetimbangan heterogen terjadi jika zat-zat dalam reaksi berada
+              pada lebih dari satu fase, misalnya padat dan gas, padat dan larutan, atau cair dan gas.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 9</span>
+            <span class="topic">Contoh kesetimbangan homogen</span>
+          </div>
+          <h3>Reaksi 2SO₂(g) + O₂(g) ⇌ 2SO₃(g) termasuk kesetimbangan…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. Heterogen</div>
+            <div class="option correct">B. Homogen</div>
+            <div class="option incorrect">C. Irreversible</div>
+            <div class="option incorrect">D. Tidak setimbang</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B. Homogen</b>.
+              Semua zat pada reaksi tersebut berfase gas, yaitu SO₂(g), O₂(g), dan SO₃(g).
+              Karena semua komponen berada pada fase yang sama, reaksi tersebut merupakan kesetimbangan homogen.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 10</span>
+            <span class="topic">Contoh kesetimbangan heterogen</span>
+          </div>
+          <h3>Reaksi CaCO₃(s) ⇌ CaO(s) + CO₂(g) termasuk kesetimbangan…</h3>
+          <div class="optionList">
+            <div class="option incorrect">A. Homogen</div>
+            <div class="option correct">B. Heterogen</div>
+            <div class="option incorrect">C. Satu arah</div>
+            <div class="option incorrect">D. Tidak dapat terjadi</div>
+          </div>
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban yang benar adalah <b>B. Heterogen</b>.
+              Reaksi tersebut melibatkan zat padat, yaitu CaCO₃(s) dan CaO(s), serta zat gas, yaitu CO₂(g).
+              Karena terdapat lebih dari satu fase dalam sistem, reaksi ini termasuk kesetimbangan heterogen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Konsep Penting</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Reaksi satu arah</div>
+            <p>
+              Ditandai dengan panah <b>→</b>. Reaksi berlangsung dari reaktan ke produk dan tidak mudah kembali
+              pada kondisi yang sama.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Reaksi dua arah</div>
+            <p>
+              Ditandai dengan panah <b>⇌</b>. Reaksi dapat berlangsung maju dan balik, sehingga memungkinkan
+              terjadinya kesetimbangan.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Kesetimbangan dinamis</div>
+            <p>
+              Terjadi saat <b>laju reaksi maju sama dengan laju reaksi balik</b>. Secara makroskopis tampak tetap,
+              tetapi reaksi tetap berlangsung secara mikroskopis.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:16px">
+          <div class="answer">
+            <h3>Homogen</h3>
+            <p>
+              Semua zat berada pada fase yang sama. Contoh:
+              <b>2SO₂(g) + O₂(g) ⇌ 2SO₃(g)</b> dan
+              <b>N₂(g) + 3H₂(g) ⇌ 2NH₃(g)</b>.
+            </p>
+          </div>
+
+          <div class="answer">
+            <h3>Heterogen</h3>
+            <p>
+              Zat-zat berada pada lebih dari satu fase. Contoh:
+              <b>CaCO₃(s) ⇌ CaO(s) + CO₂(g)</b>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Catatan Koreksi untuk Guru</h2>
+
+        <div class="answer">
+          <h3>Patokan penilaian</h3>
+          <p>
+            Jawaban siswa dianggap benar jika menunjukkan pemahaman bahwa kesetimbangan dinamis terjadi karena
+            reaksi maju dan balik tetap berlangsung dengan laju yang sama, serta mampu membedakan homogen dan heterogen
+            berdasarkan fase zat yang terlibat dalam reaksi.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keyhlm6.html">⬅ Kunci Halaman 6</a>
+          <div>
+            <a class="btn blue" href="datasb1.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keyhlm8.html">Lanjut Kunci Halaman 8 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

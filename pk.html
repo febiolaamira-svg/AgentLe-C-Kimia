@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peta Konsep • Kesetimbangan Kimia (Rapi Grid + Panah Artistik)</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+
+      --pink:#ff2aa1;
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+
+      --stroke: rgba(255,255,255,.12);
+      --stroke2: rgba(255,255,255,.18);
+
+      --shadow: 0 20px 80px rgba(0,0,0,.55);
+      --shadow2: 0 10px 40px rgba(0,0,0,.35);
+
+      --r-lg: 22px;
+      --r-md: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* Header mini */
+    .top{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 14px 16px;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,6,28,.62), rgba(10,6,28,.12));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .brand{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.38), rgba(124,77,255,.38));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 40px rgba(0,0,0,.30);
+      font-weight:900;
+      letter-spacing:.5px;
+    }
+    .brand-title{ font-weight:900; }
+    .brand-sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.10);
+      font-size:13px;
+      display:flex; gap:8px; align-items:center;
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--mag), var(--vio));
+      box-shadow: 0 0 12px rgba(255,79,216,.45);
+    }
+
+    /* Board */
+    .wrap{ padding: 20px 14px 60px; }
+    .board{
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(1200px 520px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(1200px 600px at 60% 115%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.03);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+      padding: 18px;
+    }
+
+    /* Title */
+    .poster-title{
+      padding: 16px 18px;
+      border-radius: 22px;
+      text-align:center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow2);
+      margin-bottom: 18px;
+    }
+    .poster-title .cap{
+      font-size: 12px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      font-weight: 900;
+    }
+    .poster-title .big{
+      margin-top: 8px;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      line-height: 1.02;
+    }
+    .poster-title .big span{
+      background: linear-gradient(90deg, var(--mag), var(--vio), var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style: italic;
+      display:inline-block;
+      transform: skewX(-6deg);
+      padding: 0 2px;
+    }
+    .poster-title .sub{
+      margin-top: 10px;
+      color: rgba(255,255,255,.56);
+      font-size: 12px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      line-height: 1.6;
+    }
+
+    /* GRID STAGE */
+    .stage{
+      position:relative;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.10);
+      overflow:hidden;
+      padding: 16px;
+    }
+
+    /* latar belakang garis molekul sederhana */
+    .stage::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.06), transparent 50%),
+        radial-gradient(circle at 80% 25%, rgba(255,255,255,.04), transparent 55%),
+        radial-gradient(circle at 60% 80%, rgba(255,255,255,.04), transparent 55%);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: minmax(210px, auto);
+      gap: 16px;
+      align-items: stretch;
+      position:relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Node */
+    .node{
+      border-radius: var(--r-lg);
+      padding: 14px 14px 12px;
+      background: rgba(0,0,0,.24);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+    .node::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        radial-gradient(circle at 25% 35%, rgba(255,79,216,.12), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(124,77,255,.12), transparent 55%);
+      opacity:.55;
+      filter: blur(18px);
+      pointer-events:none;
+    }
+    .node > *{ position:relative; z-index:2; }
+
+    .head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .label{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
+    }
+    .label .mini-dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, var(--mag), var(--vio));
+      box-shadow: 0 0 14px rgba(255,79,216,.35);
+    }
+    .ico{
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .ico svg{ width: 18px; height: 18px; opacity:.95; }
+
+    .node h3{
+      margin: 0;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.01em;
+      line-height:1.2;
+    }
+    .node p{
+      margin: 10px 0 0;
+      color: rgba(255,255,255,.64);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .node ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.66);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .node li{ margin: 6px 0; }
+
+    .formula{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.12);
+      font-weight: 900;
+      letter-spacing: .02em;
+      color: rgba(255,255,255,.86);
+    }
+    .formula code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,.88);
+    }
+
+    /* warna border per kategori */
+    .pink{ border-color: rgba(255,79,216,.28); }
+    .vio{ border-color: rgba(124,77,255,.28); }
+    .blue{ border-color: rgba(45,108,255,.28); }
+
+    /* LINES */
+    svg.lines{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index: 1;
+    }
+
+    /* path styling: artistik */
+    path.link-base{
+      stroke-width: 4.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: .62;
+      filter: url(#glowStrong);
+    }
+    path.link-hi{
+      stroke-width: 2.1;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: .85;
+      filter: url(#glowSoft);
+    }
+
+    /* animasi halus (optional) */
+    @media (prefers-reduced-motion: no-preference){
+      path.link-hi{
+        stroke-dasharray: 6 10;
+        animation: dash 7s linear infinite;
+      }
+      @keyframes dash{
+        from{ stroke-dashoffset: 0; }
+        to{ stroke-dashoffset: -100; }
+      }
+    }
+
+    .hint{
+      margin-top: 12px;
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      text-align:center;
+    }
+    .btn{
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  padding: 11px 14px;
+  border-radius: 14px;
+  cursor:pointer;
+  user-select:none;
+  box-shadow: 0 10px 40px rgba(0,0,0,.18);
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
+.btn.ghost{ background: rgba(255,255,255,.03); }
+
+.conceptImageWrap{
+  margin: 0 0 18px 0;
+  padding: 14px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow2);
+  text-align: center;
+}
+
+.conceptImageWrap h3{
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.conceptImageWrap p{
+  margin: 0 0 14px 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.conceptImage{
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
+.viewChoice{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:0 0 18px;
+}
+
+.viewChoice .choiceBtn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:12px 16px;
+  border-radius:16px;
+  cursor:pointer;
+  font-weight:900;
+  letter-spacing:.02em;
+  box-shadow:0 10px 34px rgba(0,0,0,.22);
+  transition:transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.viewChoice .choiceBtn:hover{
+  transform:translateY(-1px);
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.26);
+}
+
+.viewChoice .choiceBtn.active{
+  background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.48));
+  border-color:rgba(255,255,255,.32);
+}
+
+.viewPanel{
+  display:none;
+}
+
+.viewPanel.show{
+  display:block;
+}
+
+.periodicWrap{
+  margin:0 0 18px;
+  padding:14px;
+  border-radius:24px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow2);
+  text-align:center;
+}
+
+.periodicImage{
+  width:100%;
+  max-width:1120px;
+  height:auto;
+  display:block;
+  margin:0 auto;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 18px 50px rgba(0,0,0,.35);
+  background:#ffffff;
+}
+/* ===== RNOTE SUMMARY SATU PARAGRAF ===== */
+.node.rnote-unified{
+  grid-column: 1 / span 4;
+  grid-row: 1 / span 3;
+  background: linear-gradient(135deg, #e8b7c8 0%, #d8b5cf 48%, #c8b7dc 100%);
+  border: 1px solid rgba(255,255,255,.42);
+  box-shadow: 0 18px 55px rgba(0,0,0,.25);
+  color: #2f1b2a;
+}
+
+.node.rnote-unified::after{
+  display:none;
+}
+
+.node.rnote-unified .label{
+  background: rgba(124,77,255,.13);
+  border: 1px solid rgba(124,77,255,.22);
+  color: #5b257d;
+}
+
+.node.rnote-unified .ico{
+  background: rgba(124,77,255,.12);
+  border: 1px solid rgba(124,77,255,.20);
+}
+
+.node.rnote-unified h3{
+  color:#241533;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.rnote-paragraph{
+  background: rgba(255,250,252,.70);
+  border: 1px solid rgba(126,77,104,.18);
+  border-radius: 18px;
+  padding: 18px 20px;
+}
+
+.rnote-paragraph p{
+  margin: 0 0 14px 0;
+  color:#2d1b3d;
+  font-size: 15px;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.rnote-paragraph p:last-child{
+  margin-bottom: 0;
+}
+
+.rnote-paragraph strong{
+  color:#4a246a;
+  font-weight: 900;
+}
+
+.rnote-paragraph code{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: rgba(124,77,255,.10);
+  color:#241533;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+@media (max-width: 900px){
+  .node.rnote-unified{
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .rnote-paragraph p{
+    text-align: left;
+    font-size: 14px;
+  }
+}
+/* Tombol Peta Eksplorasi */
+#btnBackPre{
+  background: linear-gradient(135deg, #ff4fd8, #7c4dff, #2d6cff);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,.38);
+  padding: 13px 18px;
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: 950;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  box-shadow:
+    0 12px 34px rgba(124,77,255,.35),
+    0 0 18px rgba(255,79,216,.22);
+}
+
+#btnBackPre:hover{
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff71df, #8d63ff, #4a83ff);
+  border-color: rgba(255,255,255,.55);
+  box-shadow:
+    0 16px 42px rgba(124,77,255,.42),
+    0 0 24px rgba(255,79,216,.32);
+}
+
+#btnBackPre:active{
+  transform: translateY(0);
+}
+  </style>
+</head>
+
+<body>
+ <div class="top">
+  <div class="brand">
+    <div class="logo">K</div>
+    <div>
+      <div class="brand-title">Kesetimbangan Kimia</div>
+      <div class="brand-sub">Agent Le C • Concept Map Weblearning</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:10px; align-items:center;">
+   <button class="btn ghost" id="btnBackPre" type="button">⬅ Peta Eksplorasi</button>
+  </div>
+</div>
+
+  <div class="wrap">
+    <div class="board">
+      <div class="poster-title">
+        <div class="cap">Ruang Referensi Belajar</div>
+        <div class="big">Kesetimbangan <span>Kimia</span></div>
+      </div>
+
+      <div class="viewChoice">
+  <button class="choiceBtn active" type="button" onclick="showViewPanel('concept')">
+    🧭 Peta Konsep
+  </button>
+  <button class="choiceBtn" type="button" onclick="showViewPanel('periodic')">
+    🧪 Tabel Periodik
+  </button>
+</div>
+      </div>
+    </div>
+
+    </div>
+
+    <div id="periodicPanel" class="viewPanel">
+      <div class="periodicWrap">
+        <img
+          class="periodicImage"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDv8B5n3d1mF1Pag5L7hHAyqP5qsrEncEjdYb9p9-UIs1lEQO3aGCGmPo9tuf3CvfYuG27JoswiZULUpzYKus3v1K0qCpkaz1FeZSF_Gos4m9vwO0EGoOJ-gm3XpMAIK-3sovJCaxtDSQEUZ48Z7JuvkUpZqxj0_ojkt1Q-E8seIQZCqViifESTjqKfg_b/s2245/Tabel%20Periodik.png"
+          alt="Tabel Periodik Unsur">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="conceptPanel" class="viewPanel show">
+
+        <img
+          class="conceptImage"
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg8zRLUBVLQImiYKD7pBAu6dl67b2oK3I0SXMMu5tfL5o8aFhEhf0_7sVzhysqy0YOuKnzmVEyiT4CTjglpghA6LBTJRWZWWiqE2xDQJYKborvOrg7s0TGCsRjQezKEhn5XL7Bms8rhnQ2FBtdLOafKNsj-juJRtkyy8PUIEv1ZRQrcHdlKK-sLxLcpUZxK/s3175/PETA%20KONSEP%20KS.png"
+          alt="Peta Konsep Kesetimbangan Kimia">
+      </div>
+
+      <div class="stage" id="stage">
+        <svg class="lines" id="lines">
+          <defs>
+            <!-- GRADIENT untuk garis -->
+            <linearGradient id="gradLine" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"  stop-color="#ff4fd8" stop-opacity="0.95"/>
+              <stop offset="50%" stop-color="#7c4dff" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#2d6cff" stop-opacity="0.95"/>
+            </linearGradient>
+
+            <!-- glow lebih kuat untuk garis tebal -->
+            <filter id="glowStrong" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3.6" result="b"/>
+              <feColorMatrix in="b" type="matrix"
+                values="1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        0 0 0 0.9 0" result="g"/>
+              <feMerge>
+                <feMergeNode in="g"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <!-- glow halus untuk highlight -->
+            <filter id="glowSoft" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="1.8" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <!-- Arrow head neon (gradient) -->
+            <marker id="arrowNeon" markerWidth="18" markerHeight="18" refX="14" refY="9" orient="auto">
+              <path d="M0,2 L16,9 L0,16 Q3,9 0,2 Z" fill="url(#gradLine)" opacity="0.95"></path>
+            </marker>
+
+            <!-- Arrow head soft highlight -->
+            <marker id="arrowWhite" markerWidth="16" markerHeight="16" refX="13" refY="8" orient="auto">
+              <path d="M0,2 L14,8 L0,14 Q3,8 0,2 Z" fill="rgba(255,255,255,.85)"></path>
+            </marker>
+          </defs>
+        </svg>
+
+        <!-- GRID: 4 kolom, node tidak bertumpuk -->
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showViewPanel(type){
+  const conceptPanel = document.getElementById("conceptPanel");
+  const periodicPanel = document.getElementById("periodicPanel");
+  const buttons = document.querySelectorAll(".choiceBtn");
+
+  buttons.forEach(btn => btn.classList.remove("active"));
+
+  if(type === "concept"){
+    conceptPanel.classList.add("show");
+    periodicPanel.classList.remove("show");
+    buttons[0].classList.add("active");
+
+    requestAnimationFrame(() => {
+      if(typeof draw === "function") draw();
+    });
+  }
+
+  if(type === "periodic"){
+    conceptPanel.classList.remove("show");
+    periodicPanel.classList.add("show");
+    buttons[1].classList.add("active");
+  }
+}
+    // =========================
+    // DATA GRID
+    // =========================
+   const data = {
+  nodes: [
+    {
+      id: "rnoteAll",
+      col: "1 / span 4",
+      row: "1 / span 3",
+      color: "pink",
+      className: "rnote-unified",
+      label: "Rnote Summary",
+      icon: "book",
+      title: "Rangkuman Kesetimbangan Kimia",
+      html: `
+        <div class="rnote-paragraph">
+          <p>
+            <strong>Kesetimbangan kimia</strong> adalah keadaan ketika reaksi maju dan reaksi balik berlangsung secara terus-menerus dengan laju yang sama, sehingga tidak terjadi perubahan bersih secara makroskopik. Dalam keadaan ini, jumlah zat pereaksi dan hasil reaksi tampak tetap, meskipun pada tingkat partikel reaksi tetap berjalan secara dinamis. Kesetimbangan biasanya terjadi pada sistem tertutup dengan suhu dan tekanan yang relatif konstan.
+          </p>
+
+          <p>
+            Berdasarkan fasenya, kesetimbangan dibedakan menjadi <strong>kesetimbangan homogen</strong> dan <strong>kesetimbangan heterogen</strong>. Kesetimbangan homogen terjadi jika semua komponen berada dalam fase yang sama, misalnya semua berupa gas atau larutan, seperti reaksi <code>N₂ + 3H₂ ⇌ 2NH₃</code>. Sementara itu, kesetimbangan heterogen terjadi jika komponen berada dalam fase berbeda, misalnya <code>CaCO₃(s) ⇌ CaO(s) + CO₂(g)</code>. Pada kesetimbangan heterogen, zat padat dan cair murni tidak dimasukkan ke dalam rumus tetapan kesetimbangan.
+          </p>
+
+          <p>
+            <strong>Tetapan kesetimbangan</strong> atau <strong>K</strong> digunakan untuk menunjukkan kecenderungan suatu reaksi membentuk produk pada kondisi tertentu. Jika nilai K besar, maka produk lebih dominan; sedangkan jika nilai K kecil, maka reaktan lebih dominan. Tetapan kesetimbangan dapat dinyatakan sebagai <strong>Kc</strong> berdasarkan konsentrasi dan <strong>Kp</strong> berdasarkan tekanan parsial gas. Rumus umum Kc untuk reaksi <code>aA + bB ⇌ cC + dD</code> adalah <code>Kc = ([C]^c [D]^d) / ([A]^a [B]^b)</code>, sedangkan hubungan Kp dan Kc adalah <code>Kp = Kc(RT)^Δn</code>, dengan Δn merupakan selisih mol gas produk dan mol gas reaktan.
+          </p>
+
+          <p>
+            Arah pergeseran kesetimbangan dapat dijelaskan menggunakan <strong>asas Le Chatelier</strong>. Jika sistem setimbang diberi gangguan, sistem akan bergeser untuk mengurangi pengaruh gangguan tersebut. Pergeseran dapat dipengaruhi oleh perubahan konsentrasi, tekanan atau volume pada sistem gas, serta suhu pada reaksi endoterm dan eksoterm. Perbandingan antara <strong>Q</strong> dan <strong>K</strong> juga dapat digunakan untuk menentukan arah reaksi: jika <code>Q &lt; K</code>, reaksi bergeser ke kanan; jika <code>Q &gt; K</code>, reaksi bergeser ke kiri; dan jika <code>Q = K</code>, sistem sudah berada dalam keadaan setimbang.
+          </p>
+
+          <p>
+            Konsep kesetimbangan kimia banyak diterapkan dalam industri untuk memperoleh hasil reaksi yang optimal dan efisien. Contohnya adalah proses <strong>Haber–Bosch</strong> untuk pembuatan amonia, <strong>Proses Kontak</strong> untuk pembuatan asam sulfat, dan <strong>Proses Ostwald</strong> untuk pembuatan asam nitrat. Dengan memahami faktor-faktor yang memengaruhi kesetimbangan, kondisi reaksi dapat diatur agar menghasilkan produk sebanyak mungkin.
+          </p>
+        </div>
+      `
+    }
+  ],
+  links: []
+};
+
+    // =========================
+    // ICONS
+    // =========================
+    function iconSvg(name){
+      const stroke = 'rgba(255,255,255,.92)';
+      const common = `fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`;
+      switch(name){
+        case "book": return `<svg viewBox="0 0 24 24" ${common}><path d="M4 5a3 3 0 0 1 3-3h11v18H7a3 3 0 0 0-3 3V5z"/><path d="M7 2v18"/></svg>`;
+        case "layers": return `<svg viewBox="0 0 24 24" ${common}><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg>`;
+        case "calc": return `<svg viewBox="0 0 24 24" ${common}><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M8 6h8"/><path d="M8 10h3"/><path d="M13 10h3"/><path d="M8 14h3"/><path d="M13 14h3"/><path d="M8 18h8"/></svg>`;
+        case "balance": return `<svg viewBox="0 0 24 24" ${common}><path d="M12 3v18"/><path d="M5 7h14"/><path d="M7 7l-3 6h6l-3-6z"/><path d="M17 7l-3 6h6l-3-6z"/></svg>`;
+        case "gas": return `<svg viewBox="0 0 24 24" ${common}><path d="M12 2v8"/><path d="M8 6h8"/><path d="M6 14c0 4 3 8 6 8s6-4 6-8-3-6-6-6-6 2-6 6z"/></svg>`;
+        case "nodes": return `<svg viewBox="0 0 24 24" ${common}><path d="M7 7h10v10H7z"/><path d="M4 12h3"/><path d="M17 12h3"/><path d="M12 4v3"/><path d="M12 17v3"/></svg>`;
+        case "flask": return `<svg viewBox="0 0 24 24" ${common}><path d="M10 2v6l-5 9a3 3 0 0 0 2.6 5h8.8A3 3 0 0 0 19 17l-5-9V2"/><path d="M8 6h8"/><path d="M7 16h10"/></svg>`;
+        case "pressure": return `<svg viewBox="0 0 24 24" ${common}><path d="M12 2a8 8 0 0 0-8 8v3a8 8 0 0 0 16 0v-3a8 8 0 0 0-8-8z"/><path d="M12 10l4-2"/><path d="M8 20h8"/></svg>`;
+        case "comp": return `<svg viewBox="0 0 24 24" ${common}><path d="M10 6h10"/><path d="M4 6h2"/><path d="M4 18h2"/><path d="M10 18h10"/><path d="M8 10h12"/><path d="M8 14h12"/><path d="M4 10h2"/><path d="M4 14h2"/></svg>`;
+        case "industry": return `<svg viewBox="0 0 24 24" ${common}><path d="M3 21V9l6 4V9l6 4V3h6v18H3z"/><path d="M7 21v-4"/><path d="M11 21v-6"/><path d="M15 21v-3"/></svg>`;
+        default: return `<svg viewBox="0 0 24 24" ${common}><path d="M12 2v20"/><path d="M2 12h20"/></svg>`;
+      }
+    }
+
+    // =========================
+    // RENDER GRID
+    // =========================
+    const grid = document.getElementById("grid");
+    const stage = document.getElementById("stage");
+    const svg = document.getElementById("lines");
+    const nodeEls = new Map();
+
+    function createNode(n){
+  const el = document.createElement("div");
+  el.className = `node ${n.color} ${n.className || ""}`;
+  el.id = "node-" + n.id;
+  el.style.gridColumn = String(n.col);
+  el.style.gridRow = String(n.row);
+
+  el.innerHTML = `
+    <div class="head">
+      <div class="label"><span class="mini-dot"></span>${n.label}</div>
+      <div class="ico">${iconSvg(n.icon)}</div>
+    </div>
+    <h3>${n.title}</h3>
+    ${n.html ? n.html : `<p>${n.text || ""}</p>`}
+  `;
+
+  if(!n.html){
+    if(n.formula){
+      const f = document.createElement("div");
+      f.className = "formula";
+      f.innerHTML = `<code>${n.formula}</code>`;
+      el.appendChild(f);
+    }
+
+    if(Array.isArray(n.bullets) && n.bullets.length){
+      const ul = document.createElement("ul");
+      n.bullets.forEach(b=>{
+        const li = document.createElement("li");
+        li.textContent = b;
+        ul.appendChild(li);
+      });
+      el.appendChild(ul);
+    }
+  }
+
+  grid.appendChild(el);
+  nodeEls.set(n.id, el);
+}
+    data.nodes.forEach(createNode);
+
+    // =========================
+    // DRAW CONNECTORS (ARTISTIC ARROWS)
+    // =========================
+    function anchorRight(el){
+      const r = el.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      return { x: (r.right - sr.left), y: (r.top - sr.top) + r.height/2 };
+    }
+    function anchorLeft(el){
+      const r = el.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      return { x: (r.left - sr.left), y: (r.top - sr.top) + r.height/2 };
+    }
+    function anchorBottom(el){
+      const r = el.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      return { x: (r.left - sr.left) + r.width/2, y: (r.bottom - sr.top) };
+    }
+    function anchorTop(el){
+      const r = el.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      return { x: (r.left - sr.left) + r.width/2, y: (r.top - sr.top) };
+    }
+
+    function bezier(a,b){
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+
+      // kurva artistik: kontrol membulat
+      const bend = Math.min(170, Math.max(90, Math.abs(dx)*0.45));
+      const c1 = { x: a.x + Math.sign(dx) * bend, y: a.y };
+      const c2 = { x: b.x - Math.sign(dx) * bend, y: b.y };
+
+      if (Math.abs(dx) < 40){
+        const bendY = Math.min(140, Math.max(80, Math.abs(dy)*0.45));
+        const c1v = { x: a.x, y: a.y + Math.sign(dy) * bendY };
+        const c2v = { x: b.x, y: b.y - Math.sign(dy) * bendY };
+        return `M ${a.x} ${a.y} C ${c1v.x} ${c1v.y}, ${c2v.x} ${c2v.y}, ${b.x} ${b.y}`;
+      }
+
+      return `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
+    }
+
+    function draw(){
+      svg.setAttribute("viewBox", `0 0 ${stage.clientWidth} ${stage.clientHeight}`);
+
+      // hapus path lama (kecuali defs)
+      [...svg.querySelectorAll("path.link-base, path.link-hi")].forEach(p => p.remove());
+
+      for(const [from,to] of data.links){
+        const A = nodeEls.get(from);
+        const B = nodeEls.get(to);
+        if(!A || !B) continue;
+
+        const ar = A.getBoundingClientRect();
+        const br = B.getBoundingClientRect();
+
+        let p1, p2;
+        if (br.left > ar.right + 10){
+          p1 = anchorRight(A);
+          p2 = anchorLeft(B);
+        } else if (br.top > ar.bottom + 10){
+          p1 = anchorBottom(A);
+          p2 = anchorTop(B);
+        } else {
+          p1 = anchorRight(A);
+          p2 = anchorLeft(B);
+        }
+
+        const d = bezier(p1,p2);
+
+        // 1) garis dasar (neon tebal)
+        const base = document.createElementNS("http://www.w3.org/2000/svg","path");
+        base.setAttribute("class","link-base");
+        base.setAttribute("d", d);
+        base.setAttribute("fill","none");
+        base.setAttribute("stroke","url(#gradLine)");
+        base.setAttribute("marker-end","url(#arrowNeon)");
+        svg.appendChild(base);
+
+        // 2) highlight (putih tipis + dash animate)
+        const hi = document.createElementNS("http://www.w3.org/2000/svg","path");
+        hi.setAttribute("class","link-hi");
+        hi.setAttribute("d", d);
+        hi.setAttribute("fill","none");
+        hi.setAttribute("stroke","rgba(255,255,255,.82)");
+        hi.setAttribute("marker-end","url(#arrowWhite)");
+        svg.appendChild(hi);
+      }
+    }
+
+    // Panah dimatikan karena semua materi sudah dijadikan satu kotak
+// requestAnimationFrame(()=> requestAnimationFrame(draw));
+// window.addEventListener("resize", ()=> requestAnimationFrame(draw));
+  </script>
+  <script>
+  document.getElementById("btnBackPre")?.addEventListener("click", () => {
+    localStorage.setItem("KI_GO_TO", "landing");
+    window.location.href = "h1.html";
+  });
+</script>
+</body>
+</html>

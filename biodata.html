@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Biodata Pengembang • Agent Le C</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+      --stroke:rgba(255,255,255,.12);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 25%, rgba(255,79,216,.24), transparent 60%),
+        radial-gradient(900px 700px at 85% 25%, rgba(124,77,255,.26), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.16), transparent 62%),
+        linear-gradient(180deg,var(--bg0),var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,
+    .grain{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(2px 2px at 52% 78%, rgba(255,255,255,.22), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+      mix-blend-mode:screen;
+    }
+
+    @keyframes twinkle{
+      0%,100%{
+        opacity:.44;
+        transform:translateY(0);
+      }
+
+      50%{
+        opacity:.66;
+        transform:translateY(-2px);
+      }
+    }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+
+    .vignette{
+      position:fixed;
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.56) 75%, rgba(0,0,0,.78) 100%);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:16px 20px;
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.25));
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(255,79,216,.46), rgba(124,77,255,.46));
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:950;
+      box-shadow:0 10px 34px rgba(0,0,0,.30);
+    }
+
+    .brand-title{
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      margin-top:2px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:11px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:850;
+      font-family:inherit;
+      box-shadow:0 10px 34px rgba(0,0,0,.20);
+      transition:.14s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.22);
+    }
+
+    .btn.primary{
+      background:linear-gradient(90deg, rgba(255,42,161,.90), rgba(124,77,255,.88));
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    main{
+      position:relative;
+      z-index:3;
+      width:min(1120px,100%);
+      margin:0 auto;
+      padding:clamp(22px,4vw,48px);
+    }
+
+    .hero{
+      text-align:center;
+      margin:18px auto 30px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.76);
+      font-weight:850;
+      box-shadow:0 12px 34px rgba(0,0,0,.22);
+    }
+
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg,var(--mag),var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+      box-shadow:0 0 18px rgba(255,79,216,.35);
+    }
+
+    .hero h1{
+      margin:24px 0 0;
+      font-size:clamp(44px,7vw,88px);
+      line-height:.95;
+      letter-spacing:-.035em;
+      font-weight:950;
+    }
+
+    .hero h1 span{
+      display:inline-block;
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+      transform:skewX(-6deg);
+    }
+
+    .hero p{
+      margin:18px auto 0;
+      max-width:760px;
+      color:rgba(255,255,255,.64);
+      line-height:1.8;
+      font-size:16px;
+    }
+
+    .bio-grid{
+      display:grid;
+      grid-template-columns:.85fr 1.15fr;
+      gap:22px;
+      align-items:stretch;
+      margin-top:28px;
+    }
+
+    @media(max-width:900px){
+      .bio-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .profile-card,
+    .info-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:
+        radial-gradient(700px 260px at 15% 0%, rgba(255,79,216,.16), transparent 60%),
+        radial-gradient(700px 300px at 90% 100%, rgba(124,77,255,.18), transparent 62%),
+        rgba(255,255,255,.055);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 20px 70px rgba(0,0,0,.36);
+      backdrop-filter:blur(14px);
+    }
+
+    .profile-card{
+      padding:26px;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      min-height:520px;
+    }
+
+    .photo-wrap{
+      width:230px;
+      height:230px;
+      border-radius:34px;
+      padding:8px;
+      background:linear-gradient(135deg, rgba(255,79,216,.80), rgba(124,77,255,.70), rgba(45,108,255,.70));
+      box-shadow:0 18px 60px rgba(124,77,255,.32);
+    }
+
+    .photo{
+      width:100%;
+      height:100%;
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.22), transparent 40%),
+        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.20);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+    }
+
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .photo-placeholder{
+      padding:18px;
+      text-align:center;
+      color:rgba(255,255,255,.74);
+      font-weight:850;
+      line-height:1.5;
+    }
+
+    .profile-card h2{
+      margin:22px 0 6px;
+      font-size:30px;
+      line-height:1.1;
+      font-weight:950;
+    }
+
+    .profile-card .role{
+      color:rgba(255,255,255,.62);
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .profile-tags{
+      margin-top:18px;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .tag{
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .info-card{
+      padding:26px;
+    }
+
+    .section-title{
+      margin:0 0 16px;
+      font-size:24px;
+      font-weight:950;
+    }
+
+    .data-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .data-row{
+      display:grid;
+      grid-template-columns:190px 1fr;
+      gap:14px;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    @media(max-width:640px){
+      .data-row{
+        grid-template-columns:1fr;
+        gap:6px;
+      }
+    }
+
+    .data-label{
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+    }
+
+    .data-value{
+      color:rgba(255,255,255,.92);
+      font-weight:800;
+      line-height:1.55;
+    }
+
+    .about-box{
+      margin-top:18px;
+      padding:18px;
+      border-radius:22px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.28);
+      box-shadow:0 14px 44px rgba(0,0,0,.24);
+    }
+
+    .about-box h3{
+      margin:0 0 8px;
+      color:#312e81;
+      font-size:20px;
+      font-weight:950;
+    }
+
+    .about-box p{
+      margin:0;
+      color:#374151;
+      line-height:1.75;
+      font-weight:650;
+    }
+
+    .footer-actions{
+      margin-top:26px;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .note{
+      margin-top:18px;
+      text-align:center;
+      color:rgba(255,255,255,.44);
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+    .biodata-section{
+  display:grid;
+  gap:24px;
+  margin-top:30px;
+}
+
+.bio-row{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  gap:22px;
+  align-items:stretch;
+}
+
+@media(max-width:900px){
+  .bio-row{
+    grid-template-columns:1fr;
+  }
+}
+
+.photo-card,
+.bio-info-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:34px;
+  background:
+    radial-gradient(700px 260px at 15% 0%, rgba(255,79,216,.16), transparent 60%),
+    radial-gradient(700px 300px at 90% 100%, rgba(124,77,255,.18), transparent 62%),
+    rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 20px 70px rgba(0,0,0,.36);
+  backdrop-filter:blur(14px);
+}
+
+.photo-card{
+  padding:24px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-height:410px;
+}
+
+.photo-wrap{
+  width:230px;
+  height:230px;
+  border-radius:34px;
+  padding:8px;
+  background:linear-gradient(135deg, rgba(255,79,216,.85), rgba(124,77,255,.75), rgba(45,108,255,.70));
+  box-shadow:0 18px 60px rgba(124,77,255,.32);
+}
+
+.photo-wrap.dospem{
+  background:linear-gradient(135deg, rgba(45,108,255,.82), rgba(124,77,255,.78), rgba(255,79,216,.72));
+}
+
+.photo{
+  width:100%;
+  height:100%;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.22), transparent 40%),
+    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.20);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.photo-placeholder{
+  padding:18px;
+  text-align:center;
+  color:rgba(255,255,255,.74);
+  font-weight:900;
+  line-height:1.5;
+}
+
+.photo-card h2{
+  margin:20px 0 6px;
+  font-size:26px;
+  line-height:1.1;
+  font-weight:950;
+}
+
+.photo-card p{
+  margin:0;
+  color:rgba(255,255,255,.62);
+  line-height:1.6;
+  font-size:14px;
+}
+
+.bio-info-card{
+  padding:26px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.mini-title{
+  display:inline-flex;
+  width:max-content;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,79,216,.10);
+  border:1px solid rgba(255,79,216,.20);
+  color:rgba(255,79,216,.88);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.bio-info-card h2{
+  margin:0 0 18px;
+  font-size:28px;
+  font-weight:950;
+}
+
+.bio-paragraph-box{
+  padding:22px;
+  border-radius:24px;
+  background:#ffffff;
+  color:#111827;
+  border:2px solid rgba(124,77,255,.28);
+  box-shadow:0 14px 44px rgba(0,0,0,.24);
+}
+
+.bio-paragraph-box p{
+  margin:0;
+  color:#374151;
+  font-size:16px;
+  line-height:1.85;
+  font-weight:650;
+  text-align:justify;
+}
+
+.bio-paragraph-box b{
+  color:#312e81;
+  font-weight:950;
+}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <div class="brand-title">Kesetimbangan Kimia</div>
+        <div class="brand-sub">Agent Le C • Biodata Pengembang</div>
+      </div>
+    </div>
+
+    <a
+      class="btn"
+      href="h1.html"
+      onclick="localStorage.setItem('KI_GO_TO','landing')"
+    >
+      ⬅ Kembali ke Peta Eksplorasi
+    </a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="pill">
+        <span class="hex"></span>
+        <span>PROFIL PENGEMBANG MEDIA</span>
+      </div>
+
+      <h1>
+        Biodata<br>
+        <span>Pengembang</span>
+      </h1>
+
+      <p>
+        Halaman ini berisi identitas pengembang media pembelajaran
+        <b>Agent Le C</b> pada materi Kesetimbangan Kimia.
+      </p>
+    </section>
+
+    <section class="biodata-section">
+
+  <!-- BIODATA PENGEMBANG -->
+  <div class="bio-row">
+    <div class="photo-card">
+      <div class="photo-wrap">
+        <div class="photo">
+         <img src="foto-pengembang.jpg" alt="Foto Pengembang">
+        </div>
+      </div>
+
+      <h2>Febiola Rizqi Amira</h2>
+      <p>Mahasiswa</p>
+    </div>
+
+    <div class="bio-info-card">
+      <div class="mini-title">Biodata Pengembang</div>
+      <h2>Identitas Pengembang Media</h2>
+
+      <div class="bio-paragraph-box">
+        <p>
+          Media pembelajaran interaktif <b>Agent Le C</b> dikembangkan oleh
+          <b>Febiola Rizqi Amira</b>, mahasiswa Program Studi S1 Pendidikan 
+            Kimia, Departemen Kimia, Fakultas Matematika dan Ilmu 
+            Pengetahuan Alam, Universitas Negeri Malang.  
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIODATA DOSEN PEMBIMBING -->
+  <div class="bio-row">
+    <div class="photo-card">
+      <div class="photo-wrap dospem">
+        <div class="photo"> 
+          <img src="foto-dospem.jpg" alt="Foto Dosen Pembimbing">
+        </div>
+      </div>
+
+      <h2>Dr. Munzil, M.Si.</h2>
+      <p>Dosen Pembimbing</p>
+    </div>
+
+    <div class="bio-info-card">
+      <div class="mini-title">Biodata Dosen Pembimbing</div>
+      <h2>Identitas Dosen Pembimbing</h2>
+
+      <div class="bio-paragraph-box">
+        <p>
+          Pengembangan media pembelajaran <b>Agent Le C</b> dibimbing oleh
+          <b>Dr. Munzil, M.Si.</b> merupakan dosen Departemen Kimia, Fakultas Matematika dan Ilmu Pengetahuan 
+          Alam, Universitas Negeri Malang. Dosen pembimbing berperan dalam
+          memberikan arahan, masukan, dan pendampingan selama proses
+          perancangan, pengembangan, serta penyempurnaan media pembelajaran
+          agar sesuai dengan tujuan pembelajaran dan kebutuhan peserta didik.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENTANG MEDIA -->
+  <div class="about-box">
+    <h3>Tentang Media</h3>
+    <p>
+      Agent Le C adalah media pembelajaran imersif yang dirancang untuk
+    menciptakan pengalaman belajar yang mendalam pada materi kesetimbangan
+    kimia. Dengan dukungan visual futuristik, tahapan eksplorasi, analisis
+    data, latihan soal, dan refleksi, media ini membantu peserta didik
+    memahami konsep secara lebih bermakna. Media ini juga dilengkapi dengan
+    rekap data guru agar pembelajaran dapat dipantau dan dievaluasi dengan
+    lebih terarah.
+    </p>
+  </div>
+
+</section>
+
+    <div class="footer-actions">
+      <a
+        class="btn primary"
+        href="h1.html"
+        onclick="localStorage.setItem('KI_GO_TO','landing')"
+      >
+        Kembali ke Peta Eksplorasi
+      </a>
+    </div>
+
+    <div class="note">
+      Agent Le C • Media Pembelajaran Kesetimbangan Kimia
+    </div>
+  </main>
+</body>
+</html>

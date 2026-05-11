@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Refleksi Sub Bab 3 • Pergeseran Kesetimbangan</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+
+    @keyframes twinkle{
+      0%,100%{opacity:.46;}
+      50%{opacity:.66;}
+    }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.50), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{margin-top:2px; font-size:12px; color:var(--muted);}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+
+    .btn:hover,.btn-primary:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.24);
+    }
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1120px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+
+    .subtitle{
+      margin:12px 0 0;
+      max-width:880px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .info-box{
+      margin-top:14px;
+      padding:16px 18px;
+      border-radius:20px;
+      background:#ffffff;
+      color:#161616;
+      border:2px solid rgba(124,77,255,.35);
+      box-shadow:0 14px 46px rgba(0,0,0,.28), 0 0 0 6px rgba(124,77,255,.08);
+      line-height:1.7;
+    }
+
+    .info-box strong{color:#6f24d9;}
+
+    .form-box{
+      margin-top:14px;
+      padding:18px;
+      border-radius:24px;
+      background:#ffffff;
+      border:2px solid rgba(124,77,255,.32);
+      box-shadow:0 18px 70px rgba(0,0,0,.28), 0 0 0 6px rgba(124,77,255,.08);
+      display:grid;
+      gap:14px;
+    }
+
+    .form-box .muted{color:#222222; font-weight:600;}
+
+    .form-box .btn-primary{
+      width:max-content;
+      background:linear-gradient(135deg, #4c1d95, #1e3a8a);
+      color:#ffffff;
+      border:2px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 26px rgba(30,58,138,.28);
+    }
+
+    .form-box .btn-primary:hover,
+    .form-box .btn-primary:visited,
+    .form-box .btn-primary:active{
+      color:#ffffff;
+      background:linear-gradient(135deg, #3b0764, #172554);
+      text-decoration:none;
+    }
+
+    .form-embed{
+      width:100%;
+      min-height:920px;
+      border:0;
+      border-radius:18px;
+      background:#ffffff;
+      display:block;
+    }
+
+    @media(max-width:720px){
+      .form-embed{min-height:820px;}
+      .topbar{align-items:flex-start; flex-direction:column;}
+    }
+
+    .footer-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">R</div>
+      <div>
+        <div class="brand-title">Refleksi Sub Bab 3</div>
+        <div class="brand-sub">Faktor Pergeseran Kesetimbangan</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="h1.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#formRefleksi">Isi Refleksi</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill">
+        <span class="hex"></span>
+        <span>Problem Based Learning • Refleksi</span>
+      </div>
+
+      <section class="hero">
+        <h1 class="title">📝 Refleksi <span class="accent">Sub Bab 3</span></h1>
+        <p class="subtitle">
+          Setelah mempelajari faktor pergeseran kesetimbangan melalui sistem kobalt klorida dan penguatan FeCl₃ + KSCN,
+          lakukan refleksi untuk menilai pemahamanmu terhadap prinsip Le Chatelier dan pengalaman belajar selama penyelidikan.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Materi yang Telah Dipelajari</h2>
+          <p class="muted">
+            Pada Sub Bab 3, peserta didik mempelajari faktor-faktor yang memengaruhi pergeseran kesetimbangan,
+            yaitu perubahan konsentrasi, pengurangan ion Cl⁻ dengan AgNO₃, penambahan HCl, serta perubahan suhu
+            pada sistem kesetimbangan kobalt klorida. Pemahaman kemudian diperkuat melalui sistem Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺.
+          </p>
+
+          <div class="info-box">
+            <strong>Tujuan refleksi:</strong> membantu peserta didik mengevaluasi pemahaman tentang prinsip Le Chatelier,
+            hubungan antara perlakuan dan perubahan warna, arah pergeseran kesetimbangan, serta bagian materi yang masih perlu diperdalam.
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="formRefleksi">
+        <div class="card-inner">
+          <h2>🧾 Form Refleksi Sub Bab 3</h2>
+
+          <div class="form-box">
+            <p class="muted" style="margin:0;">
+              Isi Google Form berikut sampai selesai. Jika form tidak tampil dengan baik, gunakan tombol di bawah untuk membuka form di tab baru.
+            </p>
+
+            <a class="btn-primary" href="https://forms.gle/aJjg7SmAc98QKQWK6" target="_blank" rel="noopener">
+              Buka Google Form di Tab Baru
+            </a>
+
+            <iframe
+              class="form-embed"
+              src="https://forms.gle/aJjg7SmAc98QKQWK6"
+              title="Form Refleksi Sub Bab 3"
+              loading="lazy">
+              Memuat…
+            </iframe>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="subbab3-penyajian-hasil.html">⬅ Kembali ke Penyajian Hasil</a>
+        <a
+  class="btn-primary"
+  href="h1.html"
+  onclick="localStorage.setItem('KI_GO_TO', 'landing')"
+>
+  Selesai ➜
+</a>
+      </div>
+    </div>
+  </main>
+<script>
+const SB3_STORAGE_KEY = "dataAdminGuruSB3";
+
+function ambilIdentitasSB3(extra = {}){
+  let user = {};
+  try{ user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {}; }catch(e){ user = {}; }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem("kelompokSubBab3") || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB3(payload){
+  const identitas = ambilIdentitasSB3(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman,
+    judul: payload.judul,
+    skor: payload.skor,
+    status: payload.status,
+    ringkasan: payload.ringkasan,
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB3_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB3_STORAGE_KEY, JSON.stringify(dataLama));
+}
+
+function simpanStatusRefleksiSB3(status){
+  simpanKeDataSB3({
+    halaman: "sb36",
+    judul: "Refleksi Sub Bab 3",
+    skor: status === "kembali ke peta eksplorasi" ? 100 : 50,
+    status: status,
+    ringkasan: "Status refleksi tersimpan. Isi jawaban Google Form tidak bisa dibaca langsung oleh halaman HTML.",
+    jawaban: {
+      statusRefleksi: status,
+      sumberJawaban: "Google Form eksternal"
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll('a[href*="forms.gle"]').forEach((link) => {
+    link.addEventListener("click", function(){
+      simpanStatusRefleksiSB3("membuka Google Form refleksi");
+    });
+  });
+
+  const selesai = document.querySelector('a[href="h1.html"]');
+  if(selesai){
+    selesai.addEventListener("click", function(){
+      simpanStatusRefleksiSB3("kembali ke peta eksplorasi");
+      localStorage.setItem("KI_GO_TO", "landing");
+    });
+  }
+});
+</script> 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 3,
+    pageKey: "sb36",
+    pageTitle: "Sub Bab 3 — Refleksi Pergeseran Kesetimbangan"
+  });
+});
+</script> 
+</body>
+</html>

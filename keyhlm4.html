@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Halaman 4 — Menguji Hipotesis</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.84);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .choice {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      margin-top: 10px;
+    }
+
+    .choice.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+    }
+
+    .choice.incorrect {
+      border-color: rgba(239,68,68,.22);
+      background: rgba(239,68,68,.08);
+    }
+
+    .videoWrap {
+      position: relative;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      aspect-ratio: 16 / 9;
+    }
+
+    .videoWrap iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 1</b>
+          <span>Halaman 4 • Menguji Hipotesis</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb1.html">📊 Data Sub Bab 1</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="grid cols-2">
+        <div class="card solid">
+          <h2>🎥 Video Percobaan</h2>
+          <p class="muted">
+            Video digunakan untuk mengamati perubahan warna larutan sebelum dan sesudah perlakuan.
+          </p>
+
+          <div class="videoWrap">
+            <iframe
+              src="https://www.youtube.com/embed/GcEIpo1DoCk"
+              title="Video Percobaan Kesetimbangan Co2+"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+
+        <div class="card solid">
+          <h2>🔍 Fokus Pengamatan</h2>
+
+          <div class="concept">
+            <div class="tag">Pengamatan Utama</div>
+            <ul>
+              <li>Warna awal larutan.</li>
+              <li>Perubahan warna setelah penambahan HCl.</li>
+              <li>Perubahan warna setelah penambahan air.</li>
+              <li>Apakah warna dapat berubah kembali seperti semula.</li>
+            </ul>
+          </div>
+
+          <div class="answer">
+            <h3>Kunci Ringkasan Pengamatan</h3>
+            <ul>
+              <li><b>Warna awal:</b> merah muda/pink.</li>
+              <li><b>Setelah ditambahkan HCl:</b> berubah menjadi biru.</li>
+              <li><b>Setelah ditambahkan air:</b> kembali menjadi merah muda/pink.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pertanyaan 1 — Apa yang terjadi setelah larutan ditambahkan HCl?</h2>
+
+        <div class="answer">
+          <h3>Jawaban ideal</h3>
+          <p>
+            Setelah ditambahkan HCl, warna larutan berubah dari merah muda/pink menjadi biru.
+            Perubahan ini menunjukkan bahwa penambahan HCl memengaruhi komposisi zat dalam larutan
+            sehingga keadaan sistem bergeser.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Pembahasan</div>
+          <p>
+            Penambahan HCl menambah konsentrasi ion klorida dalam sistem. Akibatnya, sistem bergeser
+            ke arah pembentukan kompleks berwarna biru. Hal ini menjadi bukti bahwa kondisi sistem
+            dapat memengaruhi arah reaksi.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pertanyaan 2 — Apa yang terjadi setelah larutan ditambahkan air?</h2>
+
+        <div class="answer">
+          <h3>Jawaban ideal</h3>
+          <p>
+            Setelah ditambahkan air, warna larutan berubah kembali dari biru menuju merah muda/pink.
+            Hal ini menunjukkan bahwa perubahan warna tersebut dapat dibalik ketika kondisi sistem diubah.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Pembahasan</div>
+          <p>
+            Penambahan air mengencerkan sistem dan mengubah kondisi reaksi. Akibatnya, sistem dapat bergeser
+            kembali ke arah spesi yang memberikan warna merah muda. Perubahan yang dapat kembali ini menunjukkan
+            sifat reaksi reversible.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pertanyaan 3 — Jenis reaksi berdasarkan pengamatan</h2>
+
+        <div class="choice correct">
+          <h3>✅ Jawaban benar: Dua arah / bolak-balik</h3>
+          <p>
+            Perubahan warna dapat kembali ketika kondisi sistem diubah, sehingga reaksi menunjukkan sifat
+            dua arah atau bolak-balik.
+          </p>
+        </div>
+
+        <div class="choice incorrect">
+          <h3>❌ Jawaban kurang tepat: Satu arah</h3>
+          <p>
+            Jawaban ini kurang tepat karena pada percobaan terlihat bahwa warna larutan tidak hanya berubah sekali,
+            tetapi dapat berubah kembali ketika ditambahkan air.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pertanyaan 4 — Apakah hasil pengamatan sesuai dengan hipotesis?</h2>
+
+        <div class="answer">
+          <h3>Jawaban ideal</h3>
+          <p>
+            Ya, hasil pengamatan sesuai dengan hipotesis jika hipotesis siswa menyatakan bahwa perubahan warna
+            larutan Co²⁺ dapat berlangsung bolak-balik. Hal ini terbukti dari perubahan warna pink menjadi biru
+            setelah ditambahkan HCl, kemudian kembali menjadi pink setelah ditambahkan air.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Arahan koreksi</div>
+          <p>
+            Jika siswa menjawab “tidak”, tetapi alasannya menunjukkan bahwa ia memahami perubahan warna dapat kembali,
+            guru dapat memberi arahan bahwa kesimpulannya sebenarnya mendukung hipotesis reaksi bolak-balik.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kesimpulan Sementara</h2>
+
+        <div class="answer">
+          <h3>Contoh kesimpulan ideal</h3>
+          <p>
+            Perubahan warna larutan menunjukkan bahwa reaksi dapat berlangsung bolak-balik ketika kondisi sistem
+            diubah. Saat ditambahkan HCl, warna berubah menjadi biru, sedangkan saat ditambahkan air, warna kembali
+            menjadi pink. Oleh karena itu, hasil pengamatan mendukung hipotesis bahwa reaksi tersebut bersifat
+            reversible dan dapat menuju keadaan kesetimbangan dinamis.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci Halaman 4</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Observasi</div>
+            <p><b>Warna awal:</b> pink</p>
+            <p><b>+ HCl:</b> biru</p>
+            <p><b>+ Air:</b> kembali pink</p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Analisis</div>
+            <p>
+              Perubahan dapat kembali, sehingga reaksi menunjukkan sifat dua arah atau bolak-balik.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Kesimpulan</div>
+            <p>
+              Hasil pengamatan mendukung hipotesis bahwa reaksi dapat berlangsung reversible.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keyhlm3.html">⬅ Kunci Halaman 3</a>
+          <div>
+            <a class="btn blue" href="datasb1.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keyhlm5.html">Lanjut Kunci Halaman 5 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

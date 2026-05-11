@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 4 • Eksplorasi Informasi Proses Haber</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1120px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:940px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .saved-box,.white-box{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .saved-box{border:2px solid rgba(102,242,165,.35);}
+    .white-box{border:2px solid rgba(124,77,255,.32);}
+    .saved-box h3{color:#15803d;}
+    .white-box h3{color:#111827;}
+    .saved-box p,.white-box p{margin:8px 0 0; color:#374151; font-weight:650;}
+    .empty-note{color:#7c2d12; background:#fff7ed; border:1px solid #fdba74; padding:12px; border-radius:16px; font-weight:800;}
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    @media(max-width:1000px){.info-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:560px){.info-grid{grid-template-columns:1fr;}}
+    .info-card{
+      background:#ffffff;
+      color:#111827;
+      border-radius:20px;
+      border:2px solid rgba(124,77,255,.25);
+      padding:14px;
+      box-shadow:var(--shadow2);
+      line-height:1.55;
+      font-weight:650;
+      display:grid;
+      gap:6px;
+      align-content:start;
+    }
+    .info-card .icon{font-size:26px;}
+    .info-card b{display:block; color:#312e81;}
+    .info-card p{margin:0; color:#374151;}
+
+    .guide-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+    @media(max-width:800px){.guide-grid{grid-template-columns:1fr;}}
+    .guide-card{
+      background:#ffffff;
+      color:#111827;
+      border-radius:20px;
+      border:2px solid rgba(45,108,255,.22);
+      padding:16px;
+      box-shadow:var(--shadow2);
+      line-height:1.65;
+      font-weight:650;
+    }
+
+    .resource-card{
+  background:#ffffff;
+  color:#111827;
+  border-radius:22px;
+  border:2px solid rgba(124,77,255,.28);
+  padding:18px;
+  box-shadow:var(--shadow2);
+  display:grid;
+  gap:12px;
+  align-content:start;
+}
+
+.resource-card h3{
+  color:#111827;
+  margin:0;
+}
+
+.resource-card p{
+  color:#374151;
+  margin:0;
+  line-height:1.65;
+  font-weight:650;
+}
+
+.handout-wrap{
+  margin-top:4px;
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.12);
+  overflow:hidden;
+  background:#ffffff;
+  height:620px;
+  box-shadow:0 12px 32px rgba(15,23,42,.18);
+}
+
+.handout-wrap iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#ffffff;
+}
+    .guide-card b{color:#1d4ed8;}
+
+    .form-box{
+      display:grid;
+      gap:16px;
+      margin-top:14px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.28);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 14px 36px rgba(15,23,42,.15);
+    }
+    .field-group{display:grid; gap:8px;}
+    .field-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#312e81;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .field-label span{
+      width:24px;
+      height:24px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color:#ffffff;
+      background:linear-gradient(135deg, #ff4fd8, #7c4dff);
+      font-size:12px;
+      font-weight:950;
+    }
+    .field-help{margin:0; color:#4b5563; font-size:13px; line-height:1.55; font-weight:650;}
+    .textarea-box,.input-line{
+      width:100%;
+      border-radius:18px;
+      padding:14px 15px;
+      border:2px solid #c7d2fe;
+      background:#f9fafb;
+      color:#111827;
+      font-family:inherit;
+      font-weight:700;
+      outline:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+    }
+    .textarea-box{min-height:150px; resize:vertical; line-height:1.65;}
+    .input-line::placeholder,.textarea-box::placeholder{color:#6b7280; font-weight:650;}
+    .input-line:focus,.textarea-box:focus{border-color:#7c4dff; background:#ffffff; box-shadow:0 0 0 5px rgba(124,77,255,.15);}
+
+    .feedback{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(102,242,165,.28);
+      background:rgba(102,242,165,.10);
+      color:#d8ffe8;
+      line-height:1.6;
+      font-weight:850;
+    }
+    .footer-actions{display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A4</div>
+      <div>
+        <div class="brand-title">Sub Bab 4</div>
+        <div class="brand-sub">Eksplorasi Informasi Proses Haber</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="h1.html"">⬅ Kembali</a>
+      <a class="btn-primary" href="#catatan">Isi Catatan</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Inkuiri Terbimbing • Eksplorasi Informasi</span></div>
+
+      <section class="hero">
+        <h1 class="title">🔍 Eksplorasi Informasi <span class="accent">Proses Haber</span></h1>
+        <p class="subtitle">
+          Pada tahap ini, peserta didik mengumpulkan informasi untuk menjawab pertanyaan penyelidikan yang telah dirumuskan pada halaman sebelumnya.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Pertanyaan Penyelidikan dari Halaman Sebelumnya</h2>
+          <div id="rumusanTersimpan" class="saved-box">
+            <h3>Memuat pertanyaan penyelidikan...</h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+  <div class="card-inner">
+    <h2>📄 Handout Lengkap Materi Aplikasi Kesetimbangan</h2>
+    <p class="muted">
+      Gunakan handout berikut sebagai sumber belajar utama pada tahap eksplorasi informasi.
+      Bacalah bagian proses Haber terlebih dahulu untuk menemukan informasi yang relevan dengan pertanyaan penyelidikan.
+      Contoh aplikasi kesetimbangan dalam kehidupan digunakan sebagai penguatan konsep.
+    </p>
+
+    <div class="resource-card" style="margin-top:14px;">
+      <h3>Handout Aplikasi Kesetimbangan dalam Industri dan Kehidupan</h3>
+      <p>
+        Handout ini memuat penerapan prinsip kesetimbangan kimia pada proses Haber-Bosch serta contoh aplikasi kesetimbangan dalam kehidupan sehari-hari.
+      </p>
+
+      <a class="btn-primary" href="https://drive.google.com/file/d/1alTepp8tJTvjcpbhdhJ3Yl2ni7N88pN5/view?usp=sharing" target="_blank" rel="noopener">
+        Buka Handout di Tab Baru
+      </a>
+
+      <div class="handout-wrap">
+        <iframe
+          src="https://drive.google.com/file/d/1alTepp8tJTvjcpbhdhJ3Yl2ni7N88pN5/preview"
+          title="Handout Aplikasi Kesetimbangan dalam Industri dan Kehidupan"
+          loading="lazy"
+          allow="autoplay">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+      <section class="card">
+        <div class="card-inner">
+          <h2>📚 Informasi Kunci Proses Haber</h2>
+          <p class="muted">
+  Gunakan ringkasan berikut sebagai petunjuk awal sebelum membaca handout secara lebih lengkap.
+  Fokuskan pencarian informasi pada hubungan antara kondisi reaksi, arah pergeseran kesetimbangan, dan peningkatan hasil NH₃.
+</p>
+
+          <div class="white-box" style="margin-top:14px;">
+            <h3>Reaksi Kesetimbangan Proses Haber</h3>
+            <p style="font-size:24px; font-weight:950; color:#312e81; text-align:center; margin:12px 0;">
+              N₂(g) + 3H₂(g) ⇌ 2NH₃(g)<br>
+              ΔH = −92,2 kJ
+            </p>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="icon">⚖️</div>
+              <b>Tekanan</b>
+              <p>Tekanan tinggi menguntungkan sisi dengan jumlah mol gas lebih sedikit, yaitu sisi produk NH₃.</p>
+            </div>
+            <div class="info-card">
+              <div class="icon">🌡️</div>
+              <b>Suhu</b>
+              <p>Reaksi pembentukan NH₃ bersifat eksoterm, tetapi suhu terlalu rendah membuat laju reaksi lambat.</p>
+            </div>
+            <div class="info-card">
+              <div class="icon">🧪</div>
+              <b>Katalis</b>
+              <p>Katalis besi mempercepat tercapainya kesetimbangan tanpa mengubah posisi kesetimbangan.</p>
+            </div>
+            <div class="info-card">
+              <div class="icon">📤</div>
+              <b>Pemisahan NH₃</b>
+              <p>NH₃ yang dipisahkan dari sistem mendorong kesetimbangan bergeser membentuk produk kembali.</p>
+            </div>
+            <div class="info-card">
+              <div class="icon">♻️</div>
+              <b>Daur Ulang Gas</b>
+              <p>N₂ dan H₂ yang belum bereaksi dapat dialirkan kembali agar penggunaan bahan lebih efisien.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🧭 Panduan Eksplorasi</h2>
+          <p class="muted">
+            Gunakan panduan berikut untuk menyaring informasi yang relevan. Bagian ini berfungsi sebagai arahan, bukan jawaban akhir.
+          </p>
+
+          <div class="guide-grid">
+            <div class="guide-card"><b>1. Hubungkan dengan pertanyaanmu.</b><br>Catat informasi yang langsung membantu menjawab pertanyaan penyelidikan kelompok.</div>
+            <div class="guide-card"><b>2. Gunakan prinsip Le Chatelier.</b><br>Jelaskan apakah suatu perlakuan menyebabkan kesetimbangan bergeser ke arah reaktan atau produk.</div>
+            <div class="guide-card"><b>3. Bedakan hasil dan laju reaksi.</b><br>Tekanan dan suhu dapat memengaruhi hasil kesetimbangan, sedangkan katalis terutama mempercepat tercapainya kesetimbangan.</div>
+            <div class="guide-card"><b>4. Kaitkan dengan efisiensi industri.</b><br>Perhatikan mengapa industri tidak hanya mengejar hasil maksimum, tetapi juga mempertimbangkan biaya, keamanan, dan waktu reaksi.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="catatan">
+        <div class="card-inner">
+          <h2>✍️ Catatan Hasil Eksplorasi Informasi</h2>
+          <p class="muted">
+            Tuliskan informasi penting yang ditemukan untuk menjawab pertanyaan penyelidikan. Catatan ini akan digunakan pada tahap berikutnya untuk menyusun kesimpulan sementara.
+          </p>
+
+          <div class="form-box">
+            <div class="field-group">
+              <label class="field-label" for="sumberInformasi"><span>1</span> Sumber Informasi yang Digunakan</label>
+              <input id="sumberInformasi" class="input-line" type="text" placeholder="Contoh: Handout Aplikasi Kesetimbangan, buku paket, artikel, atau sumber belajar lain">
+              <p class="field-help">Tuliskan sumber informasi yang digunakan dalam eksplorasi.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="informasiPenting"><span>2</span> Informasi Penting yang Ditemukan</label>
+              <textarea id="informasiPenting" class="textarea-box" placeholder="Tuliskan informasi atau bukti konsep yang ditemukan dari handout mengenai tekanan, suhu, katalis, pemisahan NH₃, atau daur ulang gas yang berkaitan dengan pertanyaan penyelidikan."></textarea>
+              <p class="field-help">Fokus pada informasi yang membantu menjawab pertanyaan penyelidikan.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="hubunganKonsep"><span>3</span> Hubungan dengan Prinsip Le Chatelier</label>
+              <textarea id="hubunganKonsep" class="textarea-box" placeholder="Jelaskan bagaimana informasi tersebut berkaitan dengan pergeseran kesetimbangan pada proses Haber."></textarea>
+              <p class="field-help">Hubungkan informasi dengan arah pergeseran kesetimbangan dan pembentukan NH₃.</p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn-primary" type="button" onclick="simpanEksplorasi()">Simpan Catatan Eksplorasi</button>
+            <button class="btn" type="button" onclick="hapusEksplorasi()">Hapus</button>
+          </div>
+          <div id="feedbackEksplorasi" class="feedback"></div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="sb42.html">⬅ Kembali ke Pertanyaan Penyelidikan</a>
+        <a class="btn-primary" href="sb44.html" onclick="return cekSebelumLanjut()">Lanjut ke Mengolah Informasi ➜</a>
+      </div>
+    </div>
+  </main>
+  <script>
+const SB4_STORAGE_KEY = "dataAdminGuruSB4";
+
+function getUserKeySB4(){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  const email =
+    user.email ||
+    user.uid ||
+    user.name ||
+    user.nama ||
+    "tanpa-user";
+
+  return String(email)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function storageKeySB4(namaKey){
+  return namaKey + "_" + getUserKeySB4();
+}
+
+function ambilIdentitasSB4(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem(storageKeySB4("kelompokSubBab4")) || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB4(payload){
+  const identitas = ambilIdentitasSB4(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  // Simpan lokal per akun siswa agar tidak saling tertukar di browser yang sama.
+  const keyDataGuruLokal = storageKeySB4(SB4_STORAGE_KEY);
+  const dataLama = JSON.parse(localStorage.getItem(keyDataGuruLokal)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(keyDataGuruLokal, JSON.stringify(dataLama));
+
+  // Simpan online ke Firebase agar tetap terbaca di datasb4.html guru.
+  if (typeof AppDB !== "undefined" && AppDB.saveAnswer) {
+    AppDB.saveAnswer({
+      subBab: 4,
+      pageKey: payload.halaman || "sb4",
+      pageTitle: payload.judul || "Sub Bab 4",
+      answers: {
+        ...(payload.jawaban || {}),
+        _localUser: {
+          nama: identitas.nama,
+          kelas: identitas.kelas,
+          kelompok: identitas.kelompok,
+          email: identitas.email
+        }
+      },
+      score: payload.skor ?? null,
+      status: payload.status || "tersimpan"
+    }).catch((error) => {
+      console.error("Gagal menyimpan Sub Bab 4 ke Firebase:", error);
+    });
+  }
+
+  return dataBaru;
+}
+</script>
+
+  <script>
+    function tampilkanRumusan(){
+      const box = document.getElementById('rumusanTersimpan');
+      const dataTersimpan = localStorage.getItem(storageKeySB4('rumusanMasalahSubBab4'));
+
+      if(!dataTersimpan){
+        box.innerHTML = `
+          <h3>Belum ada pertanyaan penyelidikan</h3>
+          <div class="empty-note">
+            Pertanyaan penyelidikan dari halaman sebelumnya belum ditemukan. Peserta didik dapat tetap mengeksplorasi informasi, atau kembali ke halaman sebelumnya untuk menulis pertanyaan penyelidikan.
+          </div>
+        `;
+        return;
+      }
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        box.innerHTML = `
+          <h3>Pertanyaan penyelidikan tersimpan</h3>
+          <p><b>Nama/Kelompok:</b> ${data.nama || '-'}</p>
+          <p><b>Pertanyaan penyelidikan:</b><br>${data.pertanyaan || '-'}</p>
+        `;
+      }catch(e){
+        localStorage.removeItem(storageKeySB4('rumusanMasalahSubBab4'));
+        tampilkanRumusan();
+      }
+    }
+
+    function simpanEksplorasi(){
+      const sumber = document.getElementById('sumberInformasi').value.trim();
+      const informasi = document.getElementById('informasiPenting').value.trim();
+      const hubungan = document.getElementById('hubunganKonsep').value.trim();
+      const fb = document.getElementById('feedbackEksplorasi');
+
+      if(!sumber || !informasi || !hubungan){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Lengkapi sumber informasi, informasi penting, dan hubungan dengan prinsip Le Chatelier terlebih dahulu.';
+        return;
+      }
+
+      const data = {
+        sumber,
+        informasi,
+        hubungan,
+        waktuSimpan:new Date().toLocaleString('id-ID')
+      };
+
+      localStorage.setItem(storageKeySB4('eksplorasiSubBab4'), JSON.stringify(data));
+      simpanKeDataSB4({
+  halaman: "sb43",
+  judul: "Eksplorasi Informasi Proses Haber",
+  skor: 100,
+  status: "catatan eksplorasi disimpan",
+  ringkasan: "Sumber informasi, informasi penting, dan hubungan dengan Le Chatelier sudah disimpan.",
+  jawaban: data,
+  kunci: {
+    konsep: "Tekanan tinggi, suhu sedang, katalis, pemisahan NH₃, dan daur ulang gas digunakan untuk mengoptimalkan proses Haber."
+  }
+});
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(102,242,165,.28)';
+      fb.style.background = 'rgba(102,242,165,.10)';
+      fb.style.color = '#d8ffe8';
+      fb.innerHTML = '✅ Catatan eksplorasi berhasil disimpan. Lanjutkan ke tahap mengolah informasi.';
+    }
+
+    function muatEksplorasi(){
+      const dataTersimpan = localStorage.getItem(storageKeySB4('eksplorasiSubBab4'));
+      if(!dataTersimpan) return;
+      try{
+        const data = JSON.parse(dataTersimpan);
+        document.getElementById('sumberInformasi').value = data.sumber || '';
+        document.getElementById('informasiPenting').value = data.informasi || '';
+        document.getElementById('hubunganKonsep').value = data.hubungan || '';
+      }catch(e){
+        localStorage.removeItem(storageKeySB4('eksplorasiSubBab4'));
+      }
+    }
+
+    function hapusEksplorasi(){
+      document.getElementById('sumberInformasi').value = '';
+      document.getElementById('informasiPenting').value = '';
+      document.getElementById('hubunganKonsep').value = '';
+      localStorage.removeItem(storageKeySB4('eksplorasiSubBab4'));
+
+      const fb = document.getElementById('feedbackEksplorasi');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(255,224,130,.35)';
+      fb.style.background = 'rgba(255,224,130,.10)';
+      fb.style.color = '#fff2bd';
+      fb.innerHTML = 'Catatan eksplorasi sudah dihapus.';
+    }
+
+    function cekSebelumLanjut(){
+      if(!localStorage.getItem(storageKeySB4('eksplorasiSubBab4'))){
+        return confirm('Catatan eksplorasi belum disimpan. Tetap lanjut ke tahap mengolah informasi?');
+      }
+      return true;
+    }
+
+    tampilkanRumusan();
+    muatEksplorasi();
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 4,
+    pageKey: "sb43",
+    pageTitle: "Sub Bab 4 — Eksplorasi Informasi Proses Haber"
+  });
+});
+</script>
+</body>
+</html>

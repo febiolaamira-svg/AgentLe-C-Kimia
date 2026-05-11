@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB33 — Laboratorium Kobalt</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 3</b>
+          <span>keys33.html • Laboratorium Kobalt</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb3.html">📊 Data Sub Bab 3</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan panduan penilaian SB33. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Konsep Utama Laboratorium Kobalt</h2>
+
+        <div class="answer">
+          <h3>Persamaan kesetimbangan</h3>
+          <p>
+            <span class="formula">Co(H₂O)₆<sup>2+</sup> + 4Cl<sup>-</sup> ⇌ CoCl₄<sup>2-</sup> + 6H₂O</span>
+          </p>
+          <ul>
+            <li><b>Co(H₂O)₆<sup>2+</sup></b> berwarna merah muda.</li>
+            <li><b>CoCl₄<sup>2-</sup></b> berwarna biru.</li>
+            <li>Pergeseran ke kanan membuat warna semakin biru.</li>
+            <li>Pergeseran ke kiri membuat warna semakin merah muda.</li>
+          </ul>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Rumus K</div>
+          <p>
+            Untuk reaksi:
+          </p>
+          <p>
+            <span class="formula">Co(H₂O)₆<sup>2+</sup> + 4Cl<sup>-</sup> ⇌ CoCl₄<sup>2-</sup> + 6H₂O</span>
+          </p>
+          <p>
+            rumus tetapan kesetimbangannya:
+          </p>
+          <p>
+            <span class="formula">K = [CoCl₄<sup>2-</sup>] / ([Co(H₂O)₆<sup>2+</sup>][Cl<sup>-</sup>]<sup>4</sup>)</span>
+          </p>
+          <p>
+            H₂O tidak dimasukkan karena merupakan cairan/pelarut murni yang konsentrasinya dianggap tetap.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Arah Pergeseran Berdasarkan Perlakuan</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Perlakuan</th>
+              <th>Warna yang Diharapkan</th>
+              <th>Arah Pergeseran</th>
+              <th>Alasan Valid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Sistem awal + HCl bertahap</td>
+              <td>Biru atau semakin biru</td>
+              <td>Ke kanan</td>
+              <td>HCl menambah ion Cl<sup>-</sup>. Sistem mengurangi penambahan Cl<sup>-</sup> dengan membentuk lebih banyak CoCl₄<sup>2-</sup>.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>AgNO₃ ditambahkan</td>
+              <td>Merah muda atau semakin merah muda</td>
+              <td>Ke kiri</td>
+              <td>Ag<sup>+</sup> mengikat Cl<sup>-</sup> membentuk AgCl(s), sehingga Cl<sup>-</sup> bebas berkurang dan sistem bergeser ke kiri.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>HCl ditambahkan kembali</td>
+              <td>Biru atau semakin biru</td>
+              <td>Ke kanan</td>
+              <td>Ion Cl<sup>-</sup> kembali bertambah, sehingga sistem bergeser ke kanan menghasilkan kompleks biru.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Suhu dinaikkan</td>
+              <td>Biru atau semakin biru</td>
+              <td>Ke kanan</td>
+              <td>Pembentukan kompleks biru CoCl₄<sup>2-</sup> umumnya bersifat endoterm, sehingga pemanasan menggeser kesetimbangan ke kanan.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Suhu diturunkan</td>
+              <td>Merah muda atau semakin merah muda</td>
+              <td>Ke kiri</td>
+              <td>Pendinginan menggeser sistem ke arah yang melepaskan kalor, sehingga kompleks merah muda lebih dominan.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warning">
+          <h3>Catatan penting</h3>
+          <p>
+            Warna akhir bisa tampak ungu/campuran jika sistem belum sepenuhnya bergeser atau masih berada pada komposisi campuran.
+            Jawaban siswa tetap dapat diterima jika arah pergeseran dan alasan kimianya benar.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Tabel Pengamatan</h2>
+
+        <p class="muted">
+          Nilai konsentrasi dan K pada virtual lab dapat berbeda tergantung volume, suhu, dan kondisi simulasi.
+          Karena itu, guru tidak perlu memaksa satu angka tunggal. Yang harus benar adalah pola, arah pergeseran,
+          rumus K, dan cara membaca data.
+        </p>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Bagian Tabel</th>
+              <th>Yang Benar</th>
+              <th>Catatan Koreksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Volume / suhu</td>
+              <td>Diisi sesuai perlakuan yang dilakukan pada virtual lab.</td>
+              <td>Boleh berbeda antar kelompok karena jumlah klik/volume bisa berbeda.</td>
+            </tr>
+            <tr>
+              <td>Warna akhir</td>
+              <td>HCl: biru; AgNO₃: merah muda; pemanasan: biru; pendinginan: merah muda.</td>
+              <td>Ungu/campuran masih mungkin jika perubahan belum maksimal.</td>
+            </tr>
+            <tr>
+              <td>Konsentrasi</td>
+              <td>Diisi berdasarkan angka yang terbaca pada virtual lab.</td>
+              <td>Yang penting konsisten dengan kondisi akhir yang diamati.</td>
+            </tr>
+            <tr>
+              <td>Arah pergeseran</td>
+              <td>HCl ke kanan, AgNO₃ ke kiri, suhu naik ke kanan, suhu turun ke kiri.</td>
+              <td>Arah harus sesuai dengan perubahan warna dan gangguan yang diberikan.</td>
+            </tr>
+            <tr>
+              <td>Nilai K</td>
+              <td>Dihitung menggunakan rumus K = [CoCl₄²⁻] / ([Co(H₂O)₆²⁺][Cl⁻]⁴).</td>
+              <td>Jika suhu tetap, K relatif tetap. Jika suhu berubah, K dapat berubah.</td>
+            </tr>
+            <tr>
+              <td>Alasan</td>
+              <td>Harus mengaitkan gangguan, arah pergeseran, dan Asas Le Chatelier.</td>
+              <td>Jawaban tidak cukup jika hanya menulis “karena berubah warna”.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Isian Tabel yang Benar</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Perlakuan</th>
+              <th>Warna Akhir</th>
+              <th>Arah Pergeseran</th>
+              <th>Contoh Alasan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Sistem awal + HCl bertahap</td>
+              <td>Biru</td>
+              <td>Ke kanan</td>
+              <td>Penambahan HCl menambah Cl<sup>-</sup>, sehingga sistem bergeser ke kanan membentuk CoCl₄<sup>2-</sup>.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>AgNO₃ ditambahkan</td>
+              <td>Merah muda</td>
+              <td>Ke kiri</td>
+              <td>Ag<sup>+</sup> mengikat Cl<sup>-</sup> menjadi AgCl(s), sehingga Cl<sup>-</sup> berkurang dan sistem bergeser ke kiri.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>HCl ditambahkan kembali</td>
+              <td>Biru</td>
+              <td>Ke kanan</td>
+              <td>Cl<sup>-</sup> bertambah kembali sehingga pembentukan kompleks biru meningkat.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Suhu dinaikkan</td>
+              <td>Biru</td>
+              <td>Ke kanan</td>
+              <td>Pemanasan menggeser ke arah endoterm, yaitu pembentukan kompleks biru CoCl₄<sup>2-</sup>.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Suhu diturunkan</td>
+              <td>Merah muda</td>
+              <td>Ke kiri</td>
+              <td>Pendinginan menggeser sistem ke arah kompleks merah muda Co(H₂O)₆<sup>2+</sup>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Pembahasan Perhitungan K</h2>
+
+        <div class="answer">
+          <h3>Rumus yang harus digunakan</h3>
+          <p>
+            <span class="formula">K = [CoCl₄<sup>2-</sup>] / ([Co(H₂O)₆<sup>2+</sup>][Cl<sup>-</sup>]<sup>4</sup>)</span>
+          </p>
+          <p>
+            Pangkat 4 pada [Cl<sup>-</sup>] berasal dari koefisien Cl<sup>-</sup> pada persamaan reaksi.
+            Konsentrasi H₂O tidak dimasukkan karena H₂O adalah cairan/pelarut dengan konsentrasi relatif tetap.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Cara mengecek jawaban siswa</div>
+          <ol>
+            <li>Pastikan siswa memakai konsentrasi setimbang, bukan konsentrasi awal.</li>
+            <li>Pastikan [Cl<sup>-</sup>] dipangkatkan 4.</li>
+            <li>Pastikan CoCl₄<sup>2-</sup> ada di pembilang.</li>
+            <li>Pastikan Co(H₂O)₆<sup>2+</sup> dan Cl<sup>-</sup> ada di penyebut.</li>
+            <li>Jika suhu berubah, nilai K boleh berubah karena K bergantung pada suhu.</li>
+          </ol>
+        </div>
+
+        <div class="wrong">
+          <h3>Kesalahan umum</h3>
+          <ul>
+            <li>Siswa menulis K = [CoCl₄<sup>2-</sup>] / ([Co(H₂O)₆<sup>2+</sup>][Cl<sup>-</sup>]) tanpa pangkat 4.</li>
+            <li>Siswa memasukkan H₂O ke dalam rumus K.</li>
+            <li>Siswa membalik posisi reaktan dan produk.</li>
+            <li>Siswa menghitung K dari data yang belum setimbang.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Analisis dan Kesimpulan</h2>
+
+        <div class="answer">
+          <h3>1. Perbandingan prediksi dan hasil</h3>
+          <p>
+            Prediksi kelompok dianggap sesuai jika menyatakan bahwa HCl membuat larutan lebih biru,
+            AgNO₃ membuat larutan lebih merah muda, dan perubahan suhu dapat menggeser warna.
+            Hasil percobaan mendukung prediksi tersebut apabila perubahan warna dan arah pergeseran sesuai dengan Asas Le Chatelier.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>2. Sifat reaksi</h3>
+          <p>
+            Reaksi ke kanan, yaitu pembentukan CoCl₄<sup>2-</sup> yang berwarna biru, bersifat <b>endoterm</b>.
+            Hal ini karena ketika suhu dinaikkan, sistem bergeser ke kanan dan warna menjadi lebih biru.
+            Berdasarkan Asas Le Chatelier, pemanasan mendorong sistem ke arah yang menyerap kalor.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>3. Kesimpulan sementara</h3>
+          <p>
+            Penambahan HCl menambah ion Cl<sup>-</sup> sehingga kesetimbangan bergeser ke kanan dan larutan menjadi biru.
+            Penambahan AgNO₃ mengurangi ion Cl<sup>-</sup> bebas karena terbentuk AgCl(s), sehingga kesetimbangan bergeser ke kiri dan larutan menjadi merah muda.
+            Peningkatan suhu menggeser reaksi ke kanan karena pembentukan kompleks biru bersifat endoterm.
+            Nilai K dihitung dari konsentrasi setimbang dan dapat berubah jika suhu berubah.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Jawaban Analisis yang Ideal</h2>
+
+        <div class="answer">
+          <p>
+            Prediksi awal kelompok kami sesuai dengan hasil percobaan. Ketika HCl ditambahkan, warna larutan berubah menjadi lebih biru.
+            Hal ini terjadi karena HCl menambah konsentrasi ion Cl<sup>-</sup>, sehingga sistem bergeser ke kanan untuk membentuk lebih banyak CoCl₄<sup>2-</sup>.
+            Ketika AgNO₃ ditambahkan, warna larutan menjadi lebih merah muda karena Ag<sup>+</sup> mengikat ion Cl<sup>-</sup> menjadi AgCl(s),
+            sehingga konsentrasi Cl<sup>-</sup> bebas berkurang dan sistem bergeser ke kiri.
+          </p>
+          <p>
+            Berdasarkan pengaruh suhu, pembentukan kompleks biru CoCl₄<sup>2-</sup> bersifat endoterm karena pemanasan membuat warna semakin biru.
+            Nilai K dihitung menggunakan rumus K = [CoCl₄<sup>2-</sup>] / ([Co(H₂O)₆<sup>2+</sup>][Cl<sup>-</sup>]<sup>4</sup>).
+            Jika suhu berubah, nilai K juga dapat berubah karena tetapan kesetimbangan dipengaruhi suhu.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rubrik Penilaian SB33</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Tabel lengkap, arah pergeseran benar, rumus K benar, analisis menghubungkan perubahan warna,
+              konsentrasi Cl<sup>-</sup>, suhu, dan Asas Le Chatelier secara jelas.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Tabel sebagian besar lengkap dan arah pergeseran benar, tetapi alasan masih singkat
+              atau perhitungan K belum dijelaskan dengan lengkap.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Tabel banyak kosong, arah pergeseran tertukar, rumus K salah, atau analisis hanya menyebut perubahan warna tanpa alasan kesetimbangan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB33</h2>
+
+        <div class="answer">
+          <p>
+            Kunci utama SB33 adalah memahami bahwa sistem
+            <b>Co(H₂O)₆<sup>2+</sup> + 4Cl<sup>-</sup> ⇌ CoCl₄<sup>2-</sup> + 6H₂O</b>
+            bergeser sesuai gangguan yang diberikan. HCl menambah Cl<sup>-</sup> sehingga bergeser ke kanan dan menjadi biru.
+            AgNO₃ mengurangi Cl<sup>-</sup> bebas sehingga bergeser ke kiri dan menjadi merah muda.
+            Pemanasan menggeser sistem ke kanan sehingga reaksi ke kanan bersifat endoterm.
+            Rumus K yang benar adalah
+            <b>K = [CoCl₄<sup>2-</sup>] / ([Co(H₂O)₆<sup>2+</sup>][Cl<sup>-</sup>]<sup>4</sup>)</b>.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keys32.html">⬅ Kunci SB32</a>
+          <div>
+            <a class="btn blue" href="datasb3.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys34.html">Lanjut Kunci SB34 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

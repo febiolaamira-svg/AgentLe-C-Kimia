@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Halaman 5 — Homogen dan Heterogen</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.84);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th, .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .reaction {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.74);
+      border: 1px solid rgba(13,23,46,.12);
+      font-weight: 900;
+      margin-top: 6px;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 1</b>
+          <span>Halaman 5 • Homogen dan Heterogen</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb1.html">📊 Data Sub Bab 1</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="grid cols-3">
+        <div class="card">
+          <div class="concept">
+            <div class="tag">1. Fokus Konsep</div>
+            <p>
+              Perbedaan kesetimbangan homogen dan heterogen ditentukan oleh <b>fase zat</b>
+              yang terlibat dalam sistem kesetimbangan.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="concept">
+            <div class="tag">2. Homogen</div>
+            <p>
+              Kesetimbangan homogen terjadi ketika semua komponen reaksi berada pada
+              <b>fase yang sama</b>, misalnya semuanya gas atau semuanya larutan.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="concept">
+            <div class="tag">3. Heterogen</div>
+            <p>
+              Kesetimbangan heterogen terjadi ketika komponen reaksi berada pada
+              <b>lebih dari satu fase</b>, misalnya padat dan gas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid cols-2">
+        <div class="card solid">
+          <h2>🟦 Kunci Kesetimbangan Homogen</h2>
+          <p class="muted">
+            Pada kesetimbangan homogen, seluruh zat dalam reaksi memiliki fase yang sama.
+          </p>
+
+          <div class="answer">
+            <h3>Contoh reaksi</h3>
+            <div class="reaction">2SO₂(g) + O₂(g) ⇌ 2SO₃(g)</div>
+            <p>
+              Semua zat pada reaksi tersebut berfase <b>gas</b>, yaitu SO₂(g), O₂(g), dan SO₃(g).
+              Karena semua komponen berada pada fase yang sama, reaksi ini termasuk
+              <b>kesetimbangan homogen</b>.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Ciri utama</div>
+            <ul>
+              <li>Semua komponen berada pada satu fase.</li>
+              <li>Sistem tampak seragam.</li>
+              <li>Contoh umum: semua gas atau semua zat terlarut dalam larutan.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card solid">
+          <h2>🟪 Kunci Kesetimbangan Heterogen</h2>
+          <p class="muted">
+            Pada kesetimbangan heterogen, zat-zat dalam reaksi berada pada fase berbeda.
+          </p>
+
+          <div class="answer">
+            <h3>Contoh reaksi</h3>
+            <div class="reaction">CaCO₃(s) ⇌ CaO(s) + CO₂(g)</div>
+            <p>
+              Pada reaksi tersebut terdapat zat berfase <b>padat</b>, yaitu CaCO₃(s) dan CaO(s),
+              serta zat berfase <b>gas</b>, yaitu CO₂(g). Karena terdapat lebih dari satu fase,
+              reaksi ini termasuk <b>kesetimbangan heterogen</b>.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Ciri utama</div>
+            <ul>
+              <li>Terdapat lebih dari satu fase.</li>
+              <li>Sistem tidak sepenuhnya seragam.</li>
+              <li>Contoh umum: padat-gas, padat-larutan, atau cair-gas.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>📋 Kunci Tabel Perbedaan</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Jenis Kesetimbangan</th>
+              <th>Ciri Utama</th>
+              <th>Contoh Reaksi</th>
+              <th>Alasan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Homogen</b></td>
+              <td>Semua zat berada pada fase yang sama.</td>
+              <td>2SO₂(g) + O₂(g) ⇌ 2SO₃(g)</td>
+              <td>Semua komponen reaksi berfase gas.</td>
+            </tr>
+            <tr>
+              <td><b>Heterogen</b></td>
+              <td>Zat-zat berada pada lebih dari satu fase.</td>
+              <td>CaCO₃(s) ⇌ CaO(s) + CO₂(g)</td>
+              <td>Terdapat fase padat dan fase gas.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>📝 Kunci Refleksi Singkat</h2>
+        <p class="muted">
+          Pada halaman siswa, siswa diminta menuliskan perbedaan utama antara kesetimbangan homogen dan heterogen.
+        </p>
+
+        <div class="answer">
+          <h3>Contoh jawaban ideal</h3>
+          <p>
+            Kesetimbangan homogen adalah kesetimbangan ketika semua zat yang terlibat berada pada fase yang sama,
+            misalnya semuanya gas seperti 2SO₂(g) + O₂(g) ⇌ 2SO₃(g). Kesetimbangan heterogen adalah kesetimbangan
+            ketika zat-zat yang terlibat berada pada lebih dari satu fase, misalnya padat dan gas seperti
+            CaCO₃(s) ⇌ CaO(s) + CO₂(g).
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Kriteria jawaban benar</div>
+          <ul>
+            <li>Siswa menyebut bahwa homogen berarti <b>satu fase</b>.</li>
+            <li>Siswa menyebut bahwa heterogen berarti <b>lebih dari satu fase</b>.</li>
+            <li>Siswa memberi contoh atau menjelaskan fase pada reaksi yang diberikan.</li>
+            <li>Jawaban tidak harus sama persis, asalkan konsep fasenya benar.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci Halaman 5</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Homogen</div>
+            <p>
+              Semua zat berada pada fase yang sama.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Heterogen</div>
+            <p>
+              Zat-zat berada pada lebih dari satu fase.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Inti Penilaian</div>
+            <p>
+              Periksa apakah siswa membedakan berdasarkan <b>fase zat</b>, bukan hanya berdasarkan nama zat.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keyhlm4.html">⬅ Kunci Halaman 4</a>
+          <div>
+            <a class="btn blue" href="datasb1.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keyhlm6.html">Lanjut Kunci Halaman 6 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

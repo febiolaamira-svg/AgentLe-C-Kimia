@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB25 — Kuis Kc dan Kp</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .question {
+      border-radius: 18px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.78);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .qtop {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .qnum {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      border: 1px solid rgba(43,124,255,.15);
+      color: #1b4bb2;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.14);
+      border: 1px solid rgba(34,197,94,.25);
+      color: #137a36;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .optionList {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .option {
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.70);
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .option.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+      font-weight: 900;
+    }
+
+    .option.incorrect {
+      border-color: rgba(239,68,68,.18);
+      background: rgba(239,68,68,.06);
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 2</b>
+          <span>keys25.html • Kuis Kc dan Kp</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb2.html">📊 Data Sub Bab 2</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan pembahasan kuis Sub Bab 2. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+      <section class="card solid">
+        <h2>Ringkasan Kunci Cepat</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Topik</th>
+              <th>Kunci</th>
+              <th>Inti Jawaban</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Perbedaan Kc dan Kp</td>
+              <td><b>C</b></td>
+              <td>Kc berdasarkan konsentrasi, Kp berdasarkan tekanan parsial.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Kc sistem heterogen</td>
+              <td><b>E</b></td>
+              <td>Kc = [CO₂]</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Hubungan Kp dan Kc</td>
+              <td><b>E</b></td>
+              <td>Kp = Kc(RT)<sup>-1</sup></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Perhitungan Kp NH₄Cl</td>
+              <td><b>A</b></td>
+              <td>Kp = 1</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Kp dari perbandingan mol</td>
+              <td><b>C</b></td>
+              <td>Kp = 5</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Kc dari mol dan volume</td>
+              <td><b>D</b></td>
+              <td>Kc = 2</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Operasi tetapan kesetimbangan</td>
+              <td><b>B</b></td>
+              <td>K = K₂/K₁</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Jawaban dan Pembahasan Lengkap</h2>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 1</span>
+            <span class="key">Kunci C</span>
+          </div>
+
+          <h3>Perbedaan utama antara Kc dan Kp terletak pada ....</h3>
+
+          <div class="optionList">
+            <div class="option incorrect">A. Jenis reaksi yang berlangsung cepat atau lambat</div>
+            <div class="option incorrect">B. Zat yang bertindak sebagai katalis dalam reaksi</div>
+            <div class="option correct">C. Dasar perhitungan yang digunakan, yaitu konsentrasi atau tekanan parsial</div>
+            <div class="option incorrect">D. Warna zat sebelum dan sesudah reaksi</div>
+            <div class="option incorrect">E. Jumlah zat yang digunakan pada awal reaksi</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban benar adalah <b>C</b>. Kc adalah tetapan kesetimbangan yang dihitung berdasarkan
+              <b>konsentrasi molar</b>, sedangkan Kp dihitung berdasarkan <b>tekanan parsial gas</b>.
+              Jadi perbedaannya bukan pada cepat-lambat reaksi, warna, katalis, atau jumlah awal zat.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 2</span>
+            <span class="key">Kunci E</span>
+          </div>
+
+          <h3>Tentukan Kc untuk reaksi:</h3>
+          <p>
+            <span class="formula">2NaHCO₃(s) ⇌ Na₂CO₃(s) + CO₂(g) + H₂O(l)</span>
+          </p>
+
+          <div class="optionList">
+            <div class="option incorrect">A. Kc = [Na₂CO₃][CO₂][H₂O] / [NaHCO₃]²</div>
+            <div class="option incorrect">B. Kc = [CO₂][H₂O] / [NaHCO₃]²</div>
+            <div class="option incorrect">C. Kc = [Na₂CO₃][CO₂] / [NaHCO₃]²</div>
+            <div class="option incorrect">D. Kc = [CO₂][H₂O]</div>
+            <div class="option correct">E. Kc = [CO₂]</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jawaban benar adalah <b>E</b>. Pada rumus Kc, zat padat murni <b>(s)</b> dan cair murni <b>(l)</b>
+              tidak dimasukkan karena konsentrasinya dianggap tetap.
+            </p>
+            <p>
+              Pada reaksi ini, <b>NaHCO₃(s)</b> dan <b>Na₂CO₃(s)</b> adalah padat, sedangkan <b>H₂O(l)</b>
+              adalah cair murni. Maka hanya <b>CO₂(g)</b> yang masuk ke rumus Kc.
+            </p>
+            <p>
+              <span class="formula">K<sub>c</sub> = [CO₂]</span>
+            </p>
+          </div>
+
+          <div class="warning">
+            <h3>Catatan guru</h3>
+            <p>
+              Bagian ini sering membuat siswa keliru karena mereka memasukkan semua zat ke rumus Kc.
+              Tekankan bahwa padat murni dan cair murni tidak dimasukkan.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 3</span>
+            <span class="key">Kunci E</span>
+          </div>
+
+          <h3>Untuk reaksi berikut, hubungan Kp dan Kc yang benar adalah ....</h3>
+          <p>
+            <span class="formula">PCl₃(g) + Cl₂(g) ⇌ PCl₅(g)</span>
+          </p>
+
+          <div class="optionList">
+            <div class="option incorrect">A. Kp = 3Kc</div>
+            <div class="option incorrect">B. Kp = Kc(RT)</div>
+            <div class="option incorrect">C. Kp = Kc(RT)²</div>
+            <div class="option incorrect">D. Kp = (Kc)⁻¹(RT)</div>
+            <div class="option correct">E. Kp = Kc(RT)⁻¹</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Hubungan umum antara Kp dan Kc adalah:
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></span>
+            </p>
+            <p>
+              Untuk reaksi <b>PCl₃(g) + Cl₂(g) ⇌ PCl₅(g)</b>:
+            </p>
+            <ul>
+              <li>Jumlah koefisien gas produk = 1</li>
+              <li>Jumlah koefisien gas reaktan = 1 + 1 = 2</li>
+              <li>Δn = 1 − 2 = −1</li>
+            </ul>
+            <p>
+              Maka:
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = K<sub>c</sub>(RT)<sup>-1</sup></span>
+            </p>
+            <p>
+              Jadi jawaban yang benar adalah <b>E</b>.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 4</span>
+            <span class="key">Kunci A</span>
+          </div>
+
+          <h3>NH₄Cl(s) ⇌ NH₃(g) + HCl(g), tekanan total 2 atm. Nilai Kp adalah ....</h3>
+
+          <div class="optionList">
+            <div class="option correct">A. 1</div>
+            <div class="option incorrect">B. 2</div>
+            <div class="option incorrect">C. 4</div>
+            <div class="option incorrect">D. 8</div>
+            <div class="option incorrect">E. 10</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Reaksi menghasilkan gas NH₃ dan HCl dengan perbandingan koefisien 1 : 1.
+              Karena tekanan total gas adalah 2 atm, maka tekanan parsial masing-masing gas adalah:
+            </p>
+            <p>
+              <span class="formula">P<sub>NH₃</sub> = 1 atm</span>
+            </p>
+            <p>
+              <span class="formula">P<sub>HCl</sub> = 1 atm</span>
+            </p>
+            <p>
+              Rumus Kp:
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = P<sub>NH₃</sub> × P<sub>HCl</sub></span>
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = 1 × 1 = 1</span>
+            </p>
+            <p>
+              Jadi jawaban yang benar adalah <b>A</b>.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 5</span>
+            <span class="key">Kunci C</span>
+          </div>
+
+          <h3>A(g) + 2B(g) ⇌ 2C(g), tekanan total 2 atm, mol A : B : C = 2 : 1 : 2. Nilai Kp adalah ....</h3>
+
+          <div class="optionList">
+            <div class="option incorrect">A. 1</div>
+            <div class="option incorrect">B. 4</div>
+            <div class="option correct">C. 5</div>
+            <div class="option incorrect">D. 8</div>
+            <div class="option incorrect">E. 9</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Jumlah perbandingan mol = 2 + 1 + 2 = 5.
+              Tekanan total = 2 atm.
+            </p>
+            <p>
+              Tekanan parsial:
+            </p>
+            <ul>
+              <li>P<sub>A</sub> = 2/5 × 2 = 0,8 atm</li>
+              <li>P<sub>B</sub> = 1/5 × 2 = 0,4 atm</li>
+              <li>P<sub>C</sub> = 2/5 × 2 = 0,8 atm</li>
+            </ul>
+            <p>
+              Untuk reaksi <b>A(g) + 2B(g) ⇌ 2C(g)</b>:
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = (P<sub>C</sub>)<sup>2</sup> / P<sub>A</sub>(P<sub>B</sub>)<sup>2</sup></span>
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = (0,8)<sup>2</sup> / 0,8(0,4)<sup>2</sup></span>
+            </p>
+            <p>
+              <span class="formula">K<sub>p</sub> = 0,64 / 0,128 = 5</span>
+            </p>
+            <p>
+              Jadi jawaban yang benar adalah <b>C</b>.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 6</span>
+            <span class="key">Kunci D</span>
+          </div>
+
+          <h3>N₂(g) + 3H₂(g) ⇌ 2NH₃(g), volume 2 L. Setimbang: 2 mol N₂, 4 mol H₂, 8 mol NH₃. Nilai Kc adalah ....</h3>
+
+          <div class="optionList">
+            <div class="option incorrect">A. 0,03</div>
+            <div class="option incorrect">B. 0,5</div>
+            <div class="option incorrect">C. 1</div>
+            <div class="option correct">D. 2</div>
+            <div class="option incorrect">E. 8</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Ubah mol menjadi konsentrasi dengan rumus:
+            </p>
+            <p>
+              <span class="formula">M = mol / volume</span>
+            </p>
+            <ul>
+              <li>[N₂] = 2 mol / 2 L = 1 M</li>
+              <li>[H₂] = 4 mol / 2 L = 2 M</li>
+              <li>[NH₃] = 8 mol / 2 L = 4 M</li>
+            </ul>
+            <p>
+              Rumus Kc:
+            </p>
+            <p>
+              <span class="formula">K<sub>c</sub> = [NH₃]<sup>2</sup> / [N₂][H₂]<sup>3</sup></span>
+            </p>
+            <p>
+              <span class="formula">K<sub>c</sub> = 4<sup>2</sup> / 1 × 2<sup>3</sup></span>
+            </p>
+            <p>
+              <span class="formula">K<sub>c</sub> = 16 / 8 = 2</span>
+            </p>
+            <p>
+              Jadi jawaban yang benar adalah <b>D</b>.
+            </p>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="qtop">
+            <span class="qnum">Soal 7</span>
+            <span class="key">Kunci B</span>
+          </div>
+
+          <h3>Tentukan tetapan kesetimbangan reaksi target.</h3>
+          <p>
+            <span class="formula">
+              2NO(g) ⇌ N₂(g) + O₂(g) &nbsp; K₁<br>
+              N₂O(g) ⇌ N₂(g) + 1/2O₂(g) &nbsp; K₂<br><br>
+              Target: N₂O(g) + 1/2O₂(g) ⇌ 2NO(g)
+            </span>
+          </p>
+
+          <div class="optionList">
+            <div class="option incorrect">A. K₁/K₂</div>
+            <div class="option correct">B. K₂/K₁</div>
+            <div class="option incorrect">C. K₂/K₁²</div>
+            <div class="option incorrect">D. K₁ × K₂</div>
+            <div class="option incorrect">E. K₁² × K₂</div>
+          </div>
+
+          <div class="answer">
+            <h3>Pembahasan</h3>
+            <p>
+              Diketahui:
+            </p>
+            <p>
+              <span class="formula">2NO(g) ⇌ N₂(g) + O₂(g) &nbsp; K₁</span>
+            </p>
+            <p>
+              Agar menghasilkan <b>2NO(g)</b> di sebelah produk seperti pada reaksi target, reaksi pertama harus dibalik:
+            </p>
+            <p>
+              <span class="formula">N₂(g) + O₂(g) ⇌ 2NO(g) &nbsp; 1/K₁</span>
+            </p>
+            <p>
+              Reaksi kedua tetap:
+            </p>
+            <p>
+              <span class="formula">N₂O(g) ⇌ N₂(g) + 1/2O₂(g) &nbsp; K₂</span>
+            </p>
+            <p>
+              Jika kedua reaksi dijumlahkan, N₂ akan saling menghilangkan dan tersisa:
+            </p>
+            <p>
+              <span class="formula">N₂O(g) + 1/2O₂(g) ⇌ 2NO(g)</span>
+            </p>
+            <p>
+              Maka tetapan reaksinya:
+            </p>
+            <p>
+              <span class="formula">K = K₂ × 1/K₁ = K₂/K₁</span>
+            </p>
+            <p>
+              Jadi jawaban yang benar adalah <b>B</b>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Standar Penilaian Guru</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Siswa menjawab 6–7 soal benar dan mampu menerapkan konsep Kc, Kp, tekanan parsial, konsentrasi setimbang, serta operasi tetapan kesetimbangan.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Siswa menjawab 4–5 soal benar. Konsep dasar Kc dan Kp sudah mulai dipahami, tetapi masih perlu latihan pada perhitungan atau soal manipulasi reaksi.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Siswa menjawab 0–3 soal benar. Guru perlu mengulang konsep fase zat dalam Kc, Δn pada hubungan Kp-Kc, dan cara menghitung tekanan parsial.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB25</h2>
+
+        <div class="answer">
+          <p>
+            Kunci kuis SB25 adalah <b>C, E, E, A, C, D, B</b>.
+            Konsep utama yang harus dikuasai siswa adalah perbedaan Kc dan Kp, aturan zat yang masuk rumus Kc,
+            hubungan Kp dan Kc, perhitungan tekanan parsial, perhitungan konsentrasi dari mol dan volume,
+            serta perubahan nilai K ketika reaksi dibalik atau dijumlahkan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keys24.html">⬅ Kunci SB24</a>
+          <div>
+            <a class="btn blue" href="datasb2.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys26.html">Lanjut Kunci SB26 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data Drill Soal • Admin Guru</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --red:#ff5c8a;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+
+    @keyframes twinkle{
+      0%,100%{opacity:.46}
+      50%{opacity:.66}
+    }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+
+    .brand-title{
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      font-family:inherit;
+    }
+
+    .btn{
+      background:rgba(255,255,255,.06);
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+
+    .btn:hover,.btn-primary:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.24);
+    }
+
+    main{
+      position:relative;
+      z-index:2;
+    }
+
+    .wrap{
+      padding:clamp(18px,4vw,46px);
+      display:flex;
+      justify-content:center;
+    }
+
+    .container{
+      width:min(1280px,100%);
+      display:grid;
+      gap:16px;
+    }
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(34px,4.6vw,62px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+
+    .subtitle{
+      margin:12px 0 0;
+      max-width:980px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+
+    .card-inner{
+      padding:clamp(18px,2.6vw,28px);
+    }
+
+    h2,h3{
+      margin:0 0 10px;
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+
+    h2{
+      font-size:clamp(22px,2.4vw,30px);
+    }
+
+    .muted{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+
+    @media(max-width:900px){
+      .stats-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:560px){
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .stat{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      padding:18px;
+      border:2px solid rgba(124,77,255,.26);
+      box-shadow:var(--shadow2);
+    }
+
+    .stat b{
+      display:block;
+      font-size:28px;
+      color:#312e81;
+      margin-bottom:4px;
+    }
+
+    .stat span{
+      color:#4b5563;
+      font-weight:800;
+      font-size:13px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:14px;
+    }
+
+    .search{
+      flex:1;
+      min-width:240px;
+      border-radius:16px;
+      border:2px solid rgba(124,77,255,.32);
+      background:#ffffff;
+      color:#111827;
+      padding:12px 14px;
+      font-family:inherit;
+      font-weight:800;
+      outline:none;
+    }
+
+    .table-wrap{
+      margin-top:14px;
+      overflow:auto;
+      border-radius:22px;
+      border:2px solid rgba(124,77,255,.32);
+      background:#ffffff;
+      box-shadow:var(--shadow2);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1150px;
+      color:#111827;
+      background:#ffffff;
+    }
+
+    th,td{
+      padding:12px;
+      border-bottom:1px solid #e5e7eb;
+      text-align:left;
+      vertical-align:top;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    th{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:linear-gradient(135deg,#ff4fd8,#7c4dff);
+      color:#ffffff;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    tr:hover td{
+      background:#f8f5ff;
+    }
+
+    .score-badge{
+      display:inline-flex;
+      padding:8px 11px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#312e81;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .score-good{
+      background:#ecfdf5;
+      color:#166534;
+    }
+
+    .score-mid{
+      background:#fff7ed;
+      color:#9a3412;
+    }
+
+    .score-low{
+      background:#fee2e2;
+      color:#991b1b;
+    }
+
+    .small-btn{
+      border:1px solid #c7d2fe;
+      background:#ffffff;
+      color:#312e81;
+      padding:9px 11px;
+      border-radius:12px;
+      cursor:pointer;
+      font-family:inherit;
+      font-weight:950;
+      margin:2px;
+    }
+
+    .small-btn:hover{
+      background:#f6f3ff;
+    }
+
+    .empty{
+      display:none;
+      padding:18px;
+      border-radius:20px;
+      background:rgba(255,224,130,.10);
+      border:1px solid rgba(255,224,130,.30);
+      color:#fff2bd;
+      line-height:1.7;
+      font-weight:850;
+      margin-top:14px;
+    }
+
+    .empty.show{
+      display:block;
+    }
+
+    .detail{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:50;
+      background:rgba(0,0,0,.62);
+      padding:18px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .detail.show{
+      display:flex;
+    }
+
+    .detail-card{
+      width:min(1000px, 100%);
+      max-height:86vh;
+      overflow:auto;
+      border-radius:26px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.34);
+      box-shadow:0 22px 70px rgba(0,0,0,.35);
+    }
+
+    .detail-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      padding:18px;
+      border-bottom:1px solid #e5e7eb;
+      background:#f8f5ff;
+    }
+
+    .detail-body{
+      padding:18px;
+      display:grid;
+      gap:12px;
+    }
+
+    .detail-row{
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      border-radius:16px;
+      padding:12px;
+      line-height:1.55;
+      font-weight:700;
+    }
+
+    .detail-row.correct{
+      border-color:#86efac;
+      background:#ecfdf5;
+      color:#166534;
+    }
+
+    .detail-row.wrong{
+      border-color:#fdba74;
+      background:#fff7ed;
+      color:#9a3412;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">DG</div>
+      <div>
+        <div class="brand-title">Data Drill Soal</div>
+        <div class="brand-sub">Admin Guru • Rekap Skor dan Kunci Jawaban</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a
+        class="btn"
+        href="h1.html"
+        onclick="localStorage.setItem('KI_GO_TO','admin')"
+      >
+        ⬅ Dashboard Guru
+      </a>
+
+      <a class="btn-primary" href="drillsoal.html">
+        Buka Drill Soal
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill">
+        <span class="hex"></span>
+       <span>Rekap Firebase Online • Drill Soal</span>
+      </div>
+
+      <section class="hero">
+        <h1 class="title">📊 Data <span class="accent">Drill Soal</span></h1>
+        <p class="subtitle">
+          Halaman ini membaca hasil yang dikumpulkan siswa. Data berisi identitas siswa, skor, nilai, jawaban siswa, dan kunci jawaban.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>Ringkasan</h2>
+
+          <div class="stats-grid">
+            <div class="stat">
+              <b id="totalPeserta">0</b>
+              <span>Total pengumpulan</span>
+            </div>
+
+            <div class="stat">
+              <b id="rataNilai">0</b>
+              <span>Rata-rata nilai</span>
+            </div>
+
+            <div class="stat">
+              <b id="nilaiTertinggi">0</b>
+              <span>Nilai tertinggi</span>
+            </div>
+
+            <div class="stat">
+              <b id="nilaiTerendah">0</b>
+              <span>Nilai terendah</span>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <input
+              id="searchInput"
+              class="search"
+              type="search"
+              placeholder="Cari nama, kelas, email, atau waktu..."
+              oninput="renderDataDrill()"
+            >
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn-primary" type="button" onclick="exportCSV()">
+                Export CSV
+              </button>
+
+              <button class="btn" type="button" onclick="hapusSemuaData()">
+                Reset Data
+              </button>
+            </div>
+          </div>
+
+          <div id="emptyState" class="empty">
+            Belum ada data drill soal. Data akan muncul setelah siswa menekan tombol
+            <b>Kumpulkan Hasil</b> di halaman drill.
+          </div>
+
+          <div class="table-wrap" id="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Waktu</th>
+                  <th>Nama</th>
+                  <th>Kelas</th>
+                  <th>No Absen</th>
+                  <th>Email</th>
+                  <th>Skor</th>
+                  <th>Nilai</th>
+                  <th>Benar/Salah</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody id="dataBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="detail" id="detailModal">
+    <div class="detail-card">
+      <div class="detail-head">
+        <div>
+          <h2 id="detailTitle">Detail Jawaban</h2>
+          <p
+            id="detailMeta"
+            style="margin:6px 0 0; color:#4b5563; font-weight:700;"
+          ></p>
+        </div>
+
+        <button
+          class="btn"
+          type="button"
+          onclick="closeDetail()"
+          style="color:#111827; border-color:#c7d2fe;"
+        >
+          Tutup
+        </button>
+      </div>
+
+      <div class="detail-body" id="detailBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "dataAdminGuruDrill";
+
+    function getData(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      }catch(e){
+        return [];
+      }
+    }
+
+    function setData(data){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function scoreClass(nilai){
+      const n = Number(nilai) || 0;
+
+      if(n >= 80) return "score-good";
+      if(n >= 60) return "score-mid";
+
+      return "score-low";
+    }
+
+    function updateStats(data){
+      const total = data.length;
+      const nilai = data.map(item => Number(item.nilai) || 0);
+      const rata = total ? Math.round(nilai.reduce((a,b) => a + b, 0) / total) : 0;
+      const max = total ? Math.max(...nilai) : 0;
+      const min = total ? Math.min(...nilai) : 0;
+
+      document.getElementById("totalPeserta").textContent = total;
+      document.getElementById("rataNilai").textContent = rata;
+      document.getElementById("nilaiTertinggi").textContent = max;
+      document.getElementById("nilaiTerendah").textContent = min;
+    }
+
+    function renderDataDrill(){
+      const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
+      const allData = getData();
+
+      const filtered = allData.filter(item => {
+        const text = [
+          item.waktuKumpul,
+          item.nama,
+          item.kelas,
+          item.absen,
+          item.email,
+          item.skor,
+          item.nilai
+        ].join(" ").toLowerCase();
+
+        return text.includes(keyword);
+      });
+
+      updateStats(allData);
+
+      const empty = document.getElementById("emptyState");
+      const tableWrap = document.getElementById("tableWrap");
+      const tbody = document.getElementById("dataBody");
+
+      if(filtered.length === 0){
+        tbody.innerHTML = "";
+        empty.classList.add("show");
+        tableWrap.style.display = allData.length === 0 ? "none" : "block";
+
+        empty.innerHTML = allData.length === 0
+          ? "Belum ada data drill soal. Data akan muncul setelah siswa menekan tombol <b>Kumpulkan Hasil</b> di halaman drill."
+          : "Tidak ada data yang cocok dengan pencarian.";
+
+        return;
+      }
+
+      empty.classList.remove("show");
+      tableWrap.style.display = "block";
+
+      tbody.innerHTML = filtered.map((item, index) => {
+        const benar = item.detailJawaban
+          ? item.detailJawaban.filter(d => d.benar).length
+          : item.skor;
+
+        const salah = item.detailJawaban
+          ? item.detailJawaban.length - benar
+          : Number(item.total || 20) - Number(item.skor || 0);
+
+        return `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${escapeHtml(item.waktuKumpul || "-")}</td>
+            <td><b>${escapeHtml(item.nama || "-")}</b></td>
+            <td>${escapeHtml(item.kelas || "-")}</td>
+            <td>${escapeHtml(item.absen || "-")}</td>
+            <td>${escapeHtml(item.email || "-")}</td>
+            <td>
+              <span class="score-badge ${scoreClass(item.nilai)}">
+                ${escapeHtml(item.skor)}/${escapeHtml(item.total)}
+              </span>
+            </td>
+            <td>
+              <span class="score-badge ${scoreClass(item.nilai)}">
+                ${escapeHtml(item.nilai)}
+              </span>
+            </td>
+            <td>
+              Benar: <b>${benar}</b><br>
+              Salah: <b>${salah}</b>
+            </td>
+            <td>
+              <button class="small-btn" type="button" onclick="openDetail('${item.id}')">
+                Lihat Detail
+              </button>
+              <button class="small-btn" type="button" onclick="hapusData('${item.id}')">
+                Hapus
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function openDetail(id){
+      const data = getData();
+      const item = data.find(row => row.id === id);
+
+      if(!item) return;
+
+      document.getElementById("detailTitle").textContent =
+        "Detail Jawaban - " + (item.nama || "Tanpa Nama");
+
+      document.getElementById("detailMeta").textContent =
+        `${item.kelas || "-"} • Absen ${item.absen || "-"} • Skor ${item.skor}/${item.total} • Nilai ${item.nilai}`;
+
+      const detail = item.detailJawaban || [];
+
+      document.getElementById("detailBody").innerHTML = detail.map(row => `
+        <div class="detail-row ${row.benar ? "correct" : "wrong"}">
+          <b>Soal ${row.nomor}</b><br>
+          Jawaban siswa: <b>${escapeHtml(row.jawabanSiswa || "-")}</b><br>
+          Kunci jawaban: <b>${escapeHtml(row.kunciJawaban || "-")}</b><br>
+          Status: <b>${row.benar ? "Benar" : "Salah"}</b><br>
+Poin: <b>${row.poin || 0}</b><br>
+Pembahasan:<br>
+<span>${escapeHtml(row.pembahasan || "Pembahasan belum tersedia.")}</span>
+        </div>
+      `).join("");
+
+      document.getElementById("detailModal").classList.add("show");
+    }
+
+    function closeDetail(){
+      document.getElementById("detailModal").classList.remove("show");
+    }
+
+    function hapusData(id){
+      if(!confirm("Hapus data ini?")) return;
+
+      const data = getData().filter(item => item.id !== id);
+      setData(data);
+      renderDataDrill();
+    }
+
+    function hapusSemuaData(){
+      if(!confirm("Yakin menghapus semua data drill soal?")) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      renderDataDrill();
+    }
+
+    function csvEscape(value){
+      const str = String(value ?? "");
+
+      if(/[,"\n]/.test(str)){
+        return '"' + str.replaceAll('"','""') + '"';
+      }
+
+      return str;
+    }
+
+    function exportCSV(){
+      const data = getData();
+
+      if(data.length === 0){
+        alert("Belum ada data untuk diexport.");
+        return;
+      }
+
+      const header = [
+        "Waktu",
+        "Nama",
+        "Kelas",
+        "No Absen",
+        "Email",
+        "Skor",
+        "Total",
+        "Nilai",
+        "Detail Jawaban"
+      ];
+
+      const rows = data.map(item => {
+        const detail = (item.detailJawaban || [])
+          .map(d =>
+            `Soal ${d.nomor}: siswa ${d.jawabanSiswa || "-"}, kunci ${d.kunciJawaban || "-"}, poin ${d.poin || 0}, ${d.benar ? "Benar" : "Salah"}, pembahasan: ${d.pembahasan || "Pembahasan belum tersedia."}`
+          )
+          .join(" | ");
+
+        return [
+          item.waktuKumpul,
+          item.nama,
+          item.kelas,
+          item.absen,
+          item.email,
+          item.skor,
+          item.total,
+          item.nilai,
+          detail
+        ];
+      });
+
+      const csv = "\uFEFF" + [header, ...rows]
+        .map(row => row.map(csvEscape).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], {
+        type:"text/csv;charset=utf-8"
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "data_drill_soal.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 800);
+    }
+
+    document.getElementById("detailModal").addEventListener("click", function(e){
+      if(e.target === this){
+        closeDetail();
+      }
+    });
+
+    // renderDataDrill();
+// Data akan dimuat dari Firebase terlebih dahulu.
+  </script>
+    <!-- FIREBASE ONLINE UNTUK DATADRILL -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script src="src/firebase-config.js"></script>
+  <script src="src/firebase-init.js"></script>
+
+  <script>
+    function formatFirebaseTimeDrill(value) {
+      if (!value) return "-";
+
+      if (value.toDate) {
+        return value.toDate().toLocaleString("id-ID");
+      }
+
+      if (value.seconds) {
+        return new Date(value.seconds * 1000).toLocaleString("id-ID");
+      }
+
+      return String(value);
+    }
+
+    function normalisasiDataDrill(doc) {
+      const item = doc.data();
+      const jawaban = item.jawaban || item.answers || {};
+      const detailJawaban =
+        item.detailJawaban ||
+        jawaban.detailJawaban ||
+        [];
+
+      return {
+        id: doc.id,
+        waktuKumpul: item.waktuKumpul || formatFirebaseTimeDrill(item.updatedAt || item.createdAt),
+
+        nama: item.nama || item.name || "-",
+        kelas: item.kelas || "-",
+        absen: item.absen || item.noAbsen || "-",
+        email: item.email || "-",
+
+        jumlahBenar: item.jumlahBenar ?? jawaban.jumlahBenar ?? "-",
+        jumlahSalah: item.jumlahSalah ?? jawaban.jumlahSalah ?? "-",
+        jumlahSoal: item.jumlahSoal ?? jawaban.jumlahSoal ?? 20,
+
+        skor: item.skor ?? item.score ?? jawaban.skor ?? "-",
+        total: item.total ?? jawaban.total ?? 100,
+        nilai: item.nilai ?? item.skor ?? item.score ?? jawaban.nilai ?? "-",
+
+        status: item.status || "-",
+        detailJawaban: detailJawaban
+      };
+    }
+
+    async function ambilDataFirebaseDrill() {
+      const hasilMap = new Map();
+
+      const snapshotDrill = await db
+        .collection("drillAnswers")
+        .get();
+
+      snapshotDrill.forEach((doc) => {
+        hasilMap.set(doc.id, doc);
+      });
+
+      const snapshotAnswers = await db
+        .collection("answers")
+        .where("pageKey", "==", "drillsoal")
+        .get();
+
+      snapshotAnswers.forEach((doc) => {
+        if (!hasilMap.has(doc.id)) {
+          hasilMap.set(doc.id, doc);
+        }
+      });
+
+      const snapshotJawaban = await db
+        .collection("jawaban")
+        .where("pageKey", "==", "drillsoal")
+        .get();
+
+      snapshotJawaban.forEach((doc) => {
+        if (!hasilMap.has(doc.id)) {
+          hasilMap.set(doc.id, doc);
+        }
+      });
+
+      const data = [];
+
+      hasilMap.forEach((doc) => {
+        data.push(normalisasiDataDrill(doc));
+      });
+
+      data.sort((a, b) => {
+        return String(b.waktuKumpul || "").localeCompare(String(a.waktuKumpul || ""));
+      });
+
+      localStorage.setItem("dataAdminGuruDrill", JSON.stringify(data));
+      renderDataDrill();
+    }
+
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        alert("Silakan login terlebih dahulu.");
+        window.location.href = "h1.html";
+        return;
+      }
+
+      ambilDataFirebaseDrill().catch((error) => {
+        console.error("Gagal mengambil data drill dari Firebase:", error);
+
+        const emptyState = document.getElementById("emptyState");
+        const tableWrap = document.getElementById("tableWrap");
+
+        if (emptyState) {
+          emptyState.classList.add("show");
+          emptyState.innerHTML =
+            "Gagal memuat data drill dari Firebase. Cek Firestore Rules dan Console browser.";
+        }
+
+        if (tableWrap) {
+          tableWrap.style.display = "none";
+        }
+
+        renderDataDrill();
+      });
+    });
+  </script>
+</body>
+</html>

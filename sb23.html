@@ -1,0 +1,1399 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kegiatan 3 • Verifikasi Kc dan Penguatan Kp</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --red:#ff6b8a;
+      --yellow:#ffe082;
+      --shadow: 0 20px 80px rgba(0,0,0,.55);
+      --shadow2: 0 10px 40px rgba(0,0,0,.35);
+      --r-xl: 28px;
+      --r-lg: 18px;
+      --r-md: 14px;
+      --stroke: rgba(255,255,255,.14);
+      --glass: rgba(255,255,255,.06);
+      --glass2: rgba(255,255,255,.09);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars, .chem-lines, .grain{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      filter: blur(.2px);
+      animation: twinkle 6s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    @keyframes twinkle{ 0%,100%{opacity:.46} 50%{opacity:.62} }
+
+    .chem-lines{
+      opacity:.18;
+      mix-blend-mode: screen;
+      background-repeat:no-repeat;
+      background-size:cover;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'%3E%3Cg fill='none' stroke='white' stroke-opacity='.34'%3E%3Cpath d='M130 720 C260 640, 300 560, 420 500' stroke-width='2'/%3E%3Cpath d='M420 500 C520 450, 600 470, 690 410' stroke-width='2'/%3E%3Ccircle cx='130' cy='720' r='12'/%3E%3Ccircle cx='420' cy='500' r='16'/%3E%3Ccircle cx='690' cy='410' r='12'/%3E%3C/g%3E%3C/svg%3E");
+      animation: drift 12s linear infinite;
+    }
+    @keyframes drift{ 0%,100%{transform:translate3d(0,0,0) scale(1.02)} 50%{transform:translate3d(0,-8px,0) scale(1.02)} }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .vignette{
+      position:fixed; inset:-20%;
+      background: radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      pointer-events:none;
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 12px;
+      padding:16px 18px;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,6,28,.62), rgba(10,6,28,.12));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .brand{ display:flex; gap:12px; align-items:center; min-width: 220px; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.38), rgba(124,77,255,.38));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 40px rgba(0,0,0,.30);
+      font-weight:900;
+    }
+    .brand-title{ font-weight:900; letter-spacing:.2px; }
+    .brand-sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    .btn, .btn-primary{
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      font-weight:800;
+    }
+    .btn{ background: rgba(255,255,255,.06); }
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(255,79,216,.70), rgba(255,255,255,.18));
+      letter-spacing:.04em;
+      box-shadow: 0 12px 40px rgba(255,79,216,.12);
+    }
+    .btn:hover, .btn-primary:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+
+    main{ position:relative; z-index:2; }
+    .wrap{ padding: clamp(18px, 4vw, 46px); display:flex; justify-content:center; }
+    .container{ width:min(1180px, 100%); display:grid; gap: 16px; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 16px; border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
+      letter-spacing:.12em; text-transform: uppercase; font-size: 12px;
+      color: rgba(255,255,255,.78);
+      width: fit-content;
+    }
+    .pill .hex{
+      width:14px; height:14px; border-radius:4px;
+      background: linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.95));
+      clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+    }
+
+    .title{
+      margin:0; line-height:1.05; font-weight:950;
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing:-0.02em;
+    }
+    .title .accent{
+      background: linear-gradient(90deg, var(--mag), var(--vio), var(--blue));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      font-style: italic;
+    }
+    .subtitle{
+      margin: 10px 0 0;
+      max-width: 930px;
+      color: rgba(255,255,255,.72);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .card{
+      border-radius: var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 60% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      position:relative;
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{ padding: clamp(16px, 2.6vw, 26px); }
+    .card h2, .card h3{ margin:0 0 10px; font-weight:950; letter-spacing:.03em; }
+    .muted{ color: var(--muted); line-height: 1.7; font-size: 14px; }
+    .formula{
+      margin:14px 0;
+      padding:16px;
+      border-radius: 18px;
+      border:1px solid rgba(255,79,216,.22);
+      background: rgba(255,79,216,.08);
+      text-align:center;
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight:900;
+      box-shadow: var(--shadow2);
+    }
+
+    .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    @media (max-width: 880px){ .grid-2{ grid-template-columns:1fr; } }
+
+    .step{
+      display:grid;
+      grid-template-columns: 44px 1fr;
+      gap:14px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,79,216,.25);
+      background: rgba(255,79,216,.07);
+      margin-top: 12px;
+    }
+    .num{
+      width:38px; height:38px; border-radius:999px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.95), rgba(255,255,255,.20));
+      font-weight:950;
+      box-shadow: 0 10px 30px rgba(255,79,216,.14);
+    }
+
+    .input-line{
+      display:inline-block;
+      min-width: 170px;
+      border-bottom: 2px solid rgba(255,255,255,.48);
+      height: 26px;
+      vertical-align:middle;
+    }
+
+    .hint, .autocheck, .video-box, .success-box{
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.055);
+      line-height:1.65;
+      color: rgba(255,255,255,.78);
+      font-size: 14px;
+    }
+    .hint{ border-color: rgba(255,224,130,.28); background: rgba(255,224,130,.07); }
+    .autocheck{ border-color: rgba(102,242,165,.22); background: rgba(102,242,165,.06); }
+    .video-box{ border-color: rgba(45,108,255,.32); background: rgba(45,108,255,.08); }
+    .success-box{ border-color: rgba(102,242,165,.34); background: rgba(102,242,165,.10); font-weight:900; }
+
+    .iframe-wrap{
+      margin-top:12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      background: rgba(0,0,0,.22);
+      box-shadow: var(--shadow2);
+      aspect-ratio: 16 / 9;
+    }
+    iframe{ width:100%; height:100%; border:0; display:block; }
+
+    .table-wrap{
+      margin-top:14px;
+      overflow:auto;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    table{ width:100%; border-collapse:collapse; min-width: 820px; }
+    th{
+      background: linear-gradient(180deg, rgba(255,79,216,.38), rgba(124,77,255,.20));
+      color:white;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:12px;
+      padding:14px 12px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    td{
+      padding:13px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.86);
+      text-align:center;
+    }
+    tr:last-child td{ border-bottom:0; }
+    .blank{
+      display:inline-block;
+      width: 100px;
+      height: 24px;
+      border-radius: 10px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.06);
+    }
+
+    .kc-table-input{
+  width: 120px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.95);
+  color: #111;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+}
+
+.kc-table-input:focus{
+  border-color: var(--mag);
+  box-shadow: 0 0 0 4px rgba(255,79,216,.18);
+}
+
+.row-feedback{
+  display:block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.correct-row{
+  background: rgba(102,242,165,.14) !important;
+}
+
+.wrong-row{
+  background: rgba(255,107,138,.14) !important;
+}
+
+.choice{
+  cursor: pointer;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+
+.choice:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.35);
+}
+
+.choice.selected{
+  border-color: var(--yellow);
+  background: rgba(255,224,130,.12);
+}
+
+.choice.correct{
+  border-color: var(--green);
+  background: rgba(102,242,165,.16);
+}
+
+.choice.wrong{
+  border-color: var(--red);
+  background: rgba(255,107,138,.16);
+}
+    .choice-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .choice{
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.055);
+      color:rgba(255,255,255,.86);
+    }
+
+.group-select-box{
+  display:grid;
+  gap:14px;
+  margin-top:16px;
+}
+
+.group-options{
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap:12px;
+}
+
+@media (max-width: 820px){
+  .group-options{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px){
+  .group-options{
+    grid-template-columns: 1fr;
+  }
+}
+
+.group-card{
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.88);
+  border-radius:18px;
+  padding:16px 12px;
+  cursor:pointer;
+  text-align:center;
+  font-weight:900;
+  transition: transform .14s ease, border-color .14s ease, background .14s ease;
+}
+
+.group-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,79,216,.45);
+  background: rgba(255,79,216,.12);
+}
+
+.group-card.active{
+  border-color: var(--green);
+  background: rgba(102,242,165,.14);
+  box-shadow: 0 0 0 4px rgba(102,242,165,.10);
+}
+
+.locked-section{
+  display:none;
+}
+
+.locked-section.show{
+  display:block;
+}
+
+    ul{ margin:8px 0 0 20px; padding:0; }
+    li{ margin:6px 0; }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="chem-lines" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Kc</div>
+      <div>
+        <div class="brand-title">Kegiatan 3</div>
+        <div class="brand-sub">Verifikasi & Pembuktian Tetapan Kesetimbangan</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="index.html">⬅ Kembali</a>
+     <a class="btn-primary" href="#pilihKelompok">Mulai Investigasi</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>LKPD Digital • Investigate</span></div>
+
+      <section>
+        <h1 class="title">🔬 Kegiatan 3: <span class="accent">Verifikasi Kc</span> dan Penguatan Kp</h1>
+        <p class="subtitle">
+  Halaman ini merupakan kelanjutan dari analisis data sebelumnya. Sekarang, kamu akan membuktikan nilai Kc melalui perhitungan,
+  lalu memahami Kp sebagai tetapan kesetimbangan berdasarkan tekanan parsial gas.
+</p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🔁 Dari Hipotesis Menuju Pembuktian</h2>
+          <p class="muted">
+            💡 Pada tahap sebelumnya, kamu telah menemukan bahwa nilai perbandingan
+            <b>[NO₂]² / [N₂O₄]</b> cenderung konstan pada keadaan setimbang.
+            Nilai yang hampir tetap ini diduga sebagai <b>tetapan kesetimbangan berdasarkan konsentrasi (Kc)</b>.
+          </p>
+          <div class="success-box">▶ Sekarang, saatnya MEMBUKTIKANNYA secara matematis!</div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="formula">
+              N₂O₄(g) ⇌ 2NO₂(g)
+              <div class="muted" style="font-size:13px; margin-top:6px;">Reaksi yang dipelajari</div>
+            </div>
+            <div class="formula">
+              Kc = hasil kali konsentrasi produk / hasil kali konsentrasi reaktan
+           <div class="muted" style="font-size:13px; margin-top:6px;">
+              Pangkat setiap zat disesuaikan dengan koefisien reaksinya.
+          </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="pilihKelompok">
+  <div class="card-inner">
+    <h2>👥 Pilih Kelompok Investigasi</h2>
+    <p class="muted">
+      Sebelum masuk ke lembar kerja investigasi, pilih kelompok yang sudah ditentukan oleh guru.
+      Setelah memilih kelompok, kamu dapat melanjutkan ke tahap investigasi terstruktur.
+    </p>
+
+    <div class="group-select-box">
+      <div class="group-options">
+        <button class="group-card" type="button" onclick="pilihKelompok(1)">
+          Kelompok 1
+        </button>
+
+        <button class="group-card" type="button" onclick="pilihKelompok(2)">
+          Kelompok 2
+        </button>
+
+        <button class="group-card" type="button" onclick="pilihKelompok(3)">
+          Kelompok 3
+        </button>
+
+        <button class="group-card" type="button" onclick="pilihKelompok(4)">
+          Kelompok 4
+        </button>
+
+        <button class="group-card" type="button" onclick="pilihKelompok(5)">
+          Kelompok 5
+        </button>
+      </div>
+
+      <div id="fbKelompok" class="hint" style="display:none;"></div>
+
+      <button id="btnMulaiInvestigasi" class="btn-primary" type="button" onclick="mulaiInvestigasi()" style="display:none; width:max-content;">
+        Masuk ke Lembar Investigasi ➜
+      </button>
+    </div>
+  </div>
+</section>
+
+      <section class="card locked-section" id="investigasi">
+        <div class="card-inner">
+          <h2>🧭 Langkah Investigasi Terstruktur</h2>
+          <p class="muted">Ikuti setiap langkah berikut secara berurutan. Sistem akan memverifikasi jawabanmu di setiap tahap.</p>
+
+          <div class="step">
+  <div class="num">1</div>
+  <div>
+    <h3>LANGKAH 1 — Identifikasi Bentuk Ekspresi Kc</h3>
+    <p class="muted">Berdasarkan reaksi: <b>N₂O₄(g) ⇌ 2NO₂(g)</b>, tuliskan ekspresi Kc dengan benar.</p>
+
+    <p style="font-size:20px; font-weight:900;">
+      Kc =
+      <input id="num1" class="kc-input"> /
+      <input id="den1" class="kc-input">
+    </p>
+
+    <button class="btn-primary" onclick="cekLangkah1()">Cek Jawaban</button>
+
+    <div id="fb1" class="hint" style="display:none;"></div>
+  </div>
+</div>
+
+          <div class="step">
+  <div class="num">2</div>
+  <div>
+    <h3>LANGKAH 2 — Identifikasi Makna Pangkat</h3>
+    <p class="muted">Lengkapi pernyataan berikut:</p>
+
+    <p>
+      Koefisien NO₂ =
+      <input id="c1" class="small-input">
+      → pangkat =
+      <input id="p1" class="small-input">
+    </p>
+
+    <p>
+      Koefisien N₂O₄ =
+      <input id="c2" class="small-input">
+      → pangkat =
+      <input id="p2" class="small-input">
+    </p>
+
+    <button class="btn-primary" onclick="cekLangkah2()">Cek Jawaban</button>
+
+    <div id="fb2" class="hint" style="display:none;"></div>
+  </div>
+</div>
+
+          <div class="step">
+  <div class="num">3</div>
+  <div>
+    <h3>LANGKAH 3 — Substitusi Data ke dalam Rumus</h3>
+    <p class="muted">Gunakan data Percobaan 1:</p>
+
+   <div class="formula">
+  [NO₂] = 0,0547 M | [N₂O₄] = 0,643 M
+</div>
+
+<p style="font-size:20px; font-weight:900;">
+  Kc = (0,0547)² / 0,643 =
+  <input id="kcAwal" class="kc-input">
+</p>
+
+    <button class="btn-primary" onclick="cekStep3()">Cek</button>
+    <button class="btn" onclick="hintStep3()">Bantuan</button>
+
+    <div id="fb3" class="hint" style="display:none;"></div>
+    <div id="hint3" class="hint" style="display:none;"></div>
+  </div>
+</div>
+      </section>
+
+<section class="card locked-section" id="videoPenguat">
+  <div class="card-inner">
+    <h2>🎥 Video Penguat</h2>
+          <div class="video-box">
+            <p><b>📌 Instruksi untuk Siswa:</b><br>“Jika kamu mengalami kesulitan dalam melakukan substitusi ke rumus Kc, tonton video berikut sebagai panduan langkah demi langkah.”</p>
+          </div>
+
+          <div class="iframe-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/J4WJCYpTYj8"
+              title="Tetapan Kesetimbangan — Cara Menghitung Kc"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <a class="btn-primary" href="https://www.youtube.com/watch?v=J4WJCYpTYj8" target="_blank" rel="noopener">▶ Buka Video di YouTube</a>
+            <a class="btn" href="#tabel">Lanjut ke Tabel Kerja</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card locked-section" id="tabel">
+        <div class="card-inner">
+          <h2>📊 Tabel Kerja Interaktif — Hitung Nilai Kc Tiap Percobaan</h2>
+          <p class="muted">Lengkapi tabel berikut. Setiap baris akan diverifikasi oleh sistem secara otomatis setelah kamu mengisi nilai Kc.</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>[NO₂] (M)</th>
+                  <th>[N₂O₄] (M)</th>
+                  <th>Substitusi ke Kc</th>
+                  <th>Nilai Kc</th>
+                </tr>
+              </thead>
+              <tbody>
+  <tr id="row1">
+    <td>1</td>
+    <td>0,0172</td>
+    <td>0,00220</td>
+    <td>(0,0172)² / 0,00220</td>
+    <td>
+      <input class="kc-table-input" id="kc1" type="text" placeholder="Isi Kc">
+      <span class="row-feedback" id="fbKc1"></span>
+    </td>
+  </tr>
+
+  <tr id="row2">
+    <td>2</td>
+    <td>0,0310</td>
+    <td>0,00715</td>
+    <td>(0,0310)² / 0,00715</td>
+    <td>
+      <input class="kc-table-input" id="kc2" type="text" placeholder="Isi Kc">
+      <span class="row-feedback" id="fbKc2"></span>
+    </td>
+  </tr>
+
+  <tr id="row3">
+    <td>3</td>
+    <td>0,0451</td>
+    <td>0,01520</td>
+    <td>(0,0451)² / 0,01520</td>
+    <td>
+      <input class="kc-table-input" id="kc3" type="text" placeholder="Isi Kc">
+      <span class="row-feedback" id="fbKc3"></span>
+    </td>
+  </tr>
+
+  <tr id="row4">
+    <td>4</td>
+    <td>0,0500</td>
+    <td>0,01875</td>
+    <td>(0,0500)² / 0,01875</td>
+    <td>
+      <input class="kc-table-input" id="kc4" type="text" placeholder="Isi Kc">
+      <span class="row-feedback" id="fbKc4"></span>
+    </td>
+  </tr>
+
+  <tr id="row5">
+    <td>5</td>
+    <td>0,0620</td>
+    <td>0,02883</td>
+    <td>(0,0620)² / 0,02883</td>
+    <td>
+      <input class="kc-table-input" id="kc5" type="text" placeholder="Isi Kc">
+      <span class="row-feedback" id="fbKc5"></span>
+    </td>
+  </tr>
+</tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+  <button class="btn-primary" type="button" onclick="cekTabelKc()">Cek Semua Nilai Kc</button>
+</div>
+
+<div id="fbTabelKc" class="hint" style="display:none;"></div>
+        </div>
+      </section>
+
+      <section class="card locked-section" id="langkah4">
+  <div class="card-inner">
+    <h2>🔍 Langkah 4 — Bandingkan Hasil & Validasi Hipotesis</h2>
+
+    <p class="muted">
+      Setelah menghitung nilai Kc pada tabel, bandingkan hasil antarpercobaan.
+      Pilih pernyataan yang paling tepat, kemudian tuliskan alasanmu pada kolom jawaban.
+    </p>
+
+    <div class="step">
+      <div class="num">4</div>
+      <div>
+        <h3>Soal Pemilihan Perbandingan</h3>
+
+        <p class="muted">
+          Berdasarkan hasil perhitungan nilai Kc pada tabel, pernyataan manakah yang paling tepat?
+        </p>
+
+        <div class="choice-row">
+          <div class="choice" id="pilihanYa" onclick="cekLangkah4('ya')">
+            □ Nilai Kc semua percobaan sama persis.
+          </div>
+
+          <div class="choice" id="pilihanMendekati" onclick="cekLangkah4('mendekati')">
+            □ Nilai Kc tiap percobaan mendekati konstan.
+          </div>
+
+          <div class="choice" id="pilihanTidak" onclick="cekLangkah4('tidak')">
+            □ Nilai Kc tiap percobaan tidak memiliki pola.
+          </div>
+        </div>
+
+        <div id="fbLangkah4" class="hint" style="display:none;"></div>
+
+        <div class="block" style="margin-top:14px;">
+          <div class="block-title">
+            <span class="badge-num">4</span> Kolom Jawaban
+          </div>
+
+          <p class="hint">
+            Jelaskan alasanmu. Hubungkan jawabanmu dengan konsep bahwa Kc merupakan tetapan kesetimbangan pada suhu tertentu.
+          </p>
+
+          <textarea
+            id="jawabanLangkah4"
+            class="textarea"
+            rows="4"
+            placeholder="Tuliskan alasan atau kesimpulanmu di sini..."
+          ></textarea>
+        </div>
+
+        <button class="btn-primary" type="button" onclick="cekJawabanLangkah4()" style="margin-top:14px;">
+          Cek Jawaban
+        </button>
+
+        <div id="fbJawabanLangkah4" class="hint" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section class="card locked-section" id="penguatanKp">
+  <div class="card-inner">
+    <h2>🌬️ Langkah 5 — Penguatan Konsep Kp</h2>
+
+    <p class="muted">
+      Setelah membuktikan bahwa nilai Kc cenderung konstan berdasarkan data konsentrasi,
+      sekarang perhatikan bentuk lain tetapan kesetimbangan, yaitu <b>Kp</b>.
+      Kp digunakan jika kesetimbangan dinyatakan berdasarkan tekanan parsial gas.
+    </p>
+
+    <div class="grid-2" style="margin-top:14px;">
+      <div class="formula">
+        Kc = [NO₂]² / [N₂O₄]
+        <div class="muted" style="font-size:13px; margin-top:6px;">
+          Digunakan jika data dinyatakan dalam konsentrasi.
+        </div>
+      </div>
+
+      <div class="formula">
+        Kp = (P<sub>NO₂</sub>)² / P<sub>N₂O₄</sub>
+        <div class="muted" style="font-size:13px; margin-top:6px;">
+          Digunakan jika data dinyatakan dalam tekanan parsial gas.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">5</div>
+      <div>
+        <h3>Hubungan Kc dan Kp</h3>
+
+        <p class="muted">
+          Untuk reaksi gas, nilai Kc dan Kp dapat dihubungkan dengan persamaan:
+        </p>
+
+        <div class="formula">
+          Kp = Kc(RT)<sup>Δn</sup>
+        </div>
+
+        <p class="muted">
+          Keterangan:
+          <br>
+          <b>R</b> = tetapan gas,
+          <b>T</b> = suhu dalam Kelvin,
+          dan <b>Δn</b> = jumlah koefisien gas produk dikurangi jumlah koefisien gas reaktan.
+        </p>
+
+        <div class="hint">
+          Untuk reaksi <b>N₂O₄(g) ⇌ 2NO₂(g)</b>:
+          <br>
+          Δn = 2 − 1 = <b>1</b>
+          <br><br>
+          Maka hubungan Kc dan Kp untuk reaksi ini adalah:
+          <br>
+          <b>Kp = Kc(RT)<sup>1</sup></b>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">6</div>
+      <div>
+        <h3>Cek Pemahaman Kc dan Kp</h3>
+
+        <p class="muted">
+          Pilih pernyataan yang paling tepat.
+        </p>
+
+        <div class="choice-row">
+          <div class="choice" id="kpBenar" onclick="cekKp('benar')">
+            □ Kc berdasarkan konsentrasi, sedangkan Kp berdasarkan tekanan parsial gas.
+          </div>
+
+          <div class="choice" id="kpSalah1" onclick="cekKp('sama')">
+            □ Kc dan Kp selalu memiliki nilai yang sama.
+          </div>
+
+          <div class="choice" id="kpSalah2" onclick="cekKp('padat')">
+            □ Kp digunakan untuk zat padat dan cair murni.
+          </div>
+        </div>
+
+        <div id="fbKp" class="hint" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end;">
+  <a class="btn" href="sb22.html">⬅ Kembali ke Materi</a>
+
+  <button class="btn-primary" type="button" onclick="kirimJawabanKeGuru()">
+    Kirim Jawaban ➜
+  </button>
+
+  <a
+    id="btnNextSb24"
+    class="btn-primary"
+    href="sb24.html"
+    style="opacity:.45; pointer-events:none;"
+  >
+    Next ➜
+  </a>
+</div>
+
+<div id="fbKirimGuru" class="hint" style="display:none;"></div>
+  </main>
+</body>
+<script>
+function cekLangkah1(){
+  let num = document.getElementById("num1").value.toLowerCase();
+  let den = document.getElementById("den1").value.toLowerCase();
+  let fb = document.getElementById("fb1");
+
+  if(num.includes("no2") && den.includes("n2o4")){
+    fb.innerHTML = "Benar. Produk berada di pembilang dan reaktan di penyebut.";
+    fb.style.color = "lightgreen";
+  } else {
+    fb.innerHTML = "Coba lagi. Perhatikan posisi produk dan reaktan.";
+    fb.style.color = "salmon";
+  }
+
+  fb.style.display = "block";
+}
+
+function cekLangkah2(){
+  let c1 = document.getElementById("c1").value;
+  let p1 = document.getElementById("p1").value;
+  let c2 = document.getElementById("c2").value;
+  let p2 = document.getElementById("p2").value;
+  let fb = document.getElementById("fb2");
+
+  if(c1=="2" && p1=="2" && c2=="1" && p2=="1"){
+    fb.innerHTML = "Benar. Pangkat mengikuti koefisien reaksi.";
+    fb.style.color = "lightgreen";
+  } else {
+    fb.innerHTML = "Belum tepat. Ingat: NO₂ = 2, N₂O₄ = 1.";
+    fb.style.color = "salmon";
+  }
+
+  fb.style.display = "block";
+}
+</script>
+<script>
+function normalisasiAngka(nilai){
+  return parseFloat(nilai.replace(",", "."));
+}
+
+function cekStep3(){
+  const input = normalisasiAngka(document.getElementById("kcAwal").value);
+  const fb = document.getElementById("fb3");
+  const jawaban = (0.0547 * 0.0547) / 0.643;
+
+  if(!input && input !== 0){
+    fb.innerHTML = "Isi dulu nilai Kc hasil perhitunganmu.";
+    fb.style.color = "var(--yellow)";
+  } else if(Math.abs(input - jawaban) <= 0.001){
+    fb.innerHTML = "✅ Benar. Nilai Kc dari data percobaan 1 sekitar 0,00465.";
+    fb.style.color = "lightgreen";
+  } else {
+    fb.innerHTML = "❌ Belum tepat. Ingat rumusnya: Kc = [NO₂]² / [N₂O₄].";
+    fb.style.color = "salmon";
+  }
+
+  fb.style.display = "block";
+}
+
+function hintStep3(){
+  const hint = document.getElementById("hint3");
+  hint.innerHTML = "Petunjuk: kuadratkan dulu nilai [NO₂], lalu bagi dengan [N₂O₄]. Jadi: (0,0547 × 0,0547) / 0,643.";
+  hint.style.display = "block";
+}
+
+const dataKc = [
+  { id:"kc1", fb:"fbKc1", row:"row1", benar:0.1345 },
+  { id:"kc2", fb:"fbKc2", row:"row2", benar:0.1344 },
+  { id:"kc3", fb:"fbKc3", row:"row3", benar:0.1338 },
+  { id:"kc4", fb:"fbKc4", row:"row4", benar:0.1333 },
+  { id:"kc5", fb:"fbKc5", row:"row5", benar:0.1334 }
+];
+
+let tabelSudahBenar = false;
+
+function cekTabelKc(){
+  let jumlahBenar = 0;
+
+  dataKc.forEach((item) => {
+    const inputEl = document.getElementById(item.id);
+    const fbEl = document.getElementById(item.fb);
+    const rowEl = document.getElementById(item.row);
+
+    const nilai = normalisasiAngka(inputEl.value);
+    rowEl.classList.remove("correct-row", "wrong-row");
+
+    if(!nilai && nilai !== 0){
+      fbEl.innerHTML = "Harus diisi";
+      fbEl.style.color = "var(--yellow)";
+      rowEl.classList.add("wrong-row");
+      return;
+    }
+
+    if(Math.abs(nilai - item.benar) <= 0.002){
+      fbEl.innerHTML = "✅ Benar";
+      fbEl.style.color = "lightgreen";
+      rowEl.classList.add("correct-row");
+      jumlahBenar++;
+    } else {
+      fbEl.innerHTML = "❌ Cek lagi";
+      fbEl.style.color = "salmon";
+      rowEl.classList.add("wrong-row");
+    }
+  });
+
+  const fbTabel = document.getElementById("fbTabelKc");
+  fbTabel.style.display = "block";
+
+  if(jumlahBenar === dataKc.length){
+    tabelSudahBenar = true;
+    fbTabel.innerHTML = "✅ Semua nilai Kc sudah benar. Sekarang lanjutkan ke Langkah 4 untuk memvalidasi hipotesis.";
+    fbTabel.style.color = "lightgreen";
+  } else {
+    tabelSudahBenar = false;
+    fbTabel.innerHTML = "Masih ada jawaban yang perlu diperbaiki. Periksa kembali perhitungan Kc pada baris yang bertanda ❌.";
+    fbTabel.style.color = "var(--yellow)";
+  }
+}
+let pilihanLangkah4 = "";
+let langkah4SudahDijawab = false;
+let jawabanLangkah4SudahDiisi = false;
+let pilihanKp = "";
+let kpSudahDijawab = false;
+
+function cekLangkah4(pilihan){
+  const fb = document.getElementById("fbLangkah4");
+  const pilihanYa = document.getElementById("pilihanYa");
+  const pilihanMendekati = document.getElementById("pilihanMendekati");
+  const pilihanTidak = document.getElementById("pilihanTidak");
+
+  pilihanYa.classList.remove("selected", "correct", "wrong");
+  pilihanMendekati.classList.remove("selected", "correct", "wrong");
+  pilihanTidak.classList.remove("selected", "correct", "wrong");
+
+  pilihanLangkah4 = pilihan;
+  langkah4SudahDijawab = true;
+
+  if(pilihan === "ya"){
+    pilihanYa.classList.add("selected");
+  } else if(pilihan === "mendekati"){
+    pilihanMendekati.classList.add("selected");
+  } else {
+    pilihanTidak.classList.add("selected");
+  }
+
+  fb.innerHTML = "Jawaban pilihan sudah dipilih. Hasil cek akan muncul setelah kamu klik tombol Kirim Jawaban.";
+  fb.style.color = "var(--yellow)";
+  fb.style.display = "block";
+}
+function cekJawabanLangkah4(){
+  const jawaban = document.getElementById("jawabanLangkah4").value.trim();
+  const fb = document.getElementById("fbJawabanLangkah4");
+
+  if(jawaban === ""){
+    jawabanLangkah4SudahDiisi = false;
+    fb.innerHTML = "Tuliskan dulu alasan atau kesimpulanmu.";
+    fb.style.color = "var(--yellow)";
+  } else {
+    jawabanLangkah4SudahDiisi = true;
+    fb.innerHTML = "Jawaban sudah terisi. Hasil cek akan muncul setelah kamu klik tombol Kirim Jawaban.";
+    fb.style.color = "var(--yellow)";
+  }
+
+  fb.style.display = "block";
+}
+function cekKp(jawaban){
+  const fb = document.getElementById("fbKp");
+  const kpBenar = document.getElementById("kpBenar");
+  const kpSalah1 = document.getElementById("kpSalah1");
+  const kpSalah2 = document.getElementById("kpSalah2");
+
+  pilihanKp = jawaban;
+  kpSudahDijawab = true;
+
+  kpBenar.classList.remove("selected", "correct", "wrong");
+  kpSalah1.classList.remove("selected", "correct", "wrong");
+  kpSalah2.classList.remove("selected", "correct", "wrong");
+
+  if(jawaban === "benar"){
+    kpBenar.classList.add("selected");
+  } else if(jawaban === "sama"){
+    kpSalah1.classList.add("selected");
+  } else {
+    kpSalah2.classList.add("selected");
+  }
+
+  fb.innerHTML = "Jawaban sudah dipilih. Hasil cek akan muncul setelah kamu klik tombol Kirim Jawaban.";
+  fb.style.color = "var(--yellow)";
+  fb.style.display = "block";
+}
+</script>
+
+<script>
+const SB2_STORAGE_KEY = "dataAdminGuruSB2";
+
+function ambilIdentitasSB2(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB2(payload){
+  const identitas = ambilIdentitasSB2(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB2_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB2_STORAGE_KEY, JSON.stringify(dataLama));
+
+  return dataBaru;
+}
+</script>
+
+<script>
+  
+let kelompokTerpilih = null;
+
+function pilihKelompok(nomor){
+  kelompokTerpilih = nomor;
+
+  const semuaKelompok = document.querySelectorAll(".group-card");
+  semuaKelompok.forEach((item) => item.classList.remove("active"));
+
+  const tombolDipilih = semuaKelompok[nomor - 1];
+  tombolDipilih.classList.add("active");
+
+  const fb = document.getElementById("fbKelompok");
+  const btn = document.getElementById("btnMulaiInvestigasi");
+
+  fb.innerHTML = "✅ Kamu memilih <b>Kelompok " + nomor + "</b>. Klik tombol di bawah untuk masuk ke lembar investigasi.";
+  fb.style.color = "lightgreen";
+  fb.style.display = "block";
+
+  btn.style.display = "inline-flex";
+}
+
+function mulaiInvestigasi(){
+  if(!kelompokTerpilih){
+    const fb = document.getElementById("fbKelompok");
+    fb.innerHTML = "Pilih kelompok terlebih dahulu sebelum memulai investigasi.";
+    fb.style.color = "var(--yellow)";
+    fb.style.display = "block";
+    return;
+  }
+
+  const bagianTerkunci = [
+  "investigasi",
+  "videoPenguat",
+  "tabel",
+  "langkah4",
+  "penguatanKp"
+];
+
+  bagianTerkunci.forEach((id) => {
+    const bagian = document.getElementById(id);
+    if(bagian){
+      bagian.classList.add("show");
+    }
+  });
+
+  document.getElementById("investigasi").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+function ambilNilai(id){
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
+function cekSemuaJawabanSetelahKirim(){
+  cekLangkah1();
+  cekLangkah2();
+  cekStep3();
+  cekTabelKc();
+
+  const fb4 = document.getElementById("fbLangkah4");
+  const pilihanYa = document.getElementById("pilihanYa");
+  const pilihanMendekati = document.getElementById("pilihanMendekati");
+  const pilihanTidak = document.getElementById("pilihanTidak");
+
+  pilihanYa.classList.remove("selected", "correct", "wrong");
+  pilihanMendekati.classList.remove("selected", "correct", "wrong");
+  pilihanTidak.classList.remove("selected", "correct", "wrong");
+
+  if(pilihanLangkah4 === "mendekati"){
+    pilihanMendekati.classList.add("correct");
+    fb4.innerHTML = "✅ Benar. Nilai Kc tiap percobaan mendekati konstan.";
+    fb4.style.color = "lightgreen";
+  } else if(pilihanLangkah4 === "ya"){
+    pilihanYa.classList.add("wrong");
+    fb4.innerHTML = "Hampir tepat, tetapi nilai Kc tidak sama persis. Jawaban yang lebih tepat adalah mendekati konstan.";
+    fb4.style.color = "var(--yellow)";
+  } else {
+    pilihanTidak.classList.add("wrong");
+    fb4.innerHTML = "Belum tepat. Nilai Kc memiliki pola, yaitu mendekati konstan.";
+    fb4.style.color = "salmon";
+  }
+
+  fb4.style.display = "block";
+
+  const jawaban4 = document.getElementById("jawabanLangkah4").value.toLowerCase();
+  const fbJawaban4 = document.getElementById("fbJawabanLangkah4");
+
+  if(
+    jawaban4.includes("konstan") ||
+    jawaban4.includes("tetap") ||
+    jawaban4.includes("hampir sama") ||
+    jawaban4.includes("mendekati") ||
+    jawaban4.includes("kc")
+  ){
+    fbJawaban4.innerHTML = "✅ Jawaban alasan sudah baik.";
+    fbJawaban4.style.color = "lightgreen";
+  } else {
+    fbJawaban4.innerHTML = "Jawaban sudah tersimpan. Akan lebih kuat jika menyebutkan bahwa nilai Kc mendekati konstan.";
+    fbJawaban4.style.color = "var(--yellow)";
+  }
+
+  fbJawaban4.style.display = "block";
+
+  const fbKp = document.getElementById("fbKp");
+  const kpBenar = document.getElementById("kpBenar");
+  const kpSalah1 = document.getElementById("kpSalah1");
+  const kpSalah2 = document.getElementById("kpSalah2");
+
+  kpBenar.classList.remove("selected", "correct", "wrong");
+  kpSalah1.classList.remove("selected", "correct", "wrong");
+  kpSalah2.classList.remove("selected", "correct", "wrong");
+
+  if(pilihanKp === "benar"){
+    kpBenar.classList.add("correct");
+    fbKp.innerHTML = "✅ Benar. Kc berdasarkan konsentrasi, sedangkan Kp berdasarkan tekanan parsial gas.";
+    fbKp.style.color = "lightgreen";
+  } else if(pilihanKp === "sama"){
+    kpSalah1.classList.add("wrong");
+    fbKp.innerHTML = "❌ Belum tepat. Kc dan Kp tidak selalu sama.";
+    fbKp.style.color = "salmon";
+  } else {
+    kpSalah2.classList.add("wrong");
+    fbKp.innerHTML = "❌ Belum tepat. Kp digunakan untuk zat berfase gas.";
+    fbKp.style.color = "salmon";
+  }
+
+  fbKp.style.display = "block";
+}
+
+function hitungSkorSB23(){
+  let poin = 0;
+  const total = 10;
+
+  const num = ambilNilai("num1").toLowerCase();
+  const den = ambilNilai("den1").toLowerCase();
+
+  if(num.includes("no2") && den.includes("n2o4")) poin++;
+
+  if(
+    ambilNilai("c1") === "2" &&
+    ambilNilai("p1") === "2" &&
+    ambilNilai("c2") === "1" &&
+    ambilNilai("p2") === "1"
+  ){
+    poin++;
+  }
+
+  const kcAwal = normalisasiAngka(ambilNilai("kcAwal"));
+  const benarAwal = (0.0547 * 0.0547) / 0.643;
+  if(Math.abs(kcAwal - benarAwal) <= 0.001) poin++;
+
+  dataKc.forEach((item) => {
+    const nilai = normalisasiAngka(ambilNilai(item.id));
+    if(Math.abs(nilai - item.benar) <= 0.002){
+      poin++;
+    }
+  });
+
+  if(pilihanLangkah4 === "mendekati") poin++;
+  if(pilihanKp === "benar") poin++;
+
+  return Math.round((poin / total) * 100);
+}
+
+function kirimJawabanKeGuru(){
+  const fb = document.getElementById("fbKirimGuru");
+  const btnNext = document.getElementById("btnNextSb24");
+
+  jawabanLangkah4SudahDiisi = ambilNilai("jawabanLangkah4") !== "";
+
+  const wajibDiisi = [
+    { id: "num1", label: "Langkah 1 pembilang Kc" },
+    { id: "den1", label: "Langkah 1 penyebut Kc" },
+    { id: "c1", label: "Koefisien NO₂" },
+    { id: "p1", label: "Pangkat NO₂" },
+    { id: "c2", label: "Koefisien N₂O₄" },
+    { id: "p2", label: "Pangkat N₂O₄" },
+    { id: "kcAwal", label: "Kc Langkah 3" },
+    { id: "kc1", label: "Kc Percobaan 1" },
+    { id: "kc2", label: "Kc Percobaan 2" },
+    { id: "kc3", label: "Kc Percobaan 3" },
+    { id: "kc4", label: "Kc Percobaan 4" },
+    { id: "kc5", label: "Kc Percobaan 5" },
+    { id: "jawabanLangkah4", label: "Kolom jawaban Langkah 4" }
+  ];
+
+  const belumTerisi = wajibDiisi.filter((item) => ambilNilai(item.id) === "");
+
+  fb.style.display = "block";
+
+  if(!kelompokTerpilih){
+    fb.innerHTML = "Pilih kelompok terlebih dahulu sebelum mengirim jawaban.";
+    fb.style.color = "var(--yellow)";
+    return;
+  }
+
+  if(belumTerisi.length > 0){
+    fb.innerHTML = "Masih ada bagian yang belum diisi: <b>" + belumTerisi[0].label + "</b>.";
+    fb.style.color = "var(--yellow)";
+    return;
+  }
+
+  if(!langkah4SudahDijawab){
+    fb.innerHTML = "Pilih jawaban pada soal perbandingan Langkah 4 terlebih dahulu.";
+    fb.style.color = "var(--yellow)";
+    return;
+  }
+
+  if(!kpSudahDijawab){
+    fb.innerHTML = "Pilih jawaban pada bagian Cek Pemahaman Kc dan Kp terlebih dahulu.";
+    fb.style.color = "var(--yellow)";
+    return;
+  }
+
+  const dataJawaban = {
+    waktuKirim: new Date().toLocaleString("id-ID"),
+    kelompok: kelompokTerpilih,
+
+    langkah1: {
+      pembilang: ambilNilai("num1"),
+      penyebut: ambilNilai("den1")
+    },
+
+    langkah2: {
+      koefisienNO2: ambilNilai("c1"),
+      pangkatNO2: ambilNilai("p1"),
+      koefisienN2O4: ambilNilai("c2"),
+      pangkatN2O4: ambilNilai("p2")
+    },
+
+    langkah3: {
+      kcAwal: ambilNilai("kcAwal")
+    },
+
+    tabelKc: {
+      percobaan1: ambilNilai("kc1"),
+      percobaan2: ambilNilai("kc2"),
+      percobaan3: ambilNilai("kc3"),
+      percobaan4: ambilNilai("kc4"),
+      percobaan5: ambilNilai("kc5")
+    },
+
+    langkah4: {
+      pilihanPerbandingan: pilihanLangkah4,
+      jawabanAlasan: ambilNilai("jawabanLangkah4")
+    },
+
+    penguatanKp: {
+      pilihan: pilihanKp
+    }
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem("dataAdminGuruKegiatan3")) || [];
+  dataLama.push(dataJawaban);
+  localStorage.setItem("dataAdminGuruKegiatan3", JSON.stringify(dataLama));
+simpanKeDataSB2({
+  halaman: "sb23",
+  judul: "Verifikasi Kc dan Penguatan Kp",
+  kelompok: "Kelompok " + kelompokTerpilih,
+  skor: hitungSkorSB23(),
+  status: "jawaban dikirim",
+  ringkasan: "Jawaban investigasi Kc, tabel Kc, validasi hipotesis, dan penguatan Kp sudah dikirim.",
+  jawaban: dataJawaban,
+  kunci: {
+    langkah1: "Kc = [NO₂]² / [N₂O₄]",
+    langkah2: "Koefisien NO₂ = 2, pangkat NO₂ = 2, koefisien N₂O₄ = 1, pangkat N₂O₄ = 1",
+    langkah3: "Kc percobaan awal ≈ 0,00465",
+    pilihanPerbandingan: "mendekati",
+    penguatanKp: "benar"
+  }
+});
+  cekSemuaJawabanSetelahKirim();
+
+  fb.innerHTML = "✅ Semua jawaban sudah terisi, berhasil dikirim, dan tersimpan ke data admin guru. Hasil cek jawaban sudah ditampilkan.";
+  fb.style.color = "lightgreen";
+
+  btnNext.style.opacity = "1";
+  btnNext.style.pointerEvents = "auto";
+}</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 2,
+    pageKey: "sb23",
+    pageTitle: "Sub Bab 2 — Investigasi Kc dan Kp"
+  });
+});
+</script>
+</html>

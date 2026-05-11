@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 02 • Materi Hukum Aksi Massa & Kc</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+
+      --shadow: 0 20px 80px rgba(0,0,0,.55);
+      --shadow2: 0 10px 40px rgba(0,0,0,.35);
+
+      --r-xl: 28px;
+      --r-lg: 18px;
+      --r-md: 14px;
+
+      --stroke: rgba(255,255,255,.14);
+      --glass: rgba(255,255,255,.06);
+      --glass2: rgba(255,255,255,.09);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars, .chem-lines, .grain{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      filter: blur(.2px);
+      animation: twinkle 6s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    @keyframes twinkle{ 0%,100%{opacity:.46} 50%{opacity:.62} }
+
+    .chem-lines{
+      opacity:.18;
+      mix-blend-mode: screen;
+      background-repeat:no-repeat;
+      background-size:cover;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'%3E%3Cg fill='none' stroke='white' stroke-opacity='.34'%3E%3Cpath d='M130 720 C260 640, 300 560, 420 500' stroke-width='2'/%3E%3Cpath d='M420 500 C520 450, 600 470, 690 410' stroke-width='2'/%3E%3Ccircle cx='130' cy='720' r='12'/%3E%3Ccircle cx='420' cy='500' r='16'/%3E%3Ccircle cx='690' cy='410' r='12'/%3E%3C/g%3E%3C/svg%3E");
+      animation: drift 12s linear infinite;
+    }
+    @keyframes drift{ 0%,100%{transform:translate3d(0,0,0) scale(1.02)} 50%{transform:translate3d(0,-8px,0) scale(1.02)} }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .vignette{
+      position:fixed; inset:-20%;
+      background: radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      pointer-events:none;
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 12px;
+      padding:16px 18px;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,6,28,.62), rgba(10,6,28,.12));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .brand{ display:flex; gap:12px; align-items:center; min-width: 220px; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.38), rgba(124,77,255,.38));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 40px rgba(0,0,0,.30);
+      font-weight:900;
+      letter-spacing:.5px;
+    }
+    .brand-title{ font-weight:900; letter-spacing:.2px; }
+    .brand-sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      user-select:none;
+      box-shadow: 0 10px 40px rgba(0,0,0,.18);
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
+
+    main{ position:relative; z-index:2; }
+    .wrap{ padding: clamp(18px, 4vw, 46px); display:flex; justify-content:center; }
+    .container{ width:min(1100px, 100%); display:grid; gap: 16px; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 16px; border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
+      letter-spacing:.12em; text-transform: uppercase; font-size: 12px;
+      color: rgba(255,255,255,.78);
+      width: fit-content;
+    }
+    .pill .hex{
+      width:14px; height:14px; border-radius:4px;
+      background: linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.95));
+      clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+      box-shadow: 0 0 18px rgba(255,79,216,.25);
+    }
+
+    .title{
+      margin:0; line-height:.95; font-weight:900;
+      font-size: clamp(30px, 4vw, 50px);
+      letter-spacing:-0.02em;
+    }
+    .title .accent{
+      background: linear-gradient(90deg, var(--mag), var(--vio), var(--blue));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      font-style: italic; transform: skewX(-6deg);
+    }
+    .subtitle{
+      margin: 8px 0 0;
+      max-width: 860px;
+      color: rgba(255,255,255,.70);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{
+    grid-template-columns: .95fr 1.05fr; /* video sedikit lebih lebar */
+    }
+    }
+
+    .card{
+      border-radius: var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 60% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      position:relative;
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+    .card-inner{ padding: 18px; }
+
+    .step{
+      display:flex; gap:12px; align-items:flex-start;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,79,216,.26);
+      background: rgba(255,79,216,.08);
+      margin-top: 10px;
+    }
+    .num{
+      width:30px; height:30px; border-radius: 999px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.95), rgba(255,255,255,.20));
+      font-weight: 900;
+    }
+    .step b{ display:block; margin-bottom: 4px; }
+    .muted{ color: rgba(255,255,255,.72); line-height: 1.6; font-size: 14px; }
+
+    .iframe-wrap{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  overflow:hidden;
+  background: rgba(0,0,0,.22);
+  box-shadow: var(--shadow2);
+}
+
+/* ✅ khusus handout: tinggi dibuat lebih "full" */
+.handout-frame{
+  height: min(78vh, 920px);   /* tampil besar seperti dokumen */
+  min-height: 520px;         /* biar tetap nyaman di layar kecil */
+}
+/* ✅ khusus video: dibuat besar & tanpa scroll */
+.video-frame{
+  height: min(52vh, 520px);   /* video besar, nyaman dilihat */
+  min-height: 320px;          /* aman untuk layar kecil */
+}
+
+/* ✅ di HP: tetap besar tapi tidak berlebihan */
+@media (max-width: 720px){
+  .video-frame{
+    height: 40vh;
+    min-height: 240px;
+  }
+}
+
+/* ✅ agar di HP tetap enak */
+@media (max-width: 720px){
+  .handout-frame{
+    height: 72vh;
+    min-height: 460px;
+  }
+}
+    iframe{ width:100%; border:0; display:block; }
+
+    .btn-primary{
+      border: 1px solid rgba(255,255,255,.22);
+      background: linear-gradient(135deg, rgba(255,79,216,.70), rgba(255,255,255,.18));
+      color: rgba(255,255,255,.98);
+      padding: 12px 16px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      letter-spacing: .06em;
+      box-shadow: 0 12px 40px rgba(255,79,216,.12);
+      transition: transform .12s ease, filter .12s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+    .btn-primary:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+
+    .note{
+      margin-top: 10px;
+      color: rgba(255,255,255,.60);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="chem-lines" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <div class="brand-title">Sub Bab 02</div>
+        <div class="brand-sub">Hukum Aksi Massa & Kc</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="index.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#materi">Mulai Belajar</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Halaman Materi • Kc</span></div>
+
+      <div>
+        <h1 class="title">Materi <span class="accent">Hukum Aksi Massa</span> & Tetapan (Kc)</h1>
+        <p class="subtitle">
+          Ikuti langkah belajar berikut. Setelah membaca handout, tonton video, lalu buat rangkuman rumus Kc dan aturan penulisannya.
+        </p>
+      </div>
+
+      <div class="grid" id="materi">
+        <!-- KIRI: HANDOUT -->
+        <section class="card" aria-label="Handout">
+          <div class="card-inner">
+            <h2 style="margin:0 0 8px; font-weight:900; letter-spacing:.2px;">Handout Digital</h2>
+            <p class="muted" style="margin:0 0 12px;">
+              Baca handout berikut (scroll). Jika tampilan tidak muncul, buka lewat tombol “Buka Handout”.
+            </p>
+
+            <div class="iframe-wrap handout-frame">
+  <iframe
+    src="https://drive.google.com/file/d/1zTQ3hu-Jc3xKFIs1DZ7ZYgMgCNfI2vmX/preview"
+    allow="autoplay"
+    style="height:100%;">
+  </iframe>
+</div>
+
+
+           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+  <a class="btn-primary" href="https://drive.google.com/file/d/1zTQ3hu-Jc3xKFIs1DZ7ZYgMgCNfI2vmX/view?usp=sharing" target="_blank" rel="noopener">
+    📄 Buka Handout
+  </a>
+</div>
+
+
+            <p class="note">
+              Sumber handout: Google Drive (tautan yang Anda berikan).
+            </p>
+          </div>
+        </section>
+
+        <!-- KANAN: VIDEO + LANGKAH BELAJAR -->
+        <section class="card" aria-label="Video dan Langkah Belajar" id="video">
+          <div class="card-inner">
+            <h2 style="margin:0 0 8px; font-weight:900;">Video Pembelajaran (Kc)</h2>
+            <p class="muted" style="margin:0 0 12px;">
+              Tonton video berikut untuk memperkuat pemahaman tentang Kc.
+            </p>
+
+            <div class="iframe-wrap video-frame">
+  <iframe
+    src="https://www.youtube.com/embed/KyP28d14qVY"
+    title="Video Pembelajaran Kc"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    style="height:100%;">
+  </iframe>
+</div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+              <a class="btn-primary" href="https://www.youtube.com/watch?v=KyP28d14qVY" target="_blank" rel="noopener">
+                ▶ Buka di YouTube
+              </a>
+            </div>
+
+            <h3 style="margin:16px 0 6px; font-weight:900;">Langkah Belajar</h3>
+
+            <div class="step">
+              <div class="num">1</div>
+              <div>
+                <b>Membaca handout</b>
+                <div class="muted">Baca materi ringkas tentang hukum aksi massa dan tetapan kesetimbangan.</div>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="num">2</div>
+              <div>
+                <b>Menonton video</b>
+                <div class="muted">Tonton video pembelajaran Kc sampai selesai, catat poin penting.</div>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="num">3</div>
+              <div>
+                <b>Verifikasi Kc dan Penguatan Kp</b>
+                <div class="muted">Tulis rumus umum Kc dan Kp dari reaksi: aA + bB ⇌ cC + dD.</div>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="num">4</div>
+              <div>
+                <b>Mengembangkan dan Menyajikan Hasil Karya</b>
+                <div class="muted">Berupa laporan mini dengan aturan penulisan yang sesuai.</div>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="num">5</div>
+              <div>
+                <b>Kuis Interaktif</b>
+                <div class="muted">Mengerjakan kuis interaktif untuk menguji pemahaman tentang Kc dan Kp.</div>
+              </div>
+            </div>
+
+            <p class="note">
+              Video: YouTube (tautan yang Anda berikan).
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end;">
+        <a class="btn" href="index.html">⬅ Kembali ke Fenomena</a>
+        <a class="btn-primary" href="sb23.html">Next ➜</a>
+      </div>
+
+    </div>
+  </main>
+  <script>
+const SB2_STORAGE_KEY = "dataAdminGuruSB2";
+
+function ambilIdentitasSB2(extra = {}){
+  let user = {};
+  try{ user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {}; }catch(e){ user = {}; }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB2(payload){
+  const identitas = ambilIdentitasSB2(payload);
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman,
+    judul: payload.judul,
+    skor: payload.skor,
+    status: payload.status,
+    ringkasan: payload.ringkasan,
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB2_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB2_STORAGE_KEY, JSON.stringify(dataLama));
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  const nextBtn = document.querySelector('a[href="sb23.html"]');
+
+  if(nextBtn){
+    nextBtn.addEventListener("click", function(){
+      simpanKeDataSB2({
+        halaman: "sb22",
+        judul: "Materi Hukum Aksi Massa dan Kc",
+        skor: 100,
+        status: "materi selesai",
+        ringkasan: "Siswa membuka materi handout/video dan melanjutkan ke sb23.",
+        jawaban: {
+          aktivitas: "Membaca handout dan menonton video pembelajaran."
+        }
+      });
+    });
+  }
+});
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 2,
+    pageKey: "sb22",
+    pageTitle: "Sub Bab 2 — Materi Hukum Aksi Massa dan Kc"
+  });
+});
+</script>
+  </body>
+</html>

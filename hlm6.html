@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Halaman 6 — Kesetimbangan Homogen dan Heterogen</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+  --bg1:#b8f7ff;
+  --bg2:#b0b6ff;
+  --bg3:#ffd8f0;
+
+  --ink:#0b1220;
+  --muted:#5b6b86;
+
+  --card: rgba(255,255,255,.78);
+  --card2: rgba(255,255,255,.92);
+  --line: rgba(13,23,46,.12);
+
+  --primary:#2b7cff;
+  --primary2:#00c2ff;
+  --accent:#ff7a00;
+  --accent2:#ff4fd8;
+  --ok:#16a34a;
+  --bad:#dc2626;
+  --warn:#f59e0b;
+
+  --shadow: 0 18px 50px rgba(0,0,0,.12);
+  --shadow2: 0 10px 25px rgba(0,0,0,.10);
+
+  --radius: 18px;
+  --radius2: 14px;
+}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+  margin:0;
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+    radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+    linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+  overflow-x:hidden;
+}
+
+    /* blobs */
+    .blob{
+      position:fixed; width:380px;height:380px;border-radius:999px;
+      filter: blur(30px); opacity:.35; z-index:-1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b1{left:-120px; top:80px; background:#47e6ff;}
+    .blob.b2{right:-140px; top:140px; background:#6b7bff; animation-delay:-5s;}
+    .blob.b3{left:20%; bottom:-160px; background:#ff5fd6; animation-delay:-9s;}
+    @keyframes drift{
+      0%,100%{transform: translate(0,0) scale(1)}
+      50%{transform: translate(60px,-40px) scale(1.08)}
+    }
+
+    header{
+  position:sticky; top:0; z-index:20;
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,.55);
+  border-bottom: 1px solid var(--line);
+}
+    .topbar{
+      max-width:1150px;margin:0 auto;
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width: 300px;}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: var(--shadow2);
+      display:grid; place-items:center;
+      color:#fff; font-weight:900;
+    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1;}
+    .brand .t b{font-size:14px}
+    .brand .t span{font-size:12px;color:var(--muted)}
+    .rightbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .progressWrap{
+      width:220px;height:10px;border-radius:999px;
+      background: rgba(13,23,46,.10);
+      overflow:hidden;
+      border:1px solid rgba(13,23,46,.10);
+    }
+    .progressFill{
+      height:100%;
+      width:67%;
+      background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+      border-radius:999px;
+    }
+
+    main{max-width:1150px;margin:0 auto;padding:18px;}
+    .grid{display:grid;gap:16px}
+    @media (min-width: 980px){
+      .grid.cols-2{grid-template-columns: 1fr 1fr}
+      .grid.layout{grid-template-columns: 1fr 1.6fr}
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card.solid{background: var(--card2)}
+    h1{margin:0 0 4px 0; font-size:22px}
+    h2{margin:0 0 10px 0; font-size:15px}
+    p,li{font-size:13px; line-height:1.5}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background: var(--line); margin:14px 0}
+
+    .btn{
+      border:0; border-radius: 14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      user-select:none;
+    }
+    .btn:active{transform: scale(.98)}
+    .btn.primary{color:white;background: linear-gradient(135deg, var(--accent), #ff9f40);}
+    .btn.blue{color:white;background: linear-gradient(135deg, var(--primary2), var(--primary));}
+    .btn.ghost{
+      color: var(--ink);
+      background: rgba(255,255,255,.7);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+
+    .tag{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(43,124,255,.10);
+      color:#1b4bb2;
+      border:1px solid rgba(43,124,255,.15);
+      font-weight:900;
+      margin-bottom:8px;
+    }
+    .tag.orange{background: rgba(255,122,0,.12); color:#9a3d00; border-color: rgba(255,122,0,.18);}
+
+    /* Drag area */
+    .board{
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(13,23,46,.12);
+      border-radius: var(--radius);
+      padding:14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+      position:relative;
+      overflow:hidden;
+      min-height: 520px;
+    }
+    .board::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:240px;height:240px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,122,0,.18), transparent 62%);
+      transform: rotate(12deg);
+      pointer-events:none;
+    }
+
+    .bins{
+      display:grid;
+      gap:14px;
+    }
+    @media (min-width: 980px){
+      .bins{grid-template-columns: 1fr 1fr;}
+    }
+
+    .bin{
+      border-radius: 18px;
+      border: 1px dashed rgba(13,23,46,.22);
+      background: rgba(255,255,255,.68);
+      padding:14px;
+      min-height: 260px;
+      position:relative;
+      transition: box-shadow .2s ease, transform .1s ease, border-color .2s ease;
+    }
+    .bin:hover{box-shadow: 0 10px 22px rgba(0,0,0,.08)}
+    .bin.dragover{
+      border-color: rgba(43,124,255,.55);
+      box-shadow: 0 12px 28px rgba(43,124,255,.12);
+      transform: translateY(-1px);
+    }
+
+    .binHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .binTitle{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .binTitle b{font-size:16px}
+    .binTitle span{font-size:12px;color:var(--muted); font-weight:700}
+    .binBadge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      font-size:12px; font-weight:900; color:rgba(13,23,46,.75);
+    }
+    .binBadge.homo{background: rgba(0,194,255,.14); border-color: rgba(0,194,255,.18)}
+    .binBadge.hete{background: rgba(255,79,216,.12); border-color: rgba(255,79,216,.18)}
+
+    .stack{
+      display:grid; gap:10px;
+      min-height: 160px;
+    }
+
+    /* Cards */
+    .cards{
+      display:grid; gap:12px;
+    }
+    .rxnCard{
+      border-radius: 16px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.78);
+      padding:12px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.10);
+      cursor: grab;
+      user-select:none;
+      position:relative;
+      transition: transform .08s ease, box-shadow .2s ease;
+    }
+    .rxnCard:active{cursor:grabbing; transform: scale(.99)}
+    .rxnCard.dragging{
+      opacity:.65;
+      box-shadow: 0 20px 50px rgba(0,0,0,.16);
+    }
+    .rxnTop{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      margin-bottom:8px;
+    }
+    .rxnEq{
+      font-weight:900;
+      font-size:13px;
+      color: rgba(13,23,46,.85);
+    }
+    .phaseRow{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top:8px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      color: rgba(13,23,46,.75);
+    }
+    /* phase colors */
+    .ph-g{background: rgba(43,124,255,.12); border-color: rgba(43,124,255,.18); color:#123a9b;}
+    .ph-aq{background: rgba(0,194,255,.14); border-color: rgba(0,194,255,.20); color:#0a4f62;}
+    .ph-s{background: rgba(255,122,0,.14); border-color: rgba(255,122,0,.20); color:#7a2c00;}
+    .ph-l{background: rgba(255,79,216,.14); border-color: rgba(255,79,216,.20); color:#7a0b5f;}
+
+    /* Hint strip */
+    .hintStrip{
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      display:flex; align-items:flex-start; gap:10px;
+    }
+    .hintIcon{
+      width:34px;height:34px;border-radius:12px;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      color:white;
+      display:grid; place-items:center;
+      font-weight:900;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      flex:0 0 auto;
+    }
+
+    /* feedback */
+    .resultBox{
+      border-radius: 16px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.76);
+      padding:12px;
+      display:none;
+    }
+    .resultBox.show{display:block}
+    .resultGood{border-color: rgba(34,197,94,.22); background: rgba(34,197,94,.10)}
+    .resultBad{border-color: rgba(239,68,68,.22); background: rgba(239,68,68,.10)}
+
+    /* Toast */
+    .toastWrap{
+      position: fixed; right: 18px; bottom: 18px;
+      display:flex; flex-direction:column; gap:10px;
+      z-index: 60; pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      width:min(420px, calc(100vw - 36px));
+      border-radius: 16px;
+      padding:12px 12px;
+      background: rgba(255,255,255,.88);
+      border:1px solid rgba(13,23,46,.12);
+      box-shadow: var(--shadow);
+      display:flex; gap:10px;
+      align-items:flex-start;
+      animation: pop .18s ease-out;
+    }
+    @keyframes pop{from{transform: translateY(10px); opacity:.2} to{transform: translateY(0); opacity:1}}
+    .toast .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      font-weight:900; color:white;
+      flex:0 0 auto;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+    }
+    .toast.ok .icon{background: linear-gradient(135deg, #22c55e, #16a34a)}
+    .toast.bad .icon{background: linear-gradient(135deg, #ef4444, #b91c1c)}
+    .toast .t{flex:1}
+    .toast .t b{display:block; font-size:13px}
+    .toast .t span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .toast .x{background:transparent;border:0;cursor:pointer;padding:6px 8px;border-radius:10px;color:var(--muted);}
+
+    /* Modal */
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background: rgba(13,23,46,.45);
+      backdrop-filter: blur(8px);
+      display:none;
+      z-index:80;
+      padding:18px;
+    }
+    .modalBackdrop.show{display:grid; place-items:center}
+    .modal{
+      width: min(820px, 100%);
+      border-radius: 20px;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(13,23,46,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      background: linear-gradient(135deg, rgba(43,124,255,.10), rgba(255,79,216,.10));
+      border-bottom:1px solid rgba(13,23,46,.10);
+    }
+    .modalHead b{font-size:14px}
+    .modalBody{padding:16px}
+    .modalActions{
+      padding:12px 16px;
+      border-top:1px solid rgba(13,23,46,.10);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      background: rgba(255,255,255,.70);
+    }
+    .iconBtn{
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.7);
+      border-radius: 12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:900;
+      color:var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">6</div>
+        <div class="t">
+          <b>Kesetimbangan Homogen dan Heterogen</b>
+          <span>Halaman 6 • Klasifikasi kesetimbangan berdasarkan fase</span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div class="pill">
+          <span>Progress</span>
+          <b id="stepTxt" style="color:var(--ink)">6/8</b>
+        </div>
+        <div class="progressWrap"><div class="progressFill" id="progressFill" style="width:75%"></div></div>
+        <button class="btn ghost" id="btnHelp">✨ Bantuan</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="card solid">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <h1>Kesetimbangan Homogen dan Heterogen</h1>
+          <p class="muted" style="margin:0">
+            Cocokkan persamaan reaksi ke kotak yang benar.
+          </p>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="btnCheck">✅ COCOKKAN</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid layout" style="margin-top:16px">
+      <!-- LEFT: cards list -->
+      <div class="card">
+        <div class="tag orange">📦 Kartu reaksi (drag ke kotak)</div>
+        <p class="muted" style="margin:0 0 10px 0">
+          Tarik kartu ke <b>HOMOGEN</b> atau <b>HETEROGEN</b>.
+        </p>
+
+        <div class="cards" id="cardsPool" aria-label="kumpulan kartu">
+          <!-- Card 1 -->
+          <div class="rxnCard" draggable="true" data-id="rxn1" data-answer="homogen">
+            <div class="rxnTop">
+              <div class="rxnEq">2SO<sub>2</sub>(<i>g</i>) + O<sub>2</sub>(<i>g</i>) ⇌ 2SO<sub>3</sub>(<i>g</i>)</div>
+            </div>
+            <div class="phaseRow">
+              <span class="chip ph-g">SO<sub>2</sub>(<i>g</i>)</span>
+              <span class="chip ph-g">O<sub>2</sub>(<i>g</i>)</span>
+              <span class="chip ph-g">SO<sub>3</sub>(<i>g</i>)</span>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="rxnCard" draggable="true" data-id="rxn2" data-answer="heterogen">
+            <div class="rxnTop">
+              <div class="rxnEq">AgCl(s) ⇌ Ag<sup>+</sup>(<i>aq</i>) + Cl<sup>−</sup>(<i>aq</i>)</div>
+            </div>
+            <div class="phaseRow">
+              <span class="chip ph-s">AgCl(s)</span>
+              <span class="chip ph-aq">Ag<sup>+</sup>(<i>aq</i>)</span>
+              <span class="chip ph-aq">Cl<sup>−</sup>(<i>aq</i>)</span>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="rxnCard" draggable="true" data-id="rxn3" data-answer="heterogen">
+            <div class="rxnTop">
+              <div class="rxnEq">P<sub>4</sub>(s) + 6Cl<sub>2</sub>(g) ⇌ 4PCl<sub>3</sub>(l)</div>
+            </div>
+            <div class="phaseRow">
+              <span class="chip ph-s">P<sub>4</sub>(s)</span>
+              <span class="chip ph-g">Cl<sub>2</sub>(<i>g</i>)</span>
+              <span class="chip ph-l">PCl<sub>3</sub>(l)</span>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="rxnCard" draggable="true" data-id="rxn4" data-answer="homogen">
+            <div class="rxnTop">
+              <div class="rxnEq">CH<sub>3</sub>COOH(<i>aq</i>) + H<sub>2</sub>O(<i>l</i>) ⇌ CH<sub>3</sub>COO<sup>−</sup>(<i>aq</i>) + H<sub>3</sub>O<sup>+</sup>(<i>aq</i>)</div>
+            </div>
+            <div class="phaseRow">
+              <span class="chip ph-aq">CH<sub>3</sub>COOH(<i>aq</i>)</span>
+              <span class="chip ph-l">H<sub>2</sub>O(<i>l</i>)</span>
+              <span class="chip ph-aq">CH<sub>3</sub>COO<sup>−</sup>(<i>aq</i>)</span>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="rxnCard" draggable="true" data-id="rxn5" data-answer="heterogen">
+            <div class="rxnTop">
+              <div class="rxnEq">CaCO<sub>3</sub>(s) ⇌ Ca<sup>2+</sup>(<i>aq</i>) + CO<sub>3</sub><sup>2−</sup>(<i>aq</i>)</div>
+            </div>
+            <div class="phaseRow">
+              <span class="chip ph-s">CaCO<sub>3</sub>(s)</span>
+              <span class="chip ph-aq">Ca<sup>2+</sup>(<i>aq</i>)</span>
+              <span class="chip ph-aq">CO<sub>3</sub><sup>2−</sup>(<i>aq</i>)</span>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="rxnCard" draggable="true" data-id="rxn6" data-answer="homogen">
+            <div class="rxnTop">
+              <div class="rxnEq">N<sub>2</sub>(<i>g</i>) + 3H<sub>2</sub>(<i>g</i>) ⇌ 2NH<sub>3</sub>(<i>g</i>)</div>
+            </div>
+            <div class="phaseRow">
+              <span class="chip ph-g">N<sub>2</sub>(<i>g</i>)</span>
+              <span class="chip ph-g">H<sub>2</sub>(<i>g</i>)</span>
+              <span class="chip ph-g">NH<sub>3</sub>(<i>g</i>)</span>
+            </div>
+          </div>        </div>
+
+        <div class="divider"></div>
+
+        <div class="resultBox" id="resultBox"></div>
+
+        <div class="row" style="justify-content:space-between; margin-top:12px">
+          <button class="btn ghost" id="btnReset">🔁 Reset Kartu</button>
+          <button class="btn ghost" id="btnNext">LANJUT ➜</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: bins -->
+      <div class="card solid">
+        <div class="board">
+          <div class="bins">
+            <!-- HOMOGEN -->
+            <div class="bin" id="binHomogen" data-bin="homogen" aria-label="kotak homogen">
+              <div class="binHead">
+                <div class="binTitle">
+                  <b>HOMOGEN</b>
+                 
+                </div>
+                <span class="binBadge homo"></span>
+              </div>
+              <div class="stack" id="stackHomogen"></div>
+            </div>
+
+            <!-- HETEROGEN -->
+            <div class="bin" id="binHeterogen" data-bin="heterogen" aria-label="kotak heterogen">
+              <div class="binHead">
+                <div class="binTitle">
+                  <b>HETEROGEN</b>
+                
+                </div>
+                <span class="binBadge hete"></span>
+              </div>
+              <div class="stack" id="stackHeterogen"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <!-- Modal -->
+  <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div class="modalHead">
+        <b id="modalTitle">Modal</b>
+        <button class="iconBtn" id="modalClose" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalActions">
+        <button class="btn ghost" id="modalSecondary">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (q)=>document.querySelector(q);
+    const $$ = (q)=>Array.from(document.querySelectorAll(q));
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Toast
+    function toast(type, title, message, ms=4200){
+      const wrap = $("#toastWrap");
+      const t = document.createElement("div");
+      t.className = `toast ${type||"info"}`;
+      t.innerHTML = `
+        <div class="icon">${type==="ok"?"✓":type==="bad"?"!":"i"}</div>
+        <div class="t">
+          <b>${escapeHtml(title)}</b>
+          <span>${escapeHtml(message)}</span>
+        </div>
+        <button class="x" aria-label="Tutup">✕</button>
+      `;
+      t.querySelector(".x").addEventListener("click", ()=> t.remove());
+      wrap.appendChild(t);
+      if(ms) setTimeout(()=>{ if(t.isConnected) t.remove(); }, ms);
+    }
+
+    // Modal
+    const modal = {
+      open({title, bodyHTML}){
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = bodyHTML;
+        $("#modalBackdrop").classList.add("show");
+      },
+      close(){
+        $("#modalBackdrop").classList.remove("show");
+        $("#modalBody").innerHTML = "";
+      }
+    };
+    $("#modalClose").addEventListener("click", ()=> modal.close());
+    $("#modalSecondary").addEventListener("click", ()=> modal.close());
+    $("#modalBackdrop").addEventListener("click", (e)=>{ if(e.target.id==="modalBackdrop") modal.close(); });
+    window.addEventListener("keydown", (e)=>{ if(e.key==="Escape") modal.close(); });
+
+    // Drag & drop logic
+    let dragging = null;
+    let canNext = false;
+
+    const btnNext = $("#btnNext");
+    btnNext.disabled = true;
+    btnNext.style.opacity = .55;
+    btnNext.style.cursor = "not-allowed";
+
+    function bindDraggable(card){
+      card.addEventListener("dragstart", (e)=>{
+        dragging = card;
+        card.classList.add("dragging");
+        e.dataTransfer.setData("text/plain", card.dataset.id);
+        e.dataTransfer.effectAllowed = "move";
+      });
+      card.addEventListener("dragend", ()=>{
+        dragging = null;
+        card.classList.remove("dragging");
+        $$(".bin").forEach(b=> b.classList.remove("dragover"));
+      });
+    }
+
+    function bindBin(binEl, stackEl){
+      binEl.addEventListener("dragover", (e)=>{
+        e.preventDefault();
+        binEl.classList.add("dragover");
+        e.dataTransfer.dropEffect = "move";
+      });
+      binEl.addEventListener("dragleave", ()=>{
+        binEl.classList.remove("dragover");
+      });
+      binEl.addEventListener("drop", (e)=>{
+        e.preventDefault();
+        binEl.classList.remove("dragover");
+        if(!dragging) return;
+
+        // append to stack
+        stackEl.appendChild(dragging);
+        toast("ok","Kartu dipindah", "Kartu masuk ke: " + (binEl.dataset.bin==="homogen" ? "HOMOGEN" : "HETEROGEN"), 2200);
+      });
+    }
+
+    // Also allow drop back to pool
+    const pool = $("#cardsPool");
+    pool.addEventListener("dragover", (e)=>{ e.preventDefault(); });
+    pool.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      if(!dragging) return;
+      pool.appendChild(dragging);
+      toast("info","Dikembalikan", "Kartu kembali ke daftar.", 2200);
+    });
+
+    // init bind
+    $$(".rxnCard").forEach(bindDraggable);
+    bindBin($("#binHomogen"), $("#stackHomogen"));
+    bindBin($("#binHeterogen"), $("#stackHeterogen"));
+
+    // Check answers
+    function getBinOfCard(card){
+      const p = card.parentElement;
+      if(!p) return "pool";
+      if(p.id==="stackHomogen") return "homogen";
+      if(p.id==="stackHeterogen") return "heterogen";
+      return "pool";
+    }
+
+    $("#btnCheck").addEventListener("click", ()=>{
+      const cards = $$(".rxnCard");
+      const incorrect = [];
+      let placedCount = 0;
+
+      cards.forEach(c=>{
+        const where = getBinOfCard(c);
+        const ans = c.dataset.answer;
+        if(where !== "pool") placedCount++;
+        if(where !== ans){
+          incorrect.push({id:c.dataset.id, eq:c.querySelector(".rxnEq")?.textContent || "", where, ans});
+        }
+      });
+
+      const box = $("#resultBox");
+      box.classList.add("show");
+
+      if(placedCount < cards.length){
+        box.className = "resultBox show resultBad";
+        box.innerHTML = `
+          <b>⚠️ Belum selesai</b>
+          <div class="muted" style="font-weight:800;margin-top:6px">
+            Masih ada kartu yang belum dimasukkan ke kotak. Tarik semua kartu dulu ya.
+          </div>
+        `;
+        toast("bad","Belum lengkap","Masukkan semua kartu ke salah satu kotak.", 3200);
+        return;
+      }
+
+      if(incorrect.length === 0){
+        canNext = true;
+        btnNext.disabled = false;
+        btnNext.style.opacity = 1;
+        btnNext.style.cursor = "pointer";
+        box.className = "resultBox show resultGood";
+        box.innerHTML = `
+          <b>✅ Semua benar!</b>
+          <div class="muted" style="font-weight:800;margin-top:6px">
+            Kamu sudah bisa membedakan homogen (1 fase) vs heterogen (lebih dari 1 fase).
+          </div>
+        `;
+        toast("ok","Cocok!", "Seluruh klasifikasi tepat.", 3800);
+
+        // ===== Simpan ke DB untuk rekap Halaman 8 =====
+        try{
+          const u = mustLogin();
+          if(u?.email){
+            const db = dbLoad();
+            const du = db?.users?.[u.email];
+            if(du){
+              du.scores = du.scores || { sub1:null, sub2:null, sub3:null, sub4:null };
+              du.notes  = du.notes  || { sub1:"", sub2:"", sub3:"", sub4:"" };
+              du.progress = du.progress || {};
+              du.answers  = du.answers  || {};
+
+              du.scores.sub4 = 100;
+              du.notes.sub4  = `Klasifikasi homogen/heterogen benar • ${new Date().toLocaleString("id-ID")}`;
+              du.answers["page6_sort"] = { data: { correct: true }, at: new Date().toISOString() };
+              du.progress.page6 = { done:true, at: new Date().toISOString() };
+              dbSave(db);
+            }
+          }
+        }catch(e){/* silent */}
+      } else {
+        canNext = false;
+        btnNext.disabled = true;
+        btnNext.style.opacity = .55;
+        btnNext.style.cursor = "not-allowed";
+        box.className = "resultBox show resultBad";
+        box.innerHTML = `
+          <b>❌ Masih ada yang keliru</b>
+          <div class="muted" style="font-weight:800;margin-top:6px">
+            Cek lagi fase (g, aq, s, l). Homogen = semua sama. Heterogen = campuran fase.
+          </div>
+          <div style="margin-top:10px;display:grid;gap:8px">
+            ${incorrect.map(x=>`
+              <div style="padding:10px;border-radius:14px;border:1px solid rgba(13,23,46,.10);background:rgba(255,255,255,.72)">
+                <b style="font-size:12px">Kartu:</b> ${escapeHtml(x.eq)}<br/>
+                <span class="muted" style="font-weight:800">
+                  Kamu taruh di: <b>${x.where}</b> • Seharusnya: <b>${x.ans}</b>
+                </span>
+              </div>
+            `).join("")}
+          </div>
+        `;
+        toast("bad","Belum tepat", "Ada kartu yang salah kotak. Coba perbaiki.", 4200);
+      }
+    });
+
+    // Help
+    $("#btnHelp").addEventListener("click", ()=>{
+      modal.open({
+        title:"Bantuan Halaman 6",
+        bodyHTML: `
+          <ol>
+            <li>Tarik kartu reaksi ke kotak <b>HOMOGEN</b> atau <b>HETEROGEN</b>.</li>
+            <li>Gunakan label fase (g, aq, s, l) pada kartu sebagai petunjuk.</li>
+            <li>Tekan <b>COCOKKAN</b> untuk mengecek jawaban.</li>
+          </ol>
+          <p class="muted">Homogen = semua fase sama. Heterogen = lebih dari satu fase.</p>
+        `
+      });
+    });
+
+    // Reset
+    $("#btnReset").addEventListener("click", ()=>{
+      const pool = $("#cardsPool");
+      // return all cards to pool (keep original order by id)
+      const byId = {};
+      $$(".rxnCard").forEach(c=> byId[c.dataset.id] = c);
+      ["rxn1","rxn2","rxn3","rxn4","rxn5","rxn6"].forEach(id=> pool.appendChild(byId[id]));
+      $("#resultBox").className = "resultBox";
+      $("#resultBox").innerHTML = "";
+      toast("info","Reset","Semua kartu kembali ke daftar.", 3200);
+    });
+
+    // Next (placeholder)
+    $("#btnNext").addEventListener("click", ()=>{
+  if(!canNext){
+    toast("bad","Belum bisa lanjut","Klik COCOKKAN dan pastikan semua jawaban benar dulu ya.", 4200);
+    return;
+  }
+
+  toast("ok","Mantap!","Mengalihkan ke Halaman 7...", 1800);
+  setTimeout(()=> {
+    window.location.href = "./hlm7.html";
+  }, 900);
+});
+
+
+    // onboarding
+    toast("info","Mulai", "Drag kartu ke HOMOGEN atau HETEROGEN, lalu klik COCOKKAN.", 5200);
+  </script>
+  <script>
+const DB_KEY = "KI_DB_v1";
+
+function dbLoad(){
+  try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users:{} }; }
+  catch { return { users:{} }; }
+}
+function dbSave(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+function getCurrentUser(){
+  try { return JSON.parse(localStorage.getItem("KI_CURRENT_USER")); }
+  catch { return null; }
+}
+
+function ensureUserInDB(user){
+  const db = dbLoad();
+  if(!user || !user.email) return null;
+
+  if(!db.users[user.email]){
+    db.users[user.email] = {
+      name: user.name || "-",
+      email: user.email,
+      visits: [],
+      scores: { sub1:null, sub2:null, sub3:null, sub4:null },
+      notes:  { sub1:"",   sub2:"",   sub3:"",   sub4:""   },
+      answers: {},
+      progress: {}
+    };
+    dbSave(db);
+  } else {
+    db.users[user.email].name = user.name || db.users[user.email].name;
+    dbSave(db);
+  }
+  return db;
+}
+
+function mustLogin(){
+  const user = getCurrentUser();
+  if(!user || !user.email){
+    alert("Kamu belum login. Kembali ke index.");
+    location.href = "index.html";
+    return null;
+  }
+  ensureUserInDB(user);
+  return user;
+}
+
+function saveAnswer(email, key, data){
+  const db = dbLoad();
+  if(!db.users[email]) return;
+  db.users[email].answers = db.users[email].answers || {};
+  db.users[email].answers[key] = { data, at: new Date().toISOString() };
+  dbSave(db);
+}
+
+function loadAnswer(email, key){
+  const db = dbLoad();
+  return db.users?.[email]?.answers?.[key]?.data || null;
+}
+
+function markProgress(email, pageKey, done=true){
+  const db = dbLoad();
+  if(!db.users[email]) return;
+  db.users[email].progress = db.users[email].progress || {};
+  db.users[email].progress[pageKey] = { done, at: new Date().toISOString() };
+  dbSave(db);
+}
+</script>
+
+<script>
+/* =====================================================
+   SIMPAN DATA SISWA SUB BAB 1 KE DASHBOARD GURU
+   Tidak mengubah layout halaman
+===================================================== */
+
+const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+/* GANTI BAGIAN INI SESUAI FILE HALAMAN */
+const DATA_HALAMAN_ID = "hlm6";
+const DATA_HALAMAN_JUDUL = "Halaman 6: Klasifikasi kesetimbangan berdasarkan fase";
+
+/* Ambil identitas siswa dari login utama */
+function getCurrentStudentData(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+    return {
+      nama: user.name || user.nama || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+/* Ambil semua jawaban dari input, textarea, select, radio, checkbox */
+function collectPageAnswers(){
+  const hasil = [];
+
+  document.querySelectorAll("input, textarea, select").forEach((el, index) => {
+    const type = (el.type || "").toLowerCase();
+    const label =
+      document.querySelector(`label[for="${el.id}"]`)?.innerText?.trim() ||
+      el.closest(".field-group")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".field")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".card")?.querySelector("h2, h3")?.innerText?.trim() ||
+      el.name ||
+      el.id ||
+      `Isian ${index + 1}`;
+
+    let value = "";
+
+    if(type === "radio"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dipilih";
+    }else if(type === "checkbox"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dicentang";
+    }else{
+      value = el.value?.trim?.() || "";
+      if(!value) return;
+    }
+
+    hasil.push({
+      label: label,
+      jawaban: value
+    });
+  });
+
+  return hasil;
+}
+
+/* Simpan data halaman ke database guru */
+function simpanDataSubBab1KeGuru(status = "tersimpan otomatis"){
+  const siswa = getCurrentStudentData();
+  const jawaban = collectPageAnswers();
+
+  if(!siswa.email || siswa.email === "-"){
+    return;
+  }
+
+  let db = {};
+  try{
+    db = JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+  }catch(e){
+    db = {};
+  }
+
+  if(!db[siswa.email]){
+    db[siswa.email] = {
+      identitas: siswa,
+      halaman: {},
+      waktuMulai: new Date().toLocaleString("id-ID")
+    };
+  }
+
+  db[siswa.email].identitas = siswa;
+  db[siswa.email].halaman[DATA_HALAMAN_ID] = {
+    judul: DATA_HALAMAN_JUDUL,
+    status: status,
+    jawaban: jawaban,
+    waktuSimpan: new Date().toLocaleString("id-ID")
+  };
+  db[siswa.email].waktuUpdateTerakhir = new Date().toLocaleString("id-ID");
+
+  localStorage.setItem(DATA_GURU_SUBBAB1_KEY, JSON.stringify(db));
+}
+
+/* Simpan otomatis ketika siswa mengetik/memilih jawaban */
+document.addEventListener("input", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+document.addEventListener("change", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+/* Simpan juga saat tombol apa pun diklik */
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button") || e.target.closest("a")){
+    simpanDataSubBab1KeGuru("tersimpan dari aksi siswa");
+  }
+});
+
+/* Simpan saat siswa meninggalkan halaman */
+window.addEventListener("beforeunload", () => {
+  simpanDataSubBab1KeGuru("tersimpan saat keluar halaman");
+});
+
+/* Simpan awal saat halaman dibuka */
+simpanDataSubBab1KeGuru("halaman dibuka");
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 1,
+    pageKey: "hlm6",
+    pageTitle: "Halaman 6 — Klasifikasi Kesetimbangan"
+  });
+});
+</script>
+</body>
+</html>

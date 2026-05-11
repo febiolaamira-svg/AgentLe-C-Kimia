@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 3 • Laboratorium Kobalt</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --orange:#ff8a00;
+      --red:#ff5c8a;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1180px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:960px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+    @media(max-width:900px){.grid-2{grid-template-columns:1fr;}}
+
+    .white-box{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.32);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .white-box h3,.white-box h2{color:#111827;}
+    .white-box p{margin:8px 0 0; color:#374151; font-weight:650;}
+    .white-box ul,.white-box ol{margin:10px 0 0 20px; padding:0; color:#374151; font-weight:650; line-height:1.7;}
+    .white-box li{margin:7px 0;}
+
+    .reaction-box{
+      margin-top:14px;
+      padding:16px;
+      border-radius:18px;
+      border:2px solid rgba(45,108,255,.45);
+      background:rgba(45,108,255,.10);
+      text-align:center;
+      font-size:clamp(21px,2.3vw,31px);
+      font-weight:950;
+      box-shadow:var(--shadow2);
+    }
+
+    .task-list{display:grid; gap:14px; margin-top:14px;}
+    .task-card{
+      display:grid;
+      grid-template-columns:46px 1fr;
+      gap:14px;
+      padding:16px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.13);
+      background:rgba(255,255,255,.06);
+      line-height:1.7;
+    }
+    .num{
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.82));
+      font-weight:950;
+      box-shadow:0 10px 30px rgba(255,79,216,.14);
+    }
+    .task-card b{color:#fff;}
+    .hint-box{
+      margin-top:8px;
+      padding:11px 12px;
+      border-radius:15px;
+      background:rgba(255,224,130,.08);
+      border:1px solid rgba(255,224,130,.24);
+      color:rgba(255,255,255,.86);
+      font-size:13px;
+      line-height:1.65;
+    }
+
+    .lab-wrap{
+      margin-top:14px;
+      border-radius:24px;
+      border:2px solid rgba(124,77,255,.28);
+      overflow:hidden;
+      background:#ffffff;
+      box-shadow:var(--shadow2);
+    }
+    .lab-toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:14px;
+      background:#ffffff;
+      border-bottom:1px solid rgba(15,23,42,.10);
+      color:#111827;
+      font-weight:850;
+    }
+    .lab-toolbar .btn-primary{
+      background:linear-gradient(135deg, #4c1d95, #1e3a8a);
+      color:#ffffff;
+      border:2px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 26px rgba(30,58,138,.28);
+    }
+    .lab-iframe{width:100%; height:680px; border:0; display:block; background:#f8fafc;}
+    .lab-placeholder{
+      min-height:360px;
+      display:grid;
+      place-items:center;
+      padding:28px;
+      text-align:center;
+      color:#111827;
+      background:
+        radial-gradient(320px 240px at 20% 20%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(320px 240px at 80% 80%, rgba(124,77,255,.12), transparent 60%),
+        #ffffff;
+    }
+    .lab-placeholder-inner{max-width:720px;}
+    .lab-placeholder h3{font-size:25px; margin:0 0 8px; color:#312e81;}
+    .lab-placeholder p{color:#374151; line-height:1.7; font-weight:650; margin:0;}
+
+    .table-wrap{margin-top:14px; overflow:auto; border-radius:22px; border:1px solid rgba(255,255,255,.13); background:rgba(0,0,0,.18);}
+    table{width:100%; border-collapse:collapse; min-width:1100px;}
+    th{
+      background:linear-gradient(180deg, rgba(255,79,216,.38), rgba(124,77,255,.20));
+      color:white;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:12px;
+      padding:14px 12px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      text-align:center;
+    }
+    td{padding:12px; border-bottom:1px solid rgba(255,255,255,.08); color:rgba(255,255,255,.88); text-align:center; vertical-align:top;}
+    tr:last-child td{border-bottom:0;}
+    .table-input,.table-select{
+      width:100%;
+      min-width:140px;
+      border-radius:14px;
+      padding:10px 11px;
+      border:2px solid #c7d2fe;
+      background:#ffffff;
+      color:#111827;
+      font-family:inherit;
+      font-weight:750;
+      outline:none;
+    }
+    .table-input{min-height:74px; resize:vertical; line-height:1.5;}
+    .table-input:focus,.table-select:focus{border-color:#7c4dff; box-shadow:0 0 0 4px rgba(124,77,255,.15);}
+
+    .analysis-box{display:grid; gap:12px; margin-top:14px; background:#ffffff; color:#111827; border:2px solid rgba(124,77,255,.28); border-radius:24px; padding:18px; box-shadow:var(--shadow2);}
+    .field-label{display:flex; align-items:center; gap:8px; color:#312e81; font-size:13px; font-weight:950; letter-spacing:.06em; text-transform:uppercase;}
+    .field-label span{width:24px; height:24px; display:grid; place-items:center; border-radius:999px; color:#ffffff; background:linear-gradient(135deg, #ff4fd8, #7c4dff); font-size:12px; font-weight:950;}
+    .textarea-box{width:100%; min-height:120px; resize:vertical; padding:14px; border-radius:18px; border:2px solid #c7d2fe; background:#f9fafb; color:#111827; font-family:inherit; font-size:14px; line-height:1.65; outline:none; font-weight:700;}
+    .textarea-box:focus{border-color:#7c4dff; background:#ffffff; box-shadow:0 0 0 5px rgba(124,77,255,.15);}
+
+    .feedback{display:none; margin-top:12px; padding:12px 14px; border-radius:16px; border:1px solid rgba(102,242,165,.28); background:rgba(102,242,165,.10); color:#d8ffe8; line-height:1.6; font-weight:850;}
+    .info-strip{margin-top:12px; padding:14px; border-radius:18px; background:rgba(255,224,130,.08); border:1px solid rgba(255,224,130,.24); color:rgba(255,255,255,.84); line-height:1.7;}
+    .footer-actions{display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Co</div>
+      <div>
+        <div class="brand-title">Sub Bab 3</div>
+        <div class="brand-sub">Laboratorium Kobalt</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="h1.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#percobaan">Mulai Lab</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>PBL • Membimbing Penyelidikan</span></div>
+
+      <section class="hero">
+        <h1 class="title">🧪 Laboratorium <span class="accent">Kobalt</span></h1>
+        <p class="subtitle">
+          Pada tahap ini, peserta didik mengeksplorasi pengaruh gangguan terhadap kesetimbangan kompleks kobalt(II),
+          membaca perubahan warna, mencatat konsentrasi setimbang, serta menentukan nilai K pada kondisi yang diamati.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🎯 Tujuan Percobaan</h2>
+          <div class="white-box">
+            <p>
+              Memahami prinsip Le Chatelier melalui pengamatan pengaruh gangguan yang diberikan terhadap distribusi
+              kesetimbangan berbagai kompleks kobalt(II).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📚 Latar Belakang</h2>
+          <div class="grid-2">
+            <div class="white-box">
+              <h3>Kompleks Kobalt(II)</h3>
+              <p>
+                Kobalt(II) tidak terdapat dalam larutan berair sebagai ion bebas, tetapi membentuk ion kompleks.
+                Dalam ion kompleks tersebut, enam molekul air bertindak sebagai basa Lewis atau pendonor pasangan elektron
+                yang menyumbangkan elektron ke orbital kosong kobalt(II). Hal ini menghasilkan ion kompleks berwarna merah muda:
+              </p>
+              <p style="font-size:22px; font-weight:950; color:#be185d;">Co(H₂O)₆²⁺</p>
+            </div>
+
+            <div class="white-box">
+              <h3>Pengaruh Ion Klorida</h3>
+              <p>
+                Dengan adanya ion klorida, terbentuk kompleks lain, yaitu ion kompleks biru:
+              </p>
+              <p style="font-size:22px; font-weight:950; color:#1d4ed8;">CoCl₄²⁻</p>
+              <p>
+                Perbedaan warna kedua kompleks digunakan untuk menunjukkan distribusi zat pada keadaan setimbang.
+              </p>
+            </div>
+          </div>
+
+          <div class="reaction-box">
+            Co(H₂O)₆²⁺ + 4Cl⁻ ⇌ CoCl₄²⁻ + 6H₂O
+          </div>
+
+          <div class="white-box" style="margin-top:14px;">
+            <h3>Catatan Stok Larutan</h3>
+            <p>
+              Dalam simulasi ini, peserta didik tidak hanya mengamati perubahan warna, tetapi juga membaca nilai konsentrasi setimbang secara langsung.
+              Larutan stok <b>Co(NO₃)₂(aq)</b> berada sebagai <b>Co(H₂O)₆²⁺</b> dan <b>NO₃⁻</b>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="percobaan">
+        <div class="card-inner">
+          <h2>🔬 Area Virtual Lab</h2>
+          <p class="muted">
+            Gunakan virtual lab untuk melakukan setiap perlakuan. Catat perubahan warna, konsentrasi setimbang, volume yang ditambahkan,
+            serta arah pergeseran kesetimbangan.
+          </p>
+
+          <div class="info-strip">
+            <b>Catatan:</b> Jika virtual lab tidak tampil di halaman, buka melalui tombol tab baru.
+            Masukkan link virtual lab pada variabel <b>VIRTUAL_LAB_URL</b> di bagian script.
+          </div>
+
+          <div class="lab-wrap">
+            <div class="lab-toolbar">
+              <span>Virtual Lab Kobalt</span>
+              <a id="openLabBtn" class="btn-primary" href="#" target="_blank" rel="noopener">Buka Virtual Lab di Tab Baru</a>
+            </div>
+            <div id="labArea" class="lab-placeholder">
+              <div class="lab-placeholder-inner">
+                <h3>Masukkan Link Virtual Lab</h3>
+                <p>
+                  Halaman ini siap menampilkan virtual lab. Isi variabel <b>VIRTUAL_LAB_URL</b> dengan link laboratorium virtual kobalt yang digunakan.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🧭 Tugas Penyelidikan</h2>
+          <p class="muted">
+            Ikuti langkah percobaan berikut secara berurutan. Tuliskan prediksi, hasil pengamatan, dan alasan pergeseran berdasarkan prinsip Le Chatelier.
+          </p>
+
+          <div class="task-list">
+            <div class="task-card">
+              <div class="num">1</div>
+              <div>
+                <b>Menyiapkan sistem awal.</b><br>
+                Tambahkan <b>25 mL [Co(H₂O)₆]²⁺</b> ke dalam labu Erlenmeyer kosong. Kemudian tambahkan <b>HCl 12 M</b> secara bertahap sebanyak <b>1 mL</b> sampai warna kesetimbangan berubah.
+                <div class="hint-box">Petunjuk: ketik angka 1 untuk volume yang dipindahkan, lalu klik <b>pour</b> sampai terlihat perubahan warna. Hitung jumlah klik untuk menentukan total volume HCl yang ditambahkan.</div>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <div class="num">2</div>
+              <div>
+                <b>Menguji penghilangan ion klorida.</b><br>
+                Prediksikan pengaruh penghilangan ion klorida. Hilangkan sebagian ion klorida bebas dengan menambahkan <b>AgNO₃</b> sedikit demi sedikit sebanyak <b>1 mL</b> secara bertahap sampai kesetimbangan bergeser.
+                <div class="hint-box">
+                  Reaksi: AgNO₃(aq) ⇌ Ag⁺ + NO₃⁻; Ag⁺ + Cl⁻ ⇌ AgCl(s).<br>
+                  Reaksi keseluruhan: AgNO₃(aq) + Cl⁻ ⇌ AgCl(s) + NO₃⁻.<br>
+                  Ion Ag⁺ menangkap ion Cl⁻ bebas dengan mengikatnya menjadi endapan AgCl(s), sehingga ion klorida dikeluarkan dari larutan.
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <div class="num">3</div>
+              <div>
+                <b>Menguji penambahan HCl.</b><br>
+                Prediksikan pengaruh penambahan HCl terhadap sistem. Setelah itu, tambahkan HCl dalam jumlah sangat kecil secara bertahap sampai kesetimbangan bergeser.
+              </div>
+            </div>
+
+            <div class="task-card">
+              <div class="num">4</div>
+              <div>
+                <b>Menguji pengaruh suhu.</b><br>
+                Tentukan apakah reaksi seperti yang dituliskan bersifat endoterm atau eksoterm. Klik kanan pada labu, lalu pilih <b>thermal properties</b>. Ubah suhu antara <b>0–99°C</b>, kemudian panaskan atau dinginkan sistem sampai kesetimbangan terganggu.
+                <div class="hint-box">Gunakan prinsip Le Chatelier untuk menentukan apakah reaksi bersifat eksoterm atau endoterm berdasarkan arah pergeseran saat suhu dinaikkan atau diturunkan.</div>
+              </div>
+            </div>
+
+            <div class="task-card">
+              <div class="num">5</div>
+              <div>
+                <b>Menentukan nilai K pada suhu baru.</b><br>
+                Biarkan sistem mencapai kesetimbangan termal, yaitu suhu konstan. Gunakan nilai konsentrasi untuk menentukan K. Setelah itu, buka kembali <b>thermal properties</b>, ubah suhu, lalu pilih opsi <b>thermally isolated system</b>. Tentukan nilai K baru pada suhu yang baru, lalu simpulkan apakah sistem bersifat endoterm atau eksoterm.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📊 Tabel Pengamatan dan Perhitungan K</h2>
+          <p class="muted">
+            Isi tabel berdasarkan hasil virtual lab. Karena konsentrasi setimbang dapat dibaca langsung, gunakan data tersebut untuk menentukan nilai K.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Perlakuan</th>
+                  <th>Volume / Suhu</th>
+                  <th>Warna Akhir</th>
+                  <th>[Co(H₂O)₆²⁺]</th>
+                  <th>[Cl⁻]</th>
+                  <th>[CoCl₄²⁻]</th>
+                  <th>Arah Pergeseran</th>
+                  <th>Nilai K</th>
+                  <th>Alasan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Sistem awal + HCl bertahap</td>
+                  <td><textarea class="table-input" id="vol1" placeholder="Contoh: 25 mL Co + ... mL HCl"></textarea></td>
+                  <td><select class="table-select" id="warna1"><option value="">Pilih</option><option>Merah muda</option><option>Biru</option><option>Ungu/campuran</option></select></td>
+                  <td><textarea class="table-input" id="coh1" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cl1" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cocl1" placeholder="Konsentrasi"></textarea></td>
+                  <td><select class="table-select" id="arah1"><option value="">Pilih</option><option>Ke kanan</option><option>Ke kiri</option><option>Tidak bergeser</option></select></td>
+                  <td><textarea class="table-input" id="k1" placeholder="Hitung K"></textarea></td>
+                  <td><textarea class="table-input" id="alasan1" placeholder="Alasan"></textarea></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>AgNO₃ ditambahkan</td>
+                  <td><textarea class="table-input" id="vol2" placeholder="Total mL AgNO₃"></textarea></td>
+                  <td><select class="table-select" id="warna2"><option value="">Pilih</option><option>Merah muda</option><option>Biru</option><option>Ungu/campuran</option></select></td>
+                  <td><textarea class="table-input" id="coh2" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cl2" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cocl2" placeholder="Konsentrasi"></textarea></td>
+                  <td><select class="table-select" id="arah2"><option value="">Pilih</option><option>Ke kanan</option><option>Ke kiri</option><option>Tidak bergeser</option></select></td>
+                  <td><textarea class="table-input" id="k2" placeholder="Hitung K"></textarea></td>
+                  <td><textarea class="table-input" id="alasan2" placeholder="Alasan"></textarea></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>HCl ditambahkan kembali</td>
+                  <td><textarea class="table-input" id="vol3" placeholder="Total mL HCl"></textarea></td>
+                  <td><select class="table-select" id="warna3"><option value="">Pilih</option><option>Merah muda</option><option>Biru</option><option>Ungu/campuran</option></select></td>
+                  <td><textarea class="table-input" id="coh3" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cl3" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cocl3" placeholder="Konsentrasi"></textarea></td>
+                  <td><select class="table-select" id="arah3"><option value="">Pilih</option><option>Ke kanan</option><option>Ke kiri</option><option>Tidak bergeser</option></select></td>
+                  <td><textarea class="table-input" id="k3" placeholder="Hitung K"></textarea></td>
+                  <td><textarea class="table-input" id="alasan3" placeholder="Alasan"></textarea></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Suhu dinaikkan / diturunkan</td>
+                  <td><textarea class="table-input" id="vol4" placeholder="Contoh: 25°C → 80°C"></textarea></td>
+                  <td><select class="table-select" id="warna4"><option value="">Pilih</option><option>Merah muda</option><option>Biru</option><option>Ungu/campuran</option></select></td>
+                  <td><textarea class="table-input" id="coh4" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cl4" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cocl4" placeholder="Konsentrasi"></textarea></td>
+                  <td><select class="table-select" id="arah4"><option value="">Pilih</option><option>Ke kanan</option><option>Ke kiri</option><option>Tidak bergeser</option></select></td>
+                  <td><textarea class="table-input" id="k4" placeholder="K suhu awal"></textarea></td>
+                  <td><textarea class="table-input" id="alasan4" placeholder="Endoterm/eksoterm?"></textarea></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Suhu baru + thermally isolated system</td>
+                  <td><textarea class="table-input" id="vol5" placeholder="Suhu baru"></textarea></td>
+                  <td><select class="table-select" id="warna5"><option value="">Pilih</option><option>Merah muda</option><option>Biru</option><option>Ungu/campuran</option></select></td>
+                  <td><textarea class="table-input" id="coh5" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cl5" placeholder="Konsentrasi"></textarea></td>
+                  <td><textarea class="table-input" id="cocl5" placeholder="Konsentrasi"></textarea></td>
+                  <td><select class="table-select" id="arah5"><option value="">Pilih</option><option>Ke kanan</option><option>Ke kiri</option><option>Tidak bergeser</option></select></td>
+                  <td><textarea class="table-input" id="k5" placeholder="K baru"></textarea></td>
+                  <td><textarea class="table-input" id="alasan5" placeholder="Kesimpulan suhu"></textarea></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn-primary" type="button" onclick="simpanPengamatan()">Simpan Tabel Pengamatan</button>
+            <button class="btn" type="button" onclick="hapusPengamatan()">Hapus Pengamatan</button>
+          </div>
+          <div id="feedbackPengamatan" class="feedback"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🧮 Rumus Perhitungan K</h2>
+          <div class="white-box">
+            <p>
+              Gunakan konsentrasi setimbang setelah setiap langkah untuk menentukan nilai K dari persamaan:
+            </p>
+            <p style="font-size:22px; font-weight:950; color:#312e81;">
+              K = [CoCl₄²⁻] / ([Co(H₂O)₆²⁺][Cl⁻]⁴)
+            </p>
+            <p>
+              Pastikan faktor pengenceran diperhitungkan karena faktor tersebut tidak saling meniadakan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🧠 Analisis dan Kesimpulan</h2>
+          <p class="muted">
+            Gunakan data warna, konsentrasi, dan nilai K untuk menjawab pertanyaan analisis berikut.
+          </p>
+
+          <div class="analysis-box">
+            <label class="field-label" for="analisisKelompok"><span>1</span> Perbandingan Prediksi dan Hasil</label>
+            <textarea id="analisisKelompok" class="textarea-box" placeholder="Apakah prediksi awal kelompok sesuai dengan hasil percobaan? Jelaskan berdasarkan perubahan warna dan arah pergeseran."></textarea>
+
+            <label class="field-label" for="sifatReaksi"><span>2</span> Sifat Reaksi</label>
+            <textarea id="sifatReaksi" class="textarea-box" placeholder="Berdasarkan pengaruh suhu dan perubahan nilai K, apakah reaksi ke kanan bersifat endoterm atau eksoterm? Jelaskan."></textarea>
+
+            <label class="field-label" for="kesimpulanKelompok"><span>3</span> Kesimpulan Sementara</label>
+            <textarea id="kesimpulanKelompok" class="textarea-box" placeholder="Tuliskan kesimpulan tentang pengaruh HCl, AgNO₃, suhu, dan nilai K terhadap sistem kesetimbangan kobalt."></textarea>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn-primary" type="button" onclick="simpanAnalisis()">Simpan Analisis</button>
+            <button class="btn" type="button" onclick="hapusAnalisis()">Hapus Analisis</button>
+          </div>
+          <div id="feedbackAnalisis" class="feedback"></div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="sb32.html">⬅ Kembali ke Organisasi Kelompok</a>
+        <a class="btn-primary" href="sb34.html" onclick="return cekSebelumLanjut()">Lanjut ke Penyajian Hasil ➜</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function getUserKeySB3(){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  const email =
+    user.email ||
+    user.uid ||
+    user.name ||
+    user.nama ||
+    "tanpa-user";
+
+  return String(email)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function storageKeySB3(namaKey){
+  return namaKey + "_" + getUserKeySB3();
+}
+    const VIRTUAL_LAB_URL = "https://chemcollective.org/vlab/85";
+
+    function initLab(){
+      const labArea = document.getElementById('labArea');
+      const openLabBtn = document.getElementById('openLabBtn');
+
+      if(VIRTUAL_LAB_URL && VIRTUAL_LAB_URL.trim() !== ""){
+        openLabBtn.href = VIRTUAL_LAB_URL;
+        labArea.className = '';
+        labArea.innerHTML = `<iframe class="lab-iframe" src="${VIRTUAL_LAB_URL}" title="Virtual Lab Kobalt" loading="lazy" allowfullscreen></iframe>`;
+      } else {
+        openLabBtn.removeAttribute('href');
+        openLabBtn.onclick = function(){
+          alert('Masukkan link virtual lab pada variabel VIRTUAL_LAB_URL di bagian script terlebih dahulu.');
+          return false;
+        };
+      }
+    }
+
+    const fieldIds = [];
+    for(let i = 1; i <= 5; i++){
+      fieldIds.push(`vol${i}`, `warna${i}`, `coh${i}`, `cl${i}`, `cocl${i}`, `arah${i}`, `k${i}`, `alasan${i}`);
+    }
+
+    function simpanPengamatan(){
+      const data = {};
+      fieldIds.forEach((id) => data[id] = document.getElementById(id).value.trim());
+      localStorage.setItem(storageKeySB3('pengamatanKobaltSubBab3'), JSON.stringify(data));
+
+      simpanKeDataSB3({
+  halaman: "sb33",
+  judul: "Laboratorium Kobalt - Tabel Pengamatan",
+  skor: 50,
+  status: "tabel pengamatan disimpan",
+  ringkasan: "Tabel pengamatan virtual lab kobalt sudah disimpan.",
+  jawaban: {
+    tabelPengamatan: data
+  },
+  kunci: {
+    rumusK: "K = [CoCl₄²⁻] / ([Co(H₂O)₆²⁺][Cl⁻]⁴)",
+    konsep: "HCl menambah Cl⁻ dan cenderung menggeser ke kanan/biru. AgNO₃ mengurangi Cl⁻ dan cenderung menggeser ke kiri/merah muda."
+  }
+});
+
+      const fb = document.getElementById('feedbackPengamatan');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(102,242,165,.28)';
+      fb.style.background = 'rgba(102,242,165,.10)';
+      fb.style.color = '#d8ffe8';
+      fb.innerHTML = '✅ Tabel pengamatan dan perhitungan K berhasil disimpan.';
+    }
+
+    function muatPengamatan(){
+      const dataTersimpan = localStorage.getItem(storageKeySB3('pengamatanKobaltSubBab3'));
+      if(!dataTersimpan) return;
+      try{
+        const data = JSON.parse(dataTersimpan);
+        fieldIds.forEach((id) => {
+          const el = document.getElementById(id);
+          if(el) el.value = data[id] || '';
+        });
+      } catch(e){
+        localStorage.removeItem(storageKeySB3('pengamatanKobaltSubBab3'));
+      }
+    }
+
+    function hapusPengamatan(){
+      fieldIds.forEach((id) => document.getElementById(id).value = '');
+      localStorage.removeItem(storageKeySB3('pengamatanKobaltSubBab3'));
+      const fb = document.getElementById('feedbackPengamatan');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(255,224,130,.35)';
+      fb.style.background = 'rgba(255,224,130,.10)';
+      fb.style.color = '#fff2bd';
+      fb.innerHTML = 'Tabel pengamatan sudah dihapus.';
+    }
+
+    function simpanAnalisis(){
+      const analisis = document.getElementById('analisisKelompok').value.trim();
+      const sifatReaksi = document.getElementById('sifatReaksi').value.trim();
+      const kesimpulan = document.getElementById('kesimpulanKelompok').value.trim();
+      const fb = document.getElementById('feedbackAnalisis');
+
+      if(!analisis || !sifatReaksi || !kesimpulan){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Isi analisis, sifat reaksi, dan kesimpulan sebelum menyimpan.';
+        return;
+      }
+
+      const data = {analisis, sifatReaksi, kesimpulan, waktuSimpan:new Date().toLocaleString('id-ID')};
+      localStorage.setItem(storageKeySB3('analisisKobaltSubBab3'), JSON.stringify(data));
+      simpanKeDataSB3({
+  halaman: "sb33",
+  judul: "Laboratorium Kobalt - Analisis dan Kesimpulan",
+  skor: 100,
+  status: "analisis disimpan",
+  ringkasan: "Analisis, sifat reaksi, dan kesimpulan sementara sudah disimpan.",
+  jawaban: {
+    analisis: analisis,
+    sifatReaksi: sifatReaksi,
+    kesimpulan: kesimpulan
+  },
+  kunci: {
+    konsep: "Arah pergeseran ditentukan oleh gangguan konsentrasi/suhu sesuai prinsip Le Chatelier."
+  }
+});
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(102,242,165,.28)';
+      fb.style.background = 'rgba(102,242,165,.10)';
+      fb.style.color = '#d8ffe8';
+      fb.innerHTML = '✅ Analisis dan kesimpulan berhasil disimpan.';
+    }
+
+    function muatAnalisis(){
+      const dataTersimpan = localStorage.getItem(storageKeySB3('analisisKobaltSubBab3'));
+      if(!dataTersimpan) return;
+      try{
+        const data = JSON.parse(dataTersimpan);
+        document.getElementById('analisisKelompok').value = data.analisis || '';
+        document.getElementById('sifatReaksi').value = data.sifatReaksi || '';
+        document.getElementById('kesimpulanKelompok').value = data.kesimpulan || '';
+      } catch(e){
+        localStorage.removeItem(storageKeySB3('analisisKobaltSubBab3'));
+      }
+    }
+
+    function hapusAnalisis(){
+      document.getElementById('analisisKelompok').value = '';
+      document.getElementById('sifatReaksi').value = '';
+      document.getElementById('kesimpulanKelompok').value = '';
+      localStorage.removeItem(storageKeySB3('analisisKobaltSubBab3'));
+      const fb = document.getElementById('feedbackAnalisis');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(255,224,130,.35)';
+      fb.style.background = 'rgba(255,224,130,.10)';
+      fb.style.color = '#fff2bd';
+      fb.innerHTML = 'Analisis sudah dihapus.';
+    }
+
+    function cekSebelumLanjut(){
+      const pengamatan = localStorage.getItem(storageKeySB3('pengamatanKobaltSubBab3'));
+const analisis = localStorage.getItem(storageKeySB3('analisisKobaltSubBab3'));
+      if(!pengamatan || !analisis){
+        return confirm('Pengamatan atau analisis belum disimpan. Tetap lanjut ke halaman penyajian hasil?');
+      }
+      return true;
+    }
+
+    initLab();
+    muatPengamatan();
+    muatAnalisis();
+  </script>
+  <script>
+const SB3_STORAGE_KEY = "dataAdminGuruSB3";
+
+function getUserKeySB3(){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  const email =
+    user.email ||
+    user.uid ||
+    user.name ||
+    user.nama ||
+    "tanpa-user";
+
+  return String(email)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function storageKeySB3(namaKey){
+  return namaKey + "_" + getUserKeySB3();
+}
+
+function ambilIdentitasSB3(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem(storageKeySB3("kelompokSubBab3")) || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB3(payload){
+  const identitas = ambilIdentitasSB3(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const keyDataGuruLokal = storageKeySB3(SB3_STORAGE_KEY);
+  const dataLama = JSON.parse(localStorage.getItem(keyDataGuruLokal)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(keyDataGuruLokal, JSON.stringify(dataLama));
+
+  if (typeof AppDB !== "undefined" && AppDB.saveAnswer) {
+    AppDB.saveAnswer({
+      subBab: 3,
+      pageKey: payload.halaman || "sb3",
+      pageTitle: payload.judul || "Sub Bab 3",
+      answers: {
+        ...(payload.jawaban || {}),
+        _localUser: {
+          nama: identitas.nama,
+          kelas: identitas.kelas,
+          kelompok: identitas.kelompok,
+          email: identitas.email
+        }
+      },
+      score: payload.skor ?? null,
+      status: payload.status || "tersimpan"
+    }).catch((error) => {
+      console.error("Gagal menyimpan Sub Bab 3 ke Firebase:", error);
+    });
+  }
+
+  return dataBaru;
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 3,
+    pageKey: "sb33",
+    pageTitle: "Sub Bab 3 — Laboratorium Kobalt"
+  });
+});
+</script>
+</body>
+</html>

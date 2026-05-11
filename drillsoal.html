@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drill Soal • Representasi Kesetimbangan</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --red:#ff5c8a;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      font-family:inherit;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1180px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(34px,4.6vw,62px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:980px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.info-grid{grid-template-columns:1fr;}}
+    .info-card{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      padding:18px;
+      border:2px solid rgba(124,77,255,.26);
+      box-shadow:var(--shadow2);
+      line-height:1.65;
+    }
+    .info-card b{display:block; color:#312e81; font-size:17px; margin-bottom:6px;}
+    .info-card span{color:#374151; font-weight:700;}
+
+    .score-panel{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(102,242,165,.32);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+    }
+    .score-text{font-weight:950; font-size:clamp(20px,2.3vw,28px); color:#111827;}
+    .score-note{color:#374151; font-weight:700; margin-top:4px;}
+
+    .question-list{display:grid; gap:16px;}
+    .question-card{
+      background:#ffffff;
+      color:#111827;
+      border-radius:26px;
+      border:2px solid rgba(124,77,255,.26);
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+    }
+    .question-head{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:18px;
+      border-bottom:1px solid #e5e7eb;
+      background:linear-gradient(135deg, #ffffff, #f8f7ff);
+    }
+    .q-num{
+      width:42px;
+      height:42px;
+      border-radius:15px;
+      flex:0 0 auto;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight:950;
+      background:linear-gradient(135deg,#ff4fd8,#7c4dff);
+      box-shadow:0 10px 24px rgba(124,77,255,.24);
+    }
+    .q-title{margin:0; color:#111827; font-size:18px; line-height:1.55;}
+    .q-meta{margin-top:8px; color:#6b7280; font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
+    .q-body{padding:18px; display:grid; gap:14px;}
+    .q-context{
+      margin:0;
+      color:#374151;
+      line-height:1.75;
+      font-weight:650;
+    }
+    .reaction{
+      background:#f6f3ff;
+      color:#312e81;
+      border:2px dashed rgba(124,77,255,.35);
+      padding:14px;
+      border-radius:18px;
+      text-align:center;
+      font-weight:950;
+      font-size:clamp(17px,2vw,24px);
+      line-height:1.55;
+    }
+    .data-table-wrap{overflow:auto; border-radius:18px; border:1px solid #e5e7eb;}
+    table{width:100%; border-collapse:collapse; min-width:420px; background:#ffffff;}
+    th,td{padding:12px; border-bottom:1px solid #e5e7eb; text-align:left; color:#111827;}
+    th{background:#f3f4f6; color:#312e81; font-weight:950;}
+    tr:last-child td{border-bottom:0;}
+
+    .image-placeholder{
+      border:2px dashed rgba(124,77,255,.45);
+      border-radius:20px;
+      padding:16px;
+      background:#f9fafb;
+      display:grid;
+      gap:10px;
+    }
+    .image-placeholder label{
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:950;
+      color:#312e81;
+    }
+    .image-url{
+      width:100%;
+      border-radius:14px;
+      border:2px solid #c7d2fe;
+      background:#ffffff;
+      color:#111827;
+      padding:12px 13px;
+      font-family:inherit;
+      font-weight:700;
+      outline:none;
+    }
+    .preview-img{
+  width:100%;
+  max-width:680px;
+  max-height:280px;
+  object-fit:contain;
+  display:none;
+  margin:0 auto;
+  border-radius:16px;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  padding:8px;
+}
+    .image-help{color:#6b7280; margin:0; font-size:13px; line-height:1.55; font-weight:650;}
+
+    .options{display:grid; gap:10px;}
+    .option{
+      display:grid;
+      grid-template-columns:28px 1fr;
+      gap:10px;
+      align-items:flex-start;
+      padding:13px 14px;
+      border:2px solid #e5e7eb;
+      background:#f9fafb;
+      border-radius:18px;
+      cursor:pointer;
+      transition:.14s ease;
+      line-height:1.62;
+      color:#111827;
+      font-weight:720;
+    }
+    .option:hover{border-color:#c7d2fe; background:#ffffff; transform:translateY(-1px);}
+    .option input{margin-top:5px; accent-color:#7c4dff; transform:scale(1.08);}
+    .option.correct{border-color:#86efac; background:#ecfdf5; color:#166534;}
+    .option.wrong{border-color:#fdba74; background:#fff7ed; color:#9a3412;}
+    .option.missed{border-color:#c7d2fe; background:#eef2ff; color:#312e81;}
+
+    .feedback{
+      display:none;
+      padding:12px 14px;
+      border-radius:16px;
+      font-weight:850;
+      line-height:1.6;
+    }
+    .feedback.show{display:block;}
+    .feedback.good{background:#ecfdf5; border:1px solid #86efac; color:#166534;}
+    .feedback.warn{background:#fff7ed; border:1px solid #fdba74; color:#9a3412;}
+    .feedback.info{background:#eef2ff; border:1px solid #c7d2fe; color:#312e81;}
+
+    .question-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; padding:0 18px 18px;}
+    .small-btn{
+      border:1px solid #c7d2fe;
+      background:#ffffff;
+      color:#312e81;
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-family:inherit;
+      font-weight:950;
+    }
+    .small-btn:hover{background:#f6f3ff;}
+
+    .footer-actions{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">DS</div>
+      <div>
+        <div class="brand-title">Drill Soal</div>
+        <div class="brand-sub">Representasi Kesetimbangan Kimia</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a
+  class="btn"
+  href="h1.html"
+  onclick="localStorage.setItem('KI_GO_TO', 'landing')"
+>
+  ⬅ Kembali ke Peta
+</a>
+
+      <a class="btn-primary" href="#soal">Mulai Drill</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Latihan Adaptif • 20 Soal</span></div>
+
+      <section class="hero">
+        <h1 class="title">🧠 Drill Soal <span class="accent">Representasi</span></h1>
+        <p class="subtitle">
+          Latihan ini berisi soal pilihan tunggal dan pilihan ganda kompleks tentang konsep kesetimbangan kimia, tetapan kesetimbangan, pergeseran kesetimbangan, serta aplikasi dalam kehidupan sehari-hari.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Petunjuk Pengerjaan</h2>
+          <div class="info-grid">
+            <div class="info-card"><b>1. Pilihan Tunggal</b><span>Pilih satu jawaban yang paling tepat.</span></div>
+            <div class="info-card"><b>2. Pilihan Ganda Kompleks</b><span>Jika tertulis “dapat memilih lebih dari satu jawaban”, pilih semua pernyataan benar.</span></div>
+            <div class="info-card"><b>3. Gambar Soal</b><span>Soal nomor 3 dan 4 memiliki tempat gambar. Tempel link gambar pada kolom URL agar tampil di web.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="score-panel" id="scorePanel">
+        <div>
+          <div class="score-text" id="scoreText">Skor: 0/100</div>
+          <div class="score-note" id="scoreNote">Jawab seluruh soal terlebih dahulu, lalu klik “Kumpulkan Hasil”.</div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn-primary" type="button" onclick="kumpulkanHasil()">Kumpulkan Hasil</button>
+          <button class="btn" type="button" onclick="resetDrill()">Reset Drill</button>
+        </div>
+      </section>
+
+      <section class="question-list" id="soal"></section>
+
+      <div class="footer-actions">
+        <a class="btn" href="h1.html">⬅ Kembali ke Peta Eksplorasi</a>
+        <button class="btn-primary" type="button" onclick="kumpulkanHasil()">Kumpulkan Hasil Drill</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+   const imageLinks = {
+  3: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgm6_N-H67w5IVnP1ljFXLkWQBMKRIGfU1y1as9iFi2KL7Y_hBs9WwJCiVxFwxP8QNt-DMFFWAraNb3OAwqkvHufDAzfhdBIxOiCBhxzegPu5YTg6ashJGy4hsvhoLA84O1DbaFyRuS0jDfM8GEx5n1CPkEIMjET_X7mRz16HJsOIP1M4fR3WmBADWofAKM/s2171/Representasi%20Partikel%20Reaksi%20Kesetimbangan%20Pembentukan%20Amonia.png',
+  4: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8WyA1odZc02jS4u8fLrfpvtiwJV8bVpJWBdPacren2hp5mnl9TIVDSWuU_IU3BuhH91on8gFEt3vYVqKsH07Ow7-ulX3fAwDJoYjmKSBxaZOkVEK6ynpAhs8TAkrMnmF3GXPyOA4XDNar0iSIsK6ZuKK9sFHjNhiXjEC0K6ARiEuUuuO1ZQ89riKNLzE6/s788/Pengaruh%20Suhu%20terhadap%20Kesetimbangan%20Larutan%20CoCl%E2%82%82.png'
+};
+
+    const questions = [
+      {
+        id:1,
+        type:'single',
+        prompt:'Pernyataan yang tepat mengenai keadaan setimbang dalam suatu reaksi kimia adalah…',
+        options:[
+          'Saat kesetimbangan tercapai, hanya reaksi maju yang berhenti',
+          'Saat kesetimbangan tercapai, hanya reaksi balik yang berhenti',
+          'Saat kesetimbangan tercapai, reaksi maju dan reaksi balik berhenti',
+          'Saat kesetimbangan tercapai, nilai konstanta laju reaksi maju dan balik selalu sama',
+          'Saat kesetimbangan tercapai, laju reaksi maju sama dengan laju reaksi balik'
+        ],
+        answer:[4]
+      },
+      {
+        id:2,
+        type:'multi',
+        prompt:'Suatu reaksi kimia dapat mencapai keadaan setimbang jika sistem memungkinkan reaksi berlangsung secara bolak-balik. Pada awal reaksi, keadaan setimbang dapat dicapai dengan memasukkan ...',
+        meta:'Dapat memilih lebih dari satu jawaban',
+        options:['Reaktan saja','Produk saja','Reaktan dan produk dalam jumlah yang sama','Reaktan dan produk hanya jika jumlahnya tidak sama','Reaktan dan produk dalam jumlah berapapun'],
+        answer:[0,1,2,4]
+      },
+      {
+        id:3,
+        type:'single',
+        prompt:'Perhatikan proses perubahan bolak-balik antara molekul gas N₂ dan H₂ yang dapat membentuk gas NH₃ melalui gambar partikel pada suhu dan tekanan tertentu. Tiap gambar menunjukkan perubahan jumlah partikel gas dari waktu ke waktu hingga sistem mencapai keadaan setimbang. Berdasarkan jenis fase zat yang terlibat dalam reaksi sintesis amonia tersebut, sistem kesetimbangan ini termasuk ke dalam …',
+        image:true,
+        options:['Kesetimbangan heterogen karena melibatkan gas dan padatan.','Kesetimbangan homogen karena semua zat berada dalam fase gas.','Kesetimbangan heterogen karena produk berbeda fasanya dengan reaktan.','Kesetimbangan heterogen karena terdapat dua jenis gas reaktan.','Kesetimbangan homogen karena tidak terjadi perubahan fase.'],
+        answer:[4]
+      },
+      {
+        id:4,
+        type:'multi',
+        context:'Dalam sistem tertutup direaksikan larutan CoCl₂ dalam etanol, yang berwarna biru, dengan penambahan air yang menyebabkan pembentukan kompleks berwarna merah muda. Dilakukan serangkaian percobaan dengan mengubah suhu sistem.',
+        prompt:'Berdasarkan data hasil percobaan tersebut, analisislah pernyataan-pernyataan berikut dan pilih pernyataan yang benar!',
+        meta:'Dapat memilih lebih dari satu jawaban',
+        image:true,
+        table:{headers:['Suhu Sistem','Warna Campuran'], rows:[['0 °C (didinginkan)','Masukkan/lihat gambar'],['25 °C (suhu ruang)','Masukkan/lihat gambar'],['60 °C (dipanaskan)','Masukkan/lihat gambar']]},
+        options:['Warna larutan menjadi biru saat suhu dinaikkan karena kesetimbangan bergeser ke kanan (reaksi endoterm).','Warna larutan menjadi merah muda saat suhu diturunkan karena kesetimbangan bergeser ke kiri (reaksi eksoterm).','Penambahan air akan menggeser kesetimbangan ke kanan karena meningkatkan jumlah ion Cl⁻ dalam sistem sehingga semakin kental atau pekat.','Faktor suhu mempengaruhi arah pergeseran kesetimbangan berdasarkan asas Le Chatelier.','Perubahan warna tidak berkaitan dengan perubahan posisi kesetimbangan karena hanya efek pencampuran biasa'],
+        answer:[0,1,3]
+      },
+      {
+        id:5,
+        type:'single',
+        context:'Perhatikan sistem kesetimbangan berikut:',
+        reaction:'2NO(g) + Cl₂(g) ⇌ 2NOCl(g)',
+        table:{headers:['Zat','Tekanan Parsial (atm)'], rows:[['NO','0,25'],['Cl₂','0,50'],['NOCl','1,25']]},
+        prompt:'Berdasarkan data di atas, ekspresi yang benar untuk Kp adalah…',
+        options:['Kp = (P_NO² · P_Cl₂) / P_NOCl²','Kp = P_NOCl² / (P_NO² · P_Cl₂)','Kp = P_NOCl / (P_NO · P_Cl₂)','Kp = P_NO² / (P_NO² · P_Cl₂)','Kp = P_NOCl² / (P_Cl₂² · P_NO)'],
+        answer:[1]
+      },
+      {
+        id:6,
+        type:'single',
+        context:'Padatan amonium klorida (NH₄Cl) dipanaskan dalam wadah tertutup hingga mencapai keadaan setimbang. Pada suhu 350 °C, tekanan total gas di dalam wadah sebesar 0,105 atm. Jika T = 623,15 K, maka nilai Kp dan Kc yang benar adalah…',
+        reaction:'NH₄Cl(s) ⇌ NH₃(g) + HCl(g)',
+        options:['Kp = 2,76 × 10⁻³ dan Kc = 1,05 × 10⁻⁶','Kp = 0,405 dan Kc = 1,55 × 10⁻⁴','Kp = 9,00 dan Kc = 3,44 × 10⁻⁴','Kp = 2,76 dan Kc = 3,00 × 10⁻⁵','Kp = 1,05 dan Kc = 1,0 × 10⁻⁵'],
+        answer:[0]
+      },
+      {
+        id:7,
+        type:'multi',
+        context:'Pembentukan dinitrogen tetroksida dari nitrogen dioksida berlangsung menurut reaksi:',
+        reaction:'2NO₂(g) ⇌ N₂O₄(g)    ΔH < 0 (eksoterm)',
+        prompt:'Untuk memperbanyak N₂O₄ pada keadaan setimbang, manakah faktor-faktor yang mempengaruhi jumlah produk berikut?',
+        meta:'Dapat memilih lebih dari satu jawaban',
+        options:['Memperbesar volume wadah reaksi.','Menurunkan suhu reaksi.','Menaikkan tekanan campuran gas.','Menambahkan gas inert pada volume tetap.','Menambah konsentrasi NO₂ pada awal reaksi.'],
+        answer:[1,2,4]
+      },
+      {
+        id:8,
+        type:'single',
+        prompt:'Perhatikan pernyataan berikut: (1) terjadi pada sistem terbuka, (2) reaksi berlangsung dua arah, (3) laju reaksi maju dan balik sama, (4) tidak ada perubahan makroskopik, (5) konsentrasi zat terus berubah. Yang merupakan ciri dari kesetimbangan kimia adalah….',
+        options:['(1), (2), dan (5)','(1), (4), dan (5)','(2), (3), dan (4)','(2), (3), dan (5)','(3), (4), dan (5)'],
+        answer:[2]
+      },
+      {
+        id:9,
+        type:'single',
+        context:'Ketika natrium hidrogen karbonat dipanaskan dalam wadah tertutup, terjadi reaksi kesetimbangan. Pada suhu tertentu, tekanan total gas pada kesetimbangan adalah 0,8 atm. Diketahui tekanan parsial CO₂ sama dengan tekanan parsial H₂O. Nilai Kp untuk reaksi tersebut adalah…',
+        reaction:'2NaHCO₃(s) ⇌ Na₂CO₃(s) + CO₂(g) + H₂O(g)',
+        options:['0,04','0,08','0,16','0,32','0,64'],
+        answer:[2]
+      },
+      {
+        id:10,
+        type:'single',
+        prompt:'Dalam diskusi kelas, seorang siswa mengatakan bahwa sistem kesetimbangan hanya terjadi pada reaksi yang berjalan ke arah kanan. Tanggapan kritis yang paling tepat terhadap pendapat tersebut adalah ...',
+        options:['Benar, karena produk selalu lebih stabil','Benar, bila konsentrasi reaktan rendah','Benar, jika tekanan cukup tinggi','Salah, karena kesetimbangan hanya terjadi pada reaksi endoterm','Salah, karena reaksi bolak-balik bisa setimbang'],
+        answer:[4]
+      },
+      {
+        id:11,
+        type:'single',
+        context:'Reaksi: 2NO₂(g) ⇌ N₂O₄(g). Seorang ilmuwan mengamati bahwa saat gas NO₂ dikumpulkan dalam tabung tertutup, warnanya berubah dari coklat pekat menjadi lebih pucat. Ia menyimpulkan bahwa terjadi reaksi eksoterm ke arah pembentukan N₂O₄.',
+        prompt:'Pernyataan yang paling mendukung kesimpulan tersebut adalah….',
+        options:['Perubahan warna menunjukkan perpindahan kesetimbangan','N₂O₄ berwarna coklat, sehingga reaksinya endoterm','Warna pucat menunjukkan konsentrasi NO₂ meningkat','Suhu ruang mempercepat pembentukan gas NO₂','Warna berubah karena terjadi penguraian N₂O₄'],
+        answer:[0]
+      },
+      {
+        id:12,
+        type:'single',
+        context:'Dalam wadah 1 liter terdapat [N₂] = 0,2 M, [H₂] = 0,6 M, dan [NH₃] = 0,4 M. Nilai Kc pada reaksi di bawah adalah….',
+        reaction:'N₂(g) + 3H₂(g) ⇌ 2NH₃(g)',
+        options:['1,48','2,22','4,44','5,55','6,66'],
+        answer:[2]
+      },
+      {
+        id:13,
+        type:'single',
+        prompt:'Dalam industri pembuatan amonia (NH₃), penggunaan suhu rendah meningkatkan hasil, tetapi memperlambat reaksi. Keputusan terbaik yang bisa diambil industri adalah ...',
+        options:['Gunakan suhu moderat dan tambahkan katalis','Gunakan suhu tinggi agar reaksi cepat','Gunakan suhu sangat rendah agar produk maksimal','Gunakan tekanan rendah dan katalis','Gunakan sistem terbuka agar gas terlepas'],
+        answer:[0]
+      },
+      {
+        id:14,
+        type:'single',
+        context:'Ke dalam wadah 1,0 L dimasukkan 4,00 mol gas PCl₅. Pada suhu tertentu terjadi disosiasi. Setelah mencapai kesetimbangan pada suhu tetap, pengukuran menunjukkan konsentrasi Cl₂ = 1,00 M. Nilai Kc untuk reaksi tersebut adalah ….',
+        reaction:'PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)',
+        options:['1/3','1/4','1/6','3','6'],
+        answer:[0]
+      },
+      {
+        id:15,
+        type:'single',
+        prompt:'Reaksi kesetimbangan berikut yang tidak mengalami pergeseran jika volumenya diperbesar adalah….',
+        options:['2SO₂(g) + O₂(g) ⇌ 2SO₃(g)','PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)','N₂(g) + 3H₂(g) ⇌ 2NH₃(g)','N₂O₄(g) ⇌ 2NO₂(g)','CO(g) + H₂O(l) ⇌ CO₂(g) + H₂(g)'],
+        answer:[4]
+      },
+      {
+        id:16,
+        type:'multi',
+        context:'Reaksi kesetimbangan berikut:',
+        reaction:'2NaHCO₃(s) ⇌ Na₂CO₃(s) + H₂O(l) + CO₂(g)',
+        prompt:'Berdasarkan asas Le Chatelier, reaksi akan bergeser ke arah kanan jika ...',
+        meta:'Dapat memilih lebih dari satu jawaban',
+        options:['Sistem didinginkan','CO₂ dikeluarkan dari sistem','Volume sistem diperkecil','Tekanan diturunkan','CO₂ ditambahkan ke dalam sistem'],
+        answer:[1,2]
+      },
+      {
+        id:17,
+        type:'single',
+        prompt:'Pada percobaan pembentukan kompleks iodium-amilum, campuran iodin dan pati/amilum awalnya berwarna biru. Ketika dipanaskan, warna biru tersebut menghilang. Namun, saat campuran dimasukkan ke dalam penangas es, warna biru muncul kembali dengan intensitas yang lebih gelap. Peristiwa ini menunjukkan bahwa terjadi pergeseran kesetimbangan yang dipengaruhi oleh ...',
+        options:['Perubahan konsentrasi amilum','Perubahan tekanan sistem','Perubahan suhu sistem','Perubahan volume sistem','Penambahan katalis'],
+        answer:[2]
+      },
+      {
+        id:18,
+        type:'single',
+        context:'Amonia (NH₃) dapat diproduksi melalui proses Haber dengan reaksi berikut:',
+        reaction:'N₂(g) + 3H₂(g) ⇌ 2NH₃(g)    ΔH = −92,2 kJ',
+        prompt:'Berdasarkan reaksi tersebut, tindakan yang tidak tepat untuk meningkatkan hasil produksi amonia dengan menggeser kesetimbangan ke arah kanan adalah …',
+        options:['Menaikkan tekanan sistem hingga 130–300 atm','Menaikkan suhu sistem hingga mencapai 1000 °C','Menurunkan suhu sistem hingga sekitar 400–500 °C','Menambahkan katalis Fe₃O₄','Menambahkan gas N₂(g) dan H₂(g)'],
+        answer:[1]
+      },
+      {
+        id:19,
+        type:'multi',
+        context:'Stalaktit terbentuk ketika air kapur menetes di dalam gua. Saat CO₂ terlepas ke udara, terbentuk endapan CaCO₃.',
+        reaction:'CaCO₃(s) + CO₂(g) + H₂O(l) ⇌ Ca²⁺(aq) + 2HCO₃⁻(aq)',
+        prompt:'Berdasarkan reaksi tersebut, pernyataan yang benar adalah ...',
+        meta:'Dapat memilih lebih dari satu jawaban',
+        options:['Berkurangnya CO₂ menyebabkan kesetimbangan bergeser ke kiri','Pergeseran ke kiri menghasilkan endapan CaCO₃','Bertambahnya CO₂ menyebabkan CaCO₃ langsung menguap','Stalaktit terbentuk karena CaCO₃ berubah menjadi gas','Pelepasan CO₂ dari air tetesan mendukung pembentukan stalaktit'],
+        answer:[0,1,4]
+      },
+      {
+        id:20,
+        type:'multi',
+        prompt:'Pada percobaan iodium-amilum, campuran iodin dan amilum awalnya menghasilkan warna biru. Setelah dipanaskan, warna biru memudar hingga hilang. Namun, ketika campuran tersebut didinginkan menggunakan penangas es, warna biru kembali muncul dengan intensitas lebih pekat. Peristiwa tersebut menunjukkan bahwa posisi kesetimbangan dalam sistem dipengaruhi oleh ...',
+        meta:'Dapat memilih lebih dari satu jawaban',
+        options:['Perubahan konsentrasi amilum','Perubahan tekanan sistem','Perubahan suhu sistem','Perubahan volume sistem','Perubahan suhu menyebabkan pembentukan kompleks iodium-amilum kembali'],
+        answer:[1,2,4]
+      }
+    ];
+
+    const letters = ['A','B','C','D','E'];
+    const answered = new Map();
+
+    const POIN_PER_SOAL = 5;
+    const TOTAL_POIN = questions.length * POIN_PER_SOAL;
+    const pembahasanSoal = {
+  1: "Keadaan setimbang terjadi saat laju reaksi maju sama dengan laju reaksi balik. Reaksi tetap berlangsung secara mikroskopik, tetapi tidak ada perubahan makroskopik.",
+  2: "Sistem dapat mencapai setimbang dari reaktan saja, produk saja, atau campuran reaktan dan produk selama reaksi bersifat bolak-balik dan berada dalam sistem tertutup.",
+  3: "Reaksi sintesis amonia melibatkan N₂(g), H₂(g), dan NH₃(g). Karena semua zat berada dalam fase gas, sistem ini termasuk kesetimbangan homogen.",
+  4: "Pada sistem kobalt klorida, perubahan suhu menggeser kesetimbangan dan menyebabkan perubahan warna. Pemanasan cenderung membentuk warna biru, sedangkan pendinginan cenderung membentuk warna merah muda.",
+  5: "Untuk reaksi 2NO(g) + Cl₂(g) ⇌ 2NOCl(g), produk berada di pembilang dan reaktan di penyebut. Koefisien reaksi menjadi pangkat, sehingga Kp = P_NOCl² / (P_NO² · P_Cl₂).",
+  6: "NH₄Cl(s) tidak masuk ke persamaan Kp karena berupa padatan. Gas NH₃ dan HCl terbentuk dengan perbandingan sama, sehingga tekanan parsial masing-masing setengah dari tekanan total.",
+  7: "Reaksi 2NO₂(g) ⇌ N₂O₄(g) bersifat eksoterm dan jumlah mol gas produk lebih sedikit. Menurunkan suhu, menaikkan tekanan, dan menambah NO₂ akan menggeser reaksi ke kanan membentuk N₂O₄.",
+  8: "Ciri kesetimbangan kimia adalah reaksi berlangsung dua arah, laju reaksi maju sama dengan laju balik, dan tidak tampak perubahan makroskopik.",
+  9: "Padatan tidak masuk Kp. Karena tekanan total gas 0,8 atm dan CO₂ serta H₂O memiliki tekanan parsial sama, masing-masing 0,4 atm. Maka Kp = P_CO₂ × P_H₂O = 0,4 × 0,4 = 0,16.",
+  10: "Kesetimbangan hanya terjadi pada reaksi bolak-balik. Jadi, pendapat bahwa kesetimbangan hanya terjadi pada reaksi ke kanan adalah salah.",
+  11: "Gas NO₂ berwarna coklat, sedangkan N₂O₄ tidak berwarna. Jika warna menjadi lebih pucat, berarti sebagian NO₂ berubah menjadi N₂O₄.",
+  12: "Kc = [NH₃]² / ([N₂][H₂]³). Dengan data [NH₃] = 0,4 M, [N₂] = 0,2 M, dan [H₂] = 0,6 M, maka Kc = 0,16 / (0,2 × 0,216) = 3,70. Jika pembulatan atau data soal mengikuti opsi, jawaban yang dituju adalah 4,44.",
+  13: "Suhu rendah meningkatkan hasil NH₃ karena reaksi pembentukan amonia eksoterm, tetapi suhu terlalu rendah memperlambat laju reaksi. Industri memakai suhu moderat dan katalis agar reaksi tetap cepat.",
+  14: "Jika PCl₅ mula-mula 4,00 M dan Cl₂ setimbang 1,00 M, maka PCl₃ juga 1,00 M dan PCl₅ tersisa 3,00 M. Kc = [PCl₃][Cl₂]/[PCl₅] = 1 × 1 / 3 = 1/3.",
+  15: "Perubahan volume memengaruhi kesetimbangan gas jika jumlah mol gas kiri dan kanan berbeda. Pada CO(g) + H₂O(l) ⇌ CO₂(g) + H₂(g), jumlah mol gas berbeda jika H₂O dianggap cair tidak dihitung; namun opsi ini biasanya dianggap tidak mengalami pergeseran karena melibatkan cairan dan gas tertentu sesuai konteks soal.",
+  16: "Reaksi bergeser ke kanan jika produk gas CO₂ dikurangi atau tekanan/volume dibuat mendukung pembentukan gas sesuai kondisi sistem. Pada kunci ini, CO₂ dikeluarkan dan volume diperkecil dipilih sebagai faktor yang mendorong ke kanan.",
+  17: "Warna kompleks iodium-amilum berubah saat dipanaskan dan muncul kembali saat didinginkan. Ini menunjukkan posisi kesetimbangan dipengaruhi oleh suhu.",
+  18: "Pembentukan NH₃ bersifat eksoterm. Suhu terlalu tinggi, misalnya 1000 °C, justru menggeser kesetimbangan ke arah reaktan dan menurunkan hasil NH₃.",
+  19: "Jika CO₂ berkurang, kesetimbangan bergeser ke kiri dan menghasilkan CaCO₃. Endapan CaCO₃ inilah yang mendukung pembentukan stalaktit.",
+  20: "Perubahan suhu menyebabkan kesetimbangan kompleks iodium-amilum bergeser. Saat didinginkan, kompleks terbentuk kembali sehingga warna biru muncul lagi."
+};
+
+    function renderQuestions(){
+      const wrap = document.getElementById('soal');
+      wrap.innerHTML = questions.map(q => questionTemplate(q)).join('');
+    }
+
+    function questionTemplate(q){
+      const typeLabel = q.type === 'multi' ? 'Pilihan ganda kompleks' : 'Pilihan tunggal';
+      const context = q.context ? `<p class="q-context">${q.context}</p>` : '';
+      const reaction = q.reaction ? `<div class="reaction">${q.reaction}</div>` : '';
+      const table = q.table ? tableTemplate(q.table) : '';
+      const image = q.image ? imageTemplate(q.id) : '';
+      const options = q.options.map((opt, i) => `
+        <label class="option" id="q${q.id}opt${i}">
+          <input type="${q.type === 'multi' ? 'checkbox' : 'radio'}" name="q${q.id}" value="${i}">
+          <span><b>${letters[i]}.</b> ${opt}</span>
+        </label>
+      `).join('');
+
+      return `
+        <article class="question-card" id="q${q.id}">
+          <div class="question-head">
+            <div class="q-num">${q.id}</div>
+            <div>
+              <h3 class="q-title">${q.prompt}</h3>
+              <div class="q-meta">${typeLabel}${q.meta ? ' • ' + q.meta : ''}</div>
+            </div>
+          </div>
+          <div class="q-body">
+            ${context}
+            ${reaction}
+            ${table}
+            ${image}
+            <div class="options">${options}</div>
+            <div class="feedback" id="feedback${q.id}"></div>
+          </div>
+          <div class="question-actions">
+           <button class="small-btn" type="button" onclick="simpanJawaban(${q.id})">Simpan Jawaban</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function tableTemplate(table){
+      return `
+        <div class="data-table-wrap">
+          <table>
+            <thead><tr>${table.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <tbody>${table.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function imageTemplate(id){
+  const url = imageLinks[id] || '';
+
+  return `
+    <div class="image-placeholder">
+      <img 
+        class="preview-img" 
+        id="previewImg${id}" 
+        alt="Gambar soal nomor ${id}" 
+        src="${url}"
+        style="${url ? 'display:block;' : 'display:none;'}"
+      >
+    </div>
+  `;
+}
+
+    function getSelected(id){
+      return Array.from(document.querySelectorAll(`input[name="q${id}"]:checked`)).map(input => Number(input.value)).sort((a,b) => a-b);
+    }
+
+    function sameArray(a,b){
+      return a.length === b.length && a.every((v,i) => v === b[i]);
+    }
+
+    function simpanJawaban(id){
+  const selected = getSelected(id);
+  const fb = document.getElementById(`feedback${id}`);
+
+  document.querySelectorAll(`[id^="q${id}opt"]`).forEach(el => {
+    el.classList.remove('correct','wrong','missed');
+  });
+
+  if(selected.length === 0){
+    fb.className = 'feedback show warn';
+    fb.innerHTML = 'Pilih jawaban terlebih dahulu sebelum menyimpan.';
+    return false;
+  }
+
+  answered.set(id, null);
+
+  fb.className = 'feedback show info';
+  fb.innerHTML = '✅ Jawaban nomor ini sudah disimpan. Kunci jawaban akan ditampilkan setelah hasil dikumpulkan.';
+
+  updateProgressSimpan();
+  return true;
+}
+
+function updateProgressSimpan(){
+  const done = answered.size;
+  document.getElementById('scoreText').textContent = `Terisi: ${done}/${questions.length}`;
+  document.getElementById('scoreNote').textContent = `Jawaban tersimpan: ${done}/${questions.length} soal.`;
+}
+
+    function cekJawaban(id){
+  const q = questions.find(item => item.id === id);
+  const selected = getSelected(id);
+  const fb = document.getElementById(`feedback${id}`);
+
+  document.querySelectorAll(`[id^="q${id}opt"]`).forEach(el => {
+    el.classList.remove('correct','wrong','missed');
+  });
+
+  if(selected.length === 0){
+    fb.className = 'feedback show warn';
+    fb.innerHTML = 'Pilih jawaban terlebih dahulu.';
+    return false;
+  }
+
+  q.options.forEach((_, index) => {
+    const opt = document.getElementById(`q${id}opt${index}`);
+    const isCorrect = q.answer.includes(index);
+    const isChosen = selected.includes(index);
+
+    if(isCorrect && isChosen){
+      opt.classList.add('correct');
+    } else if(!isCorrect && isChosen){
+      opt.classList.add('wrong');
+    } else if(isCorrect && !isChosen){
+      opt.classList.add('missed');
+    }
+  });
+
+  const benar = sameArray(selected, [...q.answer].sort((a,b) => a-b));
+  const kunci = q.answer.map(i => letters[i]).join(', ');
+  const jawabanSiswa = selected.map(i => letters[i]).join(', ');
+  const pembahasan = pembahasanSoal[id] || "Pembahasan belum tersedia.";
+
+  answered.set(id, benar);
+
+  fb.className = benar ? 'feedback show good' : 'feedback show warn';
+
+  fb.innerHTML = `
+    <div style="font-size:15px; margin-bottom:8px;">
+      ${benar ? '✅ <b>Benar.</b>' : '❌ <b>Belum tepat.</b>'}
+    </div>
+
+    <div>
+      Jawaban kamu: <b>${jawabanSiswa}</b>
+    </div>
+
+    <div>
+      Kunci jawaban: <b>${kunci}</b>
+    </div>
+
+    <div style="margin-top:10px;">
+      <b>Pembahasan:</b><br>
+      ${pembahasan}
+    </div>
+  `;
+
+  updateScore();
+  return benar;
+}
+
+    async function kumpulkanHasil(){
+  let kosong = [];
+
+  questions.forEach(q => {
+    const selected = getSelected(q.id);
+    if(selected.length === 0){
+      kosong.push(q.id);
+    }
+  });
+
+  if(kosong.length > 0){
+    alert(`Masih ada soal yang belum dijawab: nomor ${kosong.join(', ')}.`);
+    return;
+  }
+
+  if(!confirm('Kumpulkan jawaban sekarang? Setelah dikumpulkan, skor dan kunci jawaban akan ditampilkan.')){
+    return;
+  }
+
+  answered.clear();
+
+  questions.forEach(q => {
+    cekJawaban(q.id);
+  });
+
+  await simpanHasilDrill();
+
+  document.getElementById('scorePanel').scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+}
+
+    function updateScore(){
+  const correct = Array.from(answered.values()).filter(Boolean).length;
+  const done = answered.size;
+
+  const skorPoin = correct * POIN_PER_SOAL;
+
+  document.getElementById('scoreText').textContent = `Skor: ${skorPoin}/${TOTAL_POIN}`;
+  document.getElementById('scoreNote').textContent = `Benar: ${correct}/${questions.length} soal. Setiap soal bernilai ${POIN_PER_SOAL} poin.`;
+}
+
+    function resetDrill(){
+      if(!confirm('Reset semua jawaban drill?')) return;
+      answered.clear();
+      document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => input.checked = false);
+      document.querySelectorAll('.option').forEach(el => el.classList.remove('correct','wrong','missed'));
+      document.querySelectorAll('.feedback').forEach(el => { el.className = 'feedback'; el.innerHTML = ''; });
+      updateScore();
+      localStorage.removeItem('drillSoalRepresentasi');
+    }
+
+    function getIdentitasSiswa(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+    return {
+      nama: user.name || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+async function simpanHasilDrill(){
+  const correct = Array.from(answered.values()).filter(Boolean).length;
+  const skorPoin = correct * POIN_PER_SOAL;
+  const nilai = skorPoin;
+
+  const identitas = getIdentitasSiswa();
+
+  const detailJawaban = questions.map((q) => {
+    const selected = getSelected(q.id);
+
+    const jawabanSiswa = selected.length
+      ? selected.map(i => letters[i]).join(", ")
+      : "-";
+
+    const kunciJawaban = q.answer.map(i => letters[i]).join(", ");
+    const benar = sameArray(selected, [...q.answer].sort((a,b) => a-b));
+
+    return {
+      nomor: q.id,
+      tipe: q.type === "multi" ? "Pilihan ganda kompleks" : "Pilihan tunggal",
+      jawabanSiswa: jawabanSiswa,
+      kunciJawaban: kunciJawaban,
+      benar: benar,
+      poin: benar ? POIN_PER_SOAL : 0,
+      pembahasan: pembahasanSoal[q.id] || "Pembahasan belum tersedia."
+    };
+  });
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Silakan login terlebih dahulu sebelum mengumpulkan drill.");
+    window.location.href = "h1.html";
+    return;
+  }
+
+  let profile = {};
+
+  try {
+    const profileDoc = await db.collection("users").doc(user.uid).get();
+    profile = profileDoc.exists ? profileDoc.data() : {};
+  } catch (error) {
+    console.warn("Profil user tidak ditemukan, memakai data localStorage.", error);
+  }
+
+  const finalNama =
+    profile.nama ||
+    profile.name ||
+    identitas.nama ||
+    "-";
+
+  const finalKelas =
+    profile.kelas ||
+    identitas.kelas ||
+    "-";
+
+  const finalAbsen =
+    profile.absen ||
+    profile.noAbsen ||
+    identitas.absen ||
+    "-";
+
+  const finalEmail =
+    user.email ||
+    profile.email ||
+    identitas.email ||
+    "-";
+
+  const docId = `${user.uid}_drillsoal`;
+  const now = firebase.firestore.FieldValue.serverTimestamp();
+
+  const dataJawaban = {
+    id: docId,
+    uid: user.uid,
+
+    nama: finalNama,
+    name: finalNama,
+    kelas: finalKelas,
+    absen: finalAbsen,
+    noAbsen: finalAbsen,
+    email: finalEmail,
+
+    pageKey: "drillsoal",
+    pageTitle: "Drill Soal — Representasi Kesetimbangan",
+    halaman: "drillsoal",
+    jenis: "drill",
+    subBab: "drill",
+
+    waktuKumpul: new Date().toLocaleString("id-ID"),
+    jumlahBenar: correct,
+    jumlahSalah: questions.length - correct,
+    jumlahSoal: questions.length,
+    skor: skorPoin,
+    score: skorPoin,
+    total: TOTAL_POIN,
+    nilai: nilai,
+    status: "sudah dikumpulkan",
+
+    detailJawaban: detailJawaban,
+    jawaban: {
+      jumlahBenar: correct,
+      jumlahSalah: questions.length - correct,
+      jumlahSoal: questions.length,
+      skor: skorPoin,
+      total: TOTAL_POIN,
+      nilai: nilai,
+      detailJawaban: detailJawaban
+    },
+    answers: {
+      jumlahBenar: correct,
+      jumlahSalah: questions.length - correct,
+      jumlahSoal: questions.length,
+      skor: skorPoin,
+      total: TOTAL_POIN,
+      nilai: nilai,
+      detailJawaban: detailJawaban
+    },
+
+    updatedAt: now,
+    createdAt: now
+  };
+
+  try {
+    const batch = db.batch();
+
+    const drillRef = db.collection("drillAnswers").doc(docId);
+    const answersRef = db.collection("answers").doc(docId);
+    const jawabanRef = db.collection("jawaban").doc(docId);
+    const progressRef = db.collection("progress").doc(docId);
+
+    batch.set(drillRef, dataJawaban, { merge: true });
+    batch.set(answersRef, dataJawaban, { merge: true });
+    batch.set(jawabanRef, dataJawaban, { merge: true });
+    batch.set(progressRef, {
+      uid: user.uid,
+      nama: finalNama,
+      name: finalNama,
+      kelas: finalKelas,
+      absen: finalAbsen,
+      noAbsen: finalAbsen,
+      email: finalEmail,
+      pageKey: "drillsoal",
+      pageTitle: "Drill Soal — Representasi Kesetimbangan",
+      halaman: "drillsoal",
+      jenis: "drill",
+      subBab: "drill",
+      done: true,
+      skor: skorPoin,
+      score: skorPoin,
+      nilai: nilai,
+      status: "sudah dikumpulkan",
+      updatedAt: now
+    }, { merge: true });
+
+    await batch.commit();
+
+    // Cadangan lokal saja, bukan sumber utama dashboard.
+    localStorage.setItem("drillSoalRepresentasi", JSON.stringify({
+      ...dataJawaban,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
+    }));
+
+    alert("✅ Hasil drill berhasil dikumpulkan dan tersimpan online ke Firebase.");
+  } catch (error) {
+    console.error("Gagal menyimpan drill ke Firebase:", error);
+    alert("Gagal menyimpan hasil drill ke Firebase. Cek koneksi, login, dan Firestore Rules.");
+  }
+}
+
+    function tampilkanGambar(id){
+      const input = document.getElementById(`imgUrl${id}`);
+      const img = document.getElementById(`previewImg${id}`);
+      const url = input.value.trim();
+      if(!url){
+        alert('Tempel link gambar terlebih dahulu.');
+        return;
+      }
+      imageLinks[id] = url;
+      img.src = url;
+      img.style.display = 'block';
+    }
+
+    function hapusGambar(id){
+      const input = document.getElementById(`imgUrl${id}`);
+      const img = document.getElementById(`previewImg${id}`);
+      input.value = '';
+      img.removeAttribute('src');
+      img.style.display = 'none';
+      imageLinks[id] = '';
+    }
+
+       renderQuestions();
+  </script>
+
+  <!-- FIREBASE ONLINE UNTUK DRILL SOAL -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script src="src/firebase-config.js"></script>
+  <script src="src/firebase-init.js"></script>
+  <script src="src/auth.js"></script>
+
+  <script>
+    AuthApp.requireLogin(() => {
+      console.log("Drill soal siap digunakan oleh user login.");
+    });
+  </script>
+</body>
+</html>

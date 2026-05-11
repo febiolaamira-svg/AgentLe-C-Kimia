@@ -1,0 +1,1578 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Data Sub Bab 1 • Agent Le C</title>
+
+  <style>
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:#f8fafc;
+      background:
+        radial-gradient(900px 650px at 15% 20%, rgba(255,79,216,.26), transparent 60%),
+        radial-gradient(900px 650px at 85% 30%, rgba(124,77,255,.30), transparent 62%),
+        linear-gradient(180deg,#06081b,#080724);
+      min-height:100vh;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(14px);
+      background:rgba(8,7,36,.72);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      padding:16px 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:22px;
+      line-height:1.2;
+    }
+
+    .brand p{
+      margin:4px 0 0;
+      color:rgba(255,255,255,.62);
+      font-size:13px;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.07);
+      color:#fff;
+      text-decoration:none;
+      padding:11px 14px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-family:inherit;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.86), rgba(124,77,255,.78));
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.11);
+    }
+
+    main{
+      width:min(1280px,100%);
+      margin:0 auto;
+      padding:22px;
+    }
+
+    .summary{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    @media(max-width:800px){
+      .summary{grid-template-columns:1fr}
+    }
+
+    .stat{
+  background:#ffffff;
+  color:#111827;
+  border:2px solid rgba(124,77,255,.26);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 18px 50px rgba(0,0,0,.22);
+}
+
+    .stat .label{
+  color:#4b5563;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:900;
+}
+
+    .stat .value{
+  margin-top:8px;
+  font-size:28px;
+  font-weight:950;
+  color:#312e81;
+}
+
+    .tools{
+  margin-bottom:14px;
+  background:
+    radial-gradient(600px 220px at 10% 0%, rgba(255,79,216,.18), transparent 60%),
+    radial-gradient(600px 220px at 90% 0%, rgba(124,77,255,.18), transparent 60%),
+    rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  padding:14px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  box-shadow:0 18px 50px rgba(0,0,0,.22);
+}
+
+    .search-input,.filter-select{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.92);
+      color:#111827;
+      padding:11px 13px;
+      border-radius:14px;
+      font-weight:700;
+      font-family:inherit;
+      outline:none;
+    }
+
+    .search-input{
+      flex:1;
+      min-width:240px;
+    }
+
+    .filter-select{
+      min-width:210px;
+    }
+
+    .student-card{
+  background:
+    radial-gradient(700px 220px at 20% 0%, rgba(255,79,216,.20), transparent 60%),
+    radial-gradient(700px 260px at 85% 20%, rgba(45,108,255,.20), transparent 60%),
+    rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:28px;
+  padding:0;
+  margin-top:14px;
+  margin-bottom:14px;
+  box-shadow:0 18px 54px rgba(0,0,0,.30);
+  overflow:hidden;
+}
+
+.student-summary{
+  width:100%;
+  list-style:none;
+  cursor:pointer;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  background:linear-gradient(135deg, rgba(124,77,255,.35), rgba(255,79,216,.18));
+}
+
+.student-summary::-webkit-details-marker{
+  display:none;
+}
+
+.student-summary h2{
+  margin:0;
+  font-size:22px;
+  color:#ffffff;
+  font-weight:950;
+  letter-spacing:.01em;
+}
+
+.student-summary p{
+  margin:8px 0 0;
+  color:rgba(255,255,255,.86);
+  font-size:14px;
+  font-weight:750;
+}
+
+.student-summary::after{
+  content:"Buka detail ▼";
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.13);
+  font-size:12px;
+  color:rgba(255,255,255,.86);
+  font-weight:900;
+  height:max-content;
+}
+
+details[open] > .student-summary::after{
+  content:"Tutup detail ▲";
+}
+
+.student-body{
+  padding:0 16px 16px;
+  max-height:520px;
+  overflow:auto;
+}
+
+.student-mini{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.badge{
+  padding:8px 11px;
+  border-radius:999px;
+  background:#eef2ff;
+  border:1px solid #c7d2fe;
+  font-size:12px;
+  color:#312e81;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+.badge.good{
+  background:#dcfce7;
+  border-color:#86efac;
+  color:#166534;
+}
+
+.badge.warn{
+  background:#fef3c7;
+  border-color:#fcd34d;
+  color:#92400e;
+}
+
+.page-block{
+  margin-top:14px;
+  background:#ffffff;
+  border:2px solid rgba(124,77,255,.28);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 12px 34px rgba(0,0,0,.18);
+}
+
+.page-title{
+  padding:13px 15px;
+  background:linear-gradient(135deg,#312e81,#7c4dff);
+  color:#ffffff;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  font-weight:950;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+.answer-list{
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+@media(max-width:900px){
+  .answer-list{
+    grid-template-columns:1fr;
+  }
+}
+
+.answer-item{
+  background:#f9fafb;
+  color:#111827;
+  border-radius:16px;
+  padding:13px;
+  border:1px solid #e5e7eb;
+  min-height:86px;
+  box-shadow:0 6px 18px rgba(15,23,42,.08);
+}
+
+.answer-item b{
+  display:block;
+  font-size:13px;
+  color:#312e81;
+  margin-bottom:6px;
+  font-weight:950;
+}
+
+.answer-item div{
+  white-space:pre-wrap;
+  font-size:14px;
+  line-height:1.6;
+  color:#111827;
+  max-height:150px;
+  overflow:auto;
+  font-weight:650;
+}
+
+.rekap-box{
+  margin-top:16px;
+  margin-bottom:18px;
+  padding:16px;
+  border-radius:28px;
+  background:
+    radial-gradient(700px 260px at 10% 0%, rgba(255,79,216,.20), transparent 60%),
+    radial-gradient(700px 260px at 90% 10%, rgba(124,77,255,.24), transparent 60%),
+    rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 18px 54px rgba(0,0,0,.28);
+}
+
+.rekap-title{
+  margin:0 0 12px;
+  color:#ffffff;
+  font-size:22px;
+  font-weight:950;
+}
+.compact-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin-top:18px;
+  margin-bottom:18px;
+  overflow:hidden;
+  border-radius:22px;
+  background:#ffffff !important;
+  color:#111827 !important;
+  box-shadow:0 18px 54px rgba(0,0,0,.32);
+  border:3px solid rgba(124,77,255,.45);
+}
+
+.compact-table th,
+.compact-table td{
+  padding:15px 14px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+  font-size:14px;
+  vertical-align:middle;
+  line-height:1.55;
+}
+
+.compact-table th{
+  background:linear-gradient(135deg,#ff4fd8,#7c4dff,#2d6cff) !important;
+  color:#ffffff !important;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:950;
+  white-space:nowrap;
+  text-shadow:0 1px 2px rgba(0,0,0,.25);
+}
+
+.compact-table td{
+  color:#111827 !important;
+  font-weight:750;
+}
+
+.compact-table tbody tr:nth-child(odd) td{
+  background:#ffffff !important;
+}
+
+.compact-table tbody tr:nth-child(even) td{
+  background:#f1efff !important;
+}
+
+.compact-table tbody tr:hover td{
+  background:#e0e7ff !important;
+}
+
+.compact-table td:first-child{
+  font-weight:950;
+  color:#312e81 !important;
+}
+
+.compact-table td:nth-child(2),
+.compact-table td:nth-child(3),
+.compact-table td:nth-child(4){
+  color:#1f2937 !important;
+  font-weight:800;
+}
+
+.compact-table td:nth-child(5),
+.compact-table td:nth-child(6){
+  text-align:center;
+  color:#166534 !important;
+  font-weight:950;
+  font-size:15px;
+}
+
+.compact-table td:nth-child(7){
+  color:#7c2d12 !important;
+  font-weight:900;
+}
+
+.compact-table td:nth-child(8){
+  color:#374151 !important;
+  font-weight:900;
+}
+    .compact-table th{
+      color:rgba(255,255,255,.78);
+      background:rgba(255,255,255,.08);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .print-area{
+  display:none;
+}
+
+.pdf-download-area{
+  display:none;
+}
+
+.pdf-export{
+  background:#ffffff;
+  color:#111827;
+  font-family:Arial, sans-serif;
+  padding:22px;
+  width:1123px;
+}
+
+.pdf-cover{
+  border:2px solid #7c4dff;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  background:#f8f5ff;
+}
+
+.pdf-cover h1{
+  margin:0;
+  color:#312e81;
+  font-size:22px;
+  text-align:center;
+}
+
+.pdf-cover p{
+  margin:6px 0 0;
+  color:#4b5563;
+  font-size:11px;
+  text-align:center;
+}
+
+.pdf-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:12px 0 14px;
+}
+
+.pdf-stat{
+  border:1px solid #c7d2fe;
+  background:#ffffff;
+  border-radius:10px;
+  padding:9px;
+}
+
+.pdf-stat b{
+  display:block;
+  font-size:18px;
+  color:#312e81;
+}
+
+.pdf-stat span{
+  display:block;
+  margin-top:2px;
+  font-size:9px;
+  text-transform:uppercase;
+  color:#4b5563;
+  font-weight:bold;
+  letter-spacing:.04em;
+}
+
+.pdf-rekap-table,
+.pdf-answer-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.pdf-rekap-table{
+  margin-bottom:14px;
+}
+
+.pdf-rekap-table th,
+.pdf-rekap-table td,
+.pdf-answer-table th,
+.pdf-answer-table td{
+  border:1px solid #d1d5db;
+  padding:6px;
+  font-size:9.5px;
+  vertical-align:top;
+  line-height:1.45;
+}
+
+.pdf-rekap-table th,
+.pdf-answer-table th{
+  background:#ede9fe;
+  color:#312e81;
+  font-weight:bold;
+  text-align:left;
+}
+
+.pdf-student{
+  margin:0 0 12px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  overflow:hidden;
+  page-break-inside:avoid;
+}
+
+.pdf-student-head{
+  background:#ede9fe;
+  padding:9px 10px;
+  border-bottom:1px solid #d1d5db;
+}
+
+.pdf-student-head h2{
+  margin:0;
+  font-size:14px;
+  color:#312e81;
+}
+
+.pdf-student-head p{
+  margin:4px 0 0;
+  font-size:9px;
+  color:#374151;
+  line-height:1.4;
+}
+
+.pdf-page{
+  padding:9px 10px;
+  border-top:1px solid #e5e7eb;
+}
+
+.pdf-page h3{
+  margin:0 0 5px;
+  font-size:11px;
+  color:#111827;
+}
+
+.pdf-page-time{
+  margin:0 0 7px;
+  font-size:9px;
+  color:#6b7280;
+}
+
+.pdf-answer-table th{
+  width:28%;
+}
+
+.pdf-answer-table td{
+  width:72%;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+
+.pdf-answer-table td{
+  color:#111827;
+  white-space:pre-wrap;
+}
+
+.pdf-empty{
+  padding:10px;
+  text-align:center;
+  font-size:10px;
+  color:#6b7280;
+  border:1px dashed #cbd5e1;
+  border-radius:10px;
+  background:#f8fafc;
+}
+@media print{
+  @page{
+    size:A4;
+    margin:14mm;
+  }
+
+  body{
+    background:#ffffff !important;
+    color:#111827 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  header,
+  main{
+    display:none !important;
+  }
+
+  .print-area{
+    display:block !important;
+    color:#111827;
+    font-family:Arial, sans-serif;
+  }
+
+  .print-cover{
+    border:2px solid #7c4dff;
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:14px;
+    background:#f8f5ff;
+  }
+
+  .print-cover h1{
+    margin:0;
+    color:#312e81;
+    font-size:22px;
+    text-align:center;
+  }
+
+  .print-cover p{
+    margin:6px 0 0;
+    color:#4b5563;
+    font-size:11px;
+    text-align:center;
+  }
+
+  .print-summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin:12px 0 14px;
+  }
+
+  .print-stat{
+    border:1px solid #c7d2fe;
+    background:#ffffff;
+    border-radius:10px;
+    padding:9px;
+  }
+
+  .print-stat b{
+    display:block;
+    font-size:18px;
+    color:#312e81;
+  }
+
+  .print-stat span{
+    display:block;
+    margin-top:2px;
+    font-size:9px;
+    text-transform:uppercase;
+    color:#4b5563;
+    font-weight:bold;
+    letter-spacing:.04em;
+  }
+
+  .print-rekap-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:14px;
+    page-break-inside:avoid;
+  }
+
+  .print-rekap-table th,
+  .print-rekap-table td{
+    border:1px solid #d1d5db;
+    padding:6px;
+    font-size:9px;
+    vertical-align:top;
+    line-height:1.35;
+  }
+
+  .print-rekap-table th{
+    background:#ede9fe !important;
+    color:#312e81 !important;
+    text-transform:uppercase;
+    font-weight:bold;
+  }
+
+  .print-student{
+    page-break-inside:avoid;
+    margin:0 0 12px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    overflow:hidden;
+  }
+
+  .print-student-head{
+    background:#ede9fe !important;
+    padding:9px 10px;
+    border-bottom:1px solid #d1d5db;
+  }
+
+  .print-student-head h2{
+    margin:0;
+    font-size:14px;
+    color:#312e81;
+  }
+
+  .print-student-head p{
+    margin:4px 0 0;
+    font-size:9px;
+    color:#374151;
+    line-height:1.4;
+  }
+
+  .print-page{
+    padding:9px 10px;
+    border-top:1px solid #e5e7eb;
+  }
+
+  .print-page h3{
+    margin:0 0 5px;
+    font-size:11px;
+    color:#111827;
+  }
+
+  .print-page-time{
+    margin:0 0 7px;
+    font-size:9px;
+    color:#6b7280;
+  }
+
+  .print-answer-table{
+    width:100%;
+    border-collapse:collapse;
+  }
+
+  .print-answer-table th,
+  .print-answer-table td{
+    border:1px solid #e5e7eb;
+    padding:6px;
+    vertical-align:top;
+    font-size:9.5px;
+    line-height:1.45;
+  }
+
+  .print-answer-table th{
+    background:#f8fafc !important;
+    color:#312e81 !important;
+    text-align:left;
+    width:34%;
+  }
+
+  .print-answer-table td{
+    color:#111827;
+    white-space:pre-wrap;
+  }
+
+  .print-empty{
+    padding:10px;
+    text-align:center;
+    font-size:10px;
+    color:#6b7280;
+    border:1px dashed #cbd5e1;
+    border-radius:10px;
+    background:#f8fafc;
+  }
+}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <h1>📊 Data Sub Bab 1</h1>
+      <p>Rekap jawaban siswa dari hlm1-2 sampai hlm8</p>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="btn" href="h1.html" onclick="localStorage.setItem('KI_GO_TO','admin')">⬅ Dashboard Admin</a>
+      <button class="btn primary" onclick="downloadExcel()">⬇ Export Excel</button>
+<button class="btn primary" onclick="downloadPDF()">⬇ Download PDF</button>
+<button class="btn" type="button" onclick="bukaSemua()">Buka Semua</button>
+<button class="btn" type="button" onclick="tutupSemua()">Tutup Semua</button>
+<button class="btn" onclick="hapusData()">🗑 Reset Semua Data</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="summary">
+      <div class="stat">
+        <div class="label">Jumlah Siswa</div>
+        <div class="value" id="totalSiswa">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Total Halaman Terisi</div>
+        <div class="value" id="totalHalaman">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Update Terakhir</div>
+        <div class="value" id="updateTerakhir" style="font-size:18px;">-</div>
+      </div>
+    </div>
+
+    <div class="tools">
+      <input
+        id="searchInput"
+        class="search-input"
+        type="search"
+        placeholder="Cari nama, kelas, absen, email, atau halaman..."
+        oninput="renderData()"
+      >
+
+      <select id="filterHalaman" class="filter-select" onchange="renderData()">
+        <option value="">Semua halaman</option>
+      </select>
+
+      <button class="btn" type="button" onclick="bukaSemua()">Buka Semua</button>
+      <button class="btn" type="button" onclick="tutupSemua()">Tutup Semua</button>
+    </div>
+
+    <div id="dataContainer"></div>
+    <div id="printArea" class="print-area"></div>
+<div id="pdfDownloadArea" class="pdf-download-area"></div>
+  </main>
+
+  <script>
+    const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+    function escapeHtml(text){
+      return String(text ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function loadData(){
+      try{
+        return JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+      }catch(e){
+        return {};
+      }
+    }
+
+    function countJawaban(item){
+      return Object.values(item.halaman || {}).reduce((total, h) => {
+        return total + ((h.jawaban || []).length);
+      }, 0);
+    }
+
+    function halamanTerakhir(item){
+      const halaman = Object.values(item.halaman || {});
+      if(!halaman.length) return "-";
+      return halaman[halaman.length - 1].judul || "-";
+    }
+
+    function isiFilterHalaman(entries){
+      const select = document.getElementById("filterHalaman");
+      const nilaiSekarang = select.value;
+      const set = new Set();
+
+      entries.forEach((item) => {
+        Object.values(item.halaman || {}).forEach((h) => {
+          if(h.judul) set.add(h.judul);
+        });
+      });
+
+      const halamanList = Array.from(set).sort();
+
+      select.innerHTML = `<option value="">Semua halaman</option>` + halamanList.map((judul) => {
+        return `<option value="${escapeHtml(judul)}">${escapeHtml(judul)}</option>`;
+      }).join("");
+
+      select.value = halamanList.includes(nilaiSekarang) ? nilaiSekarang : "";
+    }
+
+    function renderData(){
+      const db = loadData();
+      const container = document.getElementById("dataContainer");
+      const entries = Object.values(db);
+
+      const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filterHalaman = document.getElementById("filterHalaman").value;
+
+      isiFilterHalaman(entries);
+      document.getElementById("filterHalaman").value = filterHalaman;
+
+      let totalHalaman = 0;
+      let updateTerakhir = "-";
+
+      entries.forEach(item => {
+        totalHalaman += Object.keys(item.halaman || {}).length;
+        if(item.waktuUpdateTerakhir){
+          updateTerakhir = item.waktuUpdateTerakhir;
+        }
+      });
+
+      document.getElementById("totalSiswa").textContent = entries.length;
+      document.getElementById("totalHalaman").textContent = totalHalaman;
+      document.getElementById("updateTerakhir").textContent = updateTerakhir;
+
+      const filtered = entries.filter((item) => {
+        const id = item.identitas || {};
+        const halaman = Object.values(item.halaman || {});
+        const cocokHalaman = !filterHalaman || halaman.some(h => h.judul === filterHalaman);
+
+        const text = [
+          id.nama,
+          id.kelas,
+          id.absen,
+          id.email,
+          item.waktuUpdateTerakhir,
+          ...halaman.map(h => h.judul),
+          ...halaman.flatMap(h => (h.jawaban || []).flatMap(j => [j.label, j.jawaban]))
+        ].join(" ").toLowerCase();
+
+        return cocokHalaman && text.includes(keyword);
+      });
+
+      if(entries.length === 0){
+        container.innerHTML = `
+          <div class="empty">
+            Belum ada data siswa yang masuk. Pastikan siswa sudah login dan mengisi halaman Sub Bab 1.
+          </div>
+        `;
+        return;
+      }
+
+      if(filtered.length === 0){
+        container.innerHTML = `
+          <div class="empty">
+            Tidak ada data yang cocok dengan pencarian atau filter halaman.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+  <div class="rekap-box">
+    <h2 class="rekap-title">Rekap Singkat Siswa</h2>
+    <table class="compact-table">
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Kelas</th>
+              <th>Absen</th>
+              <th>Email</th>
+              <th>Halaman</th>
+              <th>Jawaban</th>
+              <th>Halaman Terakhir</th>
+              <th>Update</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map((item) => {
+              const id = item.identitas || {};
+              return `
+                <tr>
+                  <td>${escapeHtml(id.nama || "-")}</td>
+                  <td>${escapeHtml(id.kelas || "-")}</td>
+                  <td>${escapeHtml(id.absen || "-")}</td>
+                  <td>${escapeHtml(id.email || "-")}</td>
+                  <td>${Object.keys(item.halaman || {}).length}</td>
+                  <td>${countJawaban(item)}</td>
+                  <td>${escapeHtml(halamanTerakhir(item))}</td>
+                  <td>${escapeHtml(item.waktuUpdateTerakhir || "-")}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+                </table>
+  </div>
+
+        ${filtered.map((item, index) => {
+          const id = item.identitas || {};
+          const halaman = item.halaman || {};
+          const jumlahHalaman = Object.keys(halaman).length;
+          const jumlahJawaban = countJawaban(item);
+
+          const halamanHTML = Object.keys(halaman).map((key) => {
+            const h = halaman[key];
+            const jawaban = h.jawaban || [];
+
+            const jawabanHTML = jawaban.length
+              ? jawaban.map((j) => `
+                  <div class="answer-item">
+                    <b>${escapeHtml(j.label)}</b>
+                    <div>${escapeHtml(j.jawaban)}</div>
+                  </div>
+                `).join("")
+              : `<div class="answer-item"><b>Belum ada jawaban tertulis</b><div>-</div></div>`;
+
+            return `
+              <div class="page-block">
+                <div class="page-title">
+                  <span>${escapeHtml(h.judul || key)}</span>
+                  <span class="badge">${escapeHtml(h.waktuSimpan || "-")}</span>
+                </div>
+                <div class="answer-list">
+                  ${jawabanHTML}
+                </div>
+              </div>
+            `;
+          }).join("");
+
+          const badgeClass = jumlahHalaman >= 7 ? "good" : "warn";
+
+          return `
+            <details class="student-card" ${index === 0 ? "open" : ""}>
+              <summary class="student-summary">
+                <div>
+                  <h2>${escapeHtml(id.nama || "-")}</h2>
+                  <p>
+                    Kelas: ${escapeHtml(id.kelas || "-")} •
+                    No Absen: ${escapeHtml(id.absen || "-")} •
+                    Email: ${escapeHtml(id.email || "-")}
+                  </p>
+                  <div class="student-mini">
+                    <span class="badge ${badgeClass}">${jumlahHalaman} halaman terisi</span>
+                    <span class="badge">${jumlahJawaban} jawaban</span>
+                    <span class="badge">Update: ${escapeHtml(item.waktuUpdateTerakhir || "-")}</span>
+                  </div>
+                </div>
+              </summary>
+
+              <div class="student-body">
+                ${halamanHTML || `<div class="empty">Belum ada halaman yang tersimpan.</div>`}
+              </div>
+            </details>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function bukaSemua(){
+      document.querySelectorAll(".student-card").forEach(item => item.open = true);
+    }
+
+    function tutupSemua(){
+      document.querySelectorAll(".student-card").forEach(item => item.open = false);
+    }
+    function bersihkanTeksExcel(value){
+  return String(value ?? "-")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function downloadExcel(){
+  const db = loadData();
+  const entries = Object.values(db);
+
+  const rekapRows = [];
+  const jawabanRows = [];
+
+  entries.forEach((item, index) => {
+    const id = item.identitas || {};
+    const halaman = item.halaman || {};
+
+    const jumlahHalaman = Object.keys(halaman).length;
+    const jumlahJawaban = countJawaban(item);
+
+    rekapRows.push({
+      "No": index + 1,
+      "Nama": id.nama || "-",
+      "Kelas": id.kelas || "-",
+      "No Absen": id.absen || "-",
+      "Email": id.email || "-",
+      "Jumlah Halaman Terisi": jumlahHalaman,
+      "Jumlah Jawaban": jumlahJawaban,
+      "Halaman Terakhir": halamanTerakhir(item),
+      "Update Terakhir": item.waktuUpdateTerakhir || "-"
+    });
+
+    Object.values(halaman).forEach((h) => {
+      const jawaban = h.jawaban || [];
+
+      if(jawaban.length === 0){
+        jawabanRows.push({
+          "Nama": id.nama || "-",
+          "Kelas": id.kelas || "-",
+          "No Absen": id.absen || "-",
+          "Email": id.email || "-",
+          "Halaman": h.judul || "-",
+          "Pertanyaan / Bagian": "Belum ada jawaban tertulis",
+          "Jawaban Siswa": "-",
+          "Waktu Simpan": h.waktuSimpan || "-"
+        });
+      }else{
+        jawaban.forEach((j) => {
+          jawabanRows.push({
+            "Nama": id.nama || "-",
+            "Kelas": id.kelas || "-",
+            "No Absen": id.absen || "-",
+            "Email": id.email || "-",
+            "Halaman": h.judul || "-",
+            "Pertanyaan / Bagian": bersihkanTeksExcel(j.label || "-"),
+            "Jawaban Siswa": bersihkanTeksExcel(j.jawaban || "-"),
+            "Waktu Simpan": h.waktuSimpan || "-"
+          });
+        });
+      }
+    });
+  });
+
+  const wb = XLSX.utils.book_new();
+
+  const wsRekap = XLSX.utils.json_to_sheet(rekapRows);
+  const wsJawaban = XLSX.utils.json_to_sheet(jawabanRows);
+
+  wsRekap["!cols"] = [
+    { wch: 5 },
+    { wch: 24 },
+    { wch: 12 },
+    { wch: 10 },
+    { wch: 28 },
+    { wch: 20 },
+    { wch: 16 },
+    { wch: 34 },
+    { wch: 22 }
+  ];
+
+  wsJawaban["!cols"] = [
+    { wch: 24 },
+    { wch: 12 },
+    { wch: 10 },
+    { wch: 28 },
+    { wch: 34 },
+    { wch: 42 },
+    { wch: 70 },
+    { wch: 22 }
+  ];
+
+  wsRekap["!autofilter"] = {
+    ref: XLSX.utils.encode_range(XLSX.utils.decode_range(wsRekap["!ref"]))
+  };
+
+  wsJawaban["!autofilter"] = {
+    ref: XLSX.utils.encode_range(XLSX.utils.decode_range(wsJawaban["!ref"]))
+  };
+
+  wsRekap["!freeze"] = { xSplit: 0, ySplit: 1 };
+  wsJawaban["!freeze"] = { xSplit: 0, ySplit: 1 };
+
+  XLSX.utils.book_append_sheet(wb, wsRekap, "Rekap Siswa");
+  XLSX.utils.book_append_sheet(wb, wsJawaban, "Jawaban Rapi");
+
+  XLSX.writeFile(wb, "data-sub-bab-1-agent-le-c-rapi.xlsx");
+}
+    function downloadPDF(){
+  const db = loadData();
+  const entries = Object.values(db);
+
+  let totalHalaman = 0;
+  let totalJawaban = 0;
+  let updateTerakhir = "-";
+
+  entries.forEach(item => {
+    totalHalaman += Object.keys(item.halaman || {}).length;
+    totalJawaban += countJawaban(item);
+
+    if(item.waktuUpdateTerakhir){
+      updateTerakhir = item.waktuUpdateTerakhir;
+    }
+  });
+
+  const rekapHTML = `
+    <table class="pdf-rekap-table">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Kelas</th>
+          <th>Absen</th>
+          <th>Email</th>
+          <th>Halaman</th>
+          <th>Jawaban</th>
+          <th>Halaman Terakhir</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${entries.map((item) => {
+          const id = item.identitas || {};
+          return `
+            <tr>
+              <td>${escapeHtml(id.nama || "-")}</td>
+              <td>${escapeHtml(id.kelas || "-")}</td>
+              <td>${escapeHtml(id.absen || "-")}</td>
+              <td>${escapeHtml(id.email || "-")}</td>
+              <td>${Object.keys(item.halaman || {}).length}</td>
+              <td>${countJawaban(item)}</td>
+              <td>${escapeHtml(halamanTerakhir(item))}</td>
+              <td>${escapeHtml(item.waktuUpdateTerakhir || "-")}</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+
+  const siswaHTML = entries.map((item) => {
+    const id = item.identitas || {};
+    const halaman = item.halaman || {};
+
+    const halamanHTML = Object.keys(halaman).map((key) => {
+      const h = halaman[key];
+      const jawaban = h.jawaban || [];
+
+      const jawabanHTML = jawaban.length
+        ? `
+          <table class="pdf-answer-table">
+            <thead>
+              <tr>
+                <th>Pertanyaan / Bagian</th>
+                <th>Jawaban Siswa</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${jawaban.map((j) => `
+                <tr>
+                  <th>${escapeHtml(j.label || "-")}</th>
+                  <td>${escapeHtml(j.jawaban || "-")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `
+        : `
+          <div class="pdf-empty">
+            Belum ada jawaban tertulis.
+          </div>
+        `;
+
+      return `
+        <div class="pdf-page">
+          <h3>${escapeHtml(h.judul || key)}</h3>
+          <p class="pdf-page-time">
+            Waktu simpan: ${escapeHtml(h.waktuSimpan || "-")}
+          </p>
+          ${jawabanHTML}
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <section class="pdf-student">
+        <div class="pdf-student-head">
+          <h2>${escapeHtml(id.nama || "-")}</h2>
+          <p>
+            Kelas: ${escapeHtml(id.kelas || "-")} •
+            No Absen: ${escapeHtml(id.absen || "-")} •
+            Email: ${escapeHtml(id.email || "-")} •
+            Update: ${escapeHtml(item.waktuUpdateTerakhir || "-")}
+          </p>
+        </div>
+
+        ${halamanHTML || `
+          <div class="pdf-page">
+            <div class="pdf-empty">
+              Belum ada halaman yang tersimpan.
+            </div>
+          </div>
+        `}
+      </section>
+    `;
+  }).join("");
+
+  const pdfArea = document.getElementById("pdfDownloadArea");
+
+  pdfArea.innerHTML = `
+    <div class="pdf-export" id="pdfExportContent">
+      <div class="pdf-cover">
+        <h1>Data Sub Bab 1 — Agent Le C</h1>
+        <p>Rekap jawaban siswa dari hlm1-2 sampai hlm8</p>
+        <p>Diunduh pada: ${new Date().toLocaleString("id-ID")}</p>
+      </div>
+
+      <div class="pdf-summary">
+        <div class="pdf-stat">
+          <b>${entries.length}</b>
+          <span>Jumlah Siswa</span>
+        </div>
+
+        <div class="pdf-stat">
+          <b>${totalHalaman}</b>
+          <span>Total Halaman Terisi</span>
+        </div>
+
+        <div class="pdf-stat">
+          <b>${totalJawaban}</b>
+          <span>Total Jawaban</span>
+        </div>
+      </div>
+
+      <div class="pdf-summary">
+        <div class="pdf-stat" style="grid-column:1 / -1;">
+          <b style="font-size:12px;">${escapeHtml(updateTerakhir)}</b>
+          <span>Update Terakhir</span>
+        </div>
+      </div>
+
+      ${entries.length ? rekapHTML + siswaHTML : `
+        <div class="pdf-empty">
+          Belum ada data siswa yang masuk.
+        </div>
+      `}
+    </div>
+  `;
+
+  const element = document.getElementById("pdfExportContent");
+
+  const opt = {
+  margin: 6,
+    filename: "data-sub-bab-1-agent-le-c.pdf",
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    },
+   jsPDF: {
+  unit: "mm",
+  format: "a4",
+  orientation: "landscape"
+},
+    pagebreak: {
+      mode: ["css", "legacy"],
+      avoid: [".pdf-student", ".pdf-rekap-table"]
+    }
+  };
+
+  html2pdf()
+    .set(opt)
+    .from(element)
+    .save()
+    .then(() => {
+      pdfArea.innerHTML = "";
+    });
+}
+
+    function hapusData(){
+      if(!confirm("Yakin ingin menghapus semua data Sub Bab 1 dari browser ini?")) return;
+      localStorage.removeItem(DATA_GURU_SUBBAB1_KEY);
+      renderData();
+    }
+
+    renderData();
+  </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+
+<script>
+function formatFirebaseTime(value) {
+  if (!value) return "-";
+
+  if (value.toDate) {
+    return value.toDate().toLocaleString("id-ID");
+  }
+
+  if (value.seconds) {
+    return new Date(value.seconds * 1000).toLocaleString("id-ID");
+  }
+
+  return String(value);
+}
+
+function labelRapiSubBab1(label) {
+  const map = {
+    h1: "Pilihan hipotesis 1: arah reaksi pembentukan endapan AgCl",
+    h1Reason: "Alasan hipotesis 1",
+    h2: "Pilihan hipotesis 2: perubahan warna larutan Co²⁺",
+    h2Reason: "Alasan hipotesis 2",
+    h3: "Pilihan hipotesis 3: kondisi mencapai kesetimbangan",
+    h3Reason: "Alasan hipotesis 3",
+
+    selectedQuestions: "Rumusan masalah yang dipilih siswa",
+    obs1: "Observasi percobaan 1",
+    obs2: "Observasi percobaan 2",
+    obs3: "Observasi perbandingan kedua reaksi",
+    ans1: "Jawaban analisis 1",
+    ans2: "Jawaban analisis 2",
+    analysis: "Analisis hasil pengamatan/simulasi",
+    finalConclusion: "Kesimpulan akhir siswa",
+    matchHypothesis: "Kesesuaian hasil dengan hipotesis",
+    reflection5: "Refleksi: perbedaan kesetimbangan homogen dan heterogen",
+    confirmReflectionDone: "Konfirmasi membaca handout dan mengisi refleksi"
+  };
+
+  return map[label] || label;
+}
+
+function jawabanRapiSubBab1(value) {
+  const map = {
+    satuarah: "Reaksi cenderung berlangsung satu arah",
+    duaarah: "Reaksi cenderung berlangsung dua arah",
+    tidakbalik: "Perubahan warna hanya terjadi satu kali dan tidak dapat kembali",
+    bolakbalik: "Perubahan warna dapat terjadi bolak-balik",
+    tertutup: "Reaksi dapat mencapai kesetimbangan jika berlangsung dalam sistem tertutup",
+    terbuka: "Reaksi dapat mencapai kesetimbangan meskipun sistem terbuka",
+    on: "Ya / dicentang"
+  };
+
+  if (typeof value === "string" && map[value]) {
+    return map[value];
+  }
+
+  if (typeof value === "object" && value !== null) {
+    return JSON.stringify(value, null, 2);
+  }
+
+  return String(value ?? "");
+}
+
+function ubahJawabanKeArray(jawabanObj) {
+  if (!jawabanObj) return [];
+
+  const abaikan = [
+    "_localUser",
+    "_meta",
+    "KI_Page7_LastResult"
+  ];
+
+  if (Array.isArray(jawabanObj)) {
+    return jawabanObj
+      .filter(item => !abaikan.includes(item.label))
+      .map(item => ({
+        label: labelRapiSubBab1(item.label),
+        jawaban: jawabanRapiSubBab1(item.jawaban)
+      }));
+  }
+
+  return Object.entries(jawabanObj)
+    .filter(([label]) => !abaikan.includes(label))
+    .map(([label, value]) => {
+      return {
+        label: labelRapiSubBab1(label),
+        jawaban: jawabanRapiSubBab1(value)
+      };
+    });
+}
+
+async function ambilSnapshotJawabanSubBab1() {
+  const hasil = new Map();
+
+  // Ambil hanya data Sub Bab 1 dari koleksi utama.
+  const answersSnapshot = await db
+    .collection("answers")
+    .where("subBab", "==", 1)
+    .get();
+
+  answersSnapshot.forEach((doc) => {
+    hasil.set(doc.id, doc);
+  });
+
+  // Ambil cadangan dari koleksi lama, tetap hanya Sub Bab 1.
+  const legacySnapshot = await db
+    .collection("jawaban")
+    .where("subBab", "==", 1)
+    .get();
+
+  legacySnapshot.forEach((doc) => {
+    if (!hasil.has(doc.id)) {
+      hasil.set(doc.id, doc);
+    }
+  });
+
+  return Array.from(hasil.values());
+}
+
+async function sinkronFirebaseKeDashboardSubBab1() {
+  const docs = await ambilSnapshotJawabanSubBab1();
+
+  const hasil = {};
+
+  docs.forEach((doc) => {
+    const data = doc.data();
+
+    const email =
+      data.email ||
+      data["e-mail"] ||
+      data.siswa?.email ||
+      "tanpa-email";
+
+    const nama =
+      data.nama ||
+      data.name ||
+      data.siswa?.nama ||
+      data.siswa?.name ||
+      "-";
+
+    const kelas =
+      data.kelas ||
+      data.siswa?.kelas ||
+      "-";
+
+    const absen =
+      data.absen ||
+      data["no absen"] ||
+      data.siswa?.absen ||
+      "-";
+
+    const pageKey =
+      data.pageKey ||
+      data.halamanKey ||
+      data.halamanId ||
+      doc.id.split("_").pop() ||
+      doc.id;
+
+    const judul =
+      data.pageTitle ||
+      data.judul ||
+      data.halaman ||
+      pageKey;
+
+    const waktu =
+      formatFirebaseTime(data.updatedAt || data.dibuatPada || data.createdAt || data.waktuSimpan);
+
+    const jawabanArray = ubahJawabanKeArray(data.jawaban || data.answers);
+
+    if (!hasil[email]) {
+      hasil[email] = {
+        identitas: {
+          nama: nama,
+          kelas: kelas,
+          absen: absen,
+          email: email
+        },
+        halaman: {},
+        waktuUpdateTerakhir: waktu
+      };
+    }
+
+    hasil[email].halaman[pageKey] = {
+      judul: judul,
+      waktuSimpan: waktu,
+      jawaban: jawabanArray
+    };
+
+    hasil[email].waktuUpdateTerakhir = waktu;
+  });
+
+  localStorage.setItem("AGENT_LEC_DATA_SUBBAB1_V1", JSON.stringify(hasil));
+
+  renderData();
+}
+
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    alert("Silakan login terlebih dahulu.");
+    window.location.href = "h1.html";
+    return;
+  }
+
+  if (user.email !== "appbeechem@gmail.com") {
+    alert("Halaman ini khusus guru.");
+    window.location.href = "h1.html";
+    return;
+  }
+
+  sinkronFirebaseKeDashboardSubBab1().catch((error) => {
+    console.error("Gagal mengambil data Firebase:", error);
+
+    document.getElementById("dataContainer").innerHTML = `
+      <div class="empty">
+        Gagal memuat data dari Firebase. Cek Rules Firestore dan Console browser.
+      </div>
+    `;
+  });
+});
+</script>
+</body>
+</html>

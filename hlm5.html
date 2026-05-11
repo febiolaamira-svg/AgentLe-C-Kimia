@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kesetimbangan Dinamis (Hal. 5) — Homogen & Heterogen</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#b8f7ff;
+      --bg2:#b0b6ff;
+      --bg3:#ffd8f0;
+
+      --ink:#0b1220;
+      --muted:#5b6b86;
+
+      --card: rgba(255,255,255,.78);
+      --card2: rgba(255,255,255,.92);
+      --line: rgba(13,23,46,.12);
+
+      --primary:#2b7cff;
+      --primary2:#00c2ff;
+      --accent:#ff7a00;
+      --accent2:#ff4fd8;
+      --ok:#16a34a;
+
+      --shadow: 0 18px 50px rgba(0,0,0,.12);
+      --shadow2: 0 10px 25px rgba(0,0,0,.10);
+
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x:hidden;
+    }
+
+    .blob{
+      position:fixed;
+      width:380px;height:380px;border-radius:999px;
+      filter: blur(30px);
+      opacity:.35;
+      z-index:-1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b1{left:-120px; top:80px; background:#47e6ff;}
+    .blob.b2{right:-140px; top:140px; background:#6b7bff; animation-delay:-5s;}
+    .blob.b3{left:20%; bottom:-160px; background:#ff5fd6; animation-delay:-9s;}
+
+    @keyframes drift{
+      0%,100%{transform: translate(0,0) scale(1)}
+      50%{transform: translate(60px,-40px) scale(1.08)}
+    }
+
+    header{
+      position:sticky; top:0;
+      z-index:20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.55);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar{
+      max-width:1150px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width:260px;}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: var(--shadow2);
+      display:grid; place-items:center;
+      color:white; font-weight:900;
+    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1;}
+    .brand .t b{font-size:14px}
+    .brand .t span{font-size:12px;color:var(--muted)}
+    .rightbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .progressWrap{
+      width:220px;height:10px;border-radius:999px;
+      background: rgba(13,23,46,.10);
+      overflow:hidden;
+      border:1px solid rgba(13,23,46,.10);
+    }
+    .progressFill{
+      height:100%;
+      width:62.5%;
+      background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+      border-radius:999px;
+      transition: width .5s ease;
+    }
+
+    main{max-width:1150px;margin:0 auto;padding:18px;}
+    .grid{display:grid;gap:16px}
+    @media (min-width: 980px){
+      .grid.cols-2{grid-template-columns: 1fr 1fr}
+      .grid.cols-3{grid-template-columns: 1fr 1fr 1fr}
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card.solid{background: var(--card2)}
+
+    h1{margin:0 0 4px 0; font-size:22px}
+    h2{margin:0 0 10px 0; font-size:15px}
+    h3{margin:0 0 8px 0; font-size:14px}
+    p,li,label{font-size:13px; line-height:1.55}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background: var(--line); margin:14px 0}
+
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      user-select:none;
+    }
+    .btn:active{transform: scale(.98)}
+    .btn.primary{
+      color:white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+    }
+    .btn.blue{
+      color:white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+    }
+    .btn.ghost{
+      color: var(--ink);
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+
+    .tag{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(43,124,255,.10);
+      color:#1b4bb2;
+      border:1px solid rgba(43,124,255,.15);
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .compareWrap{
+      display:grid;
+      gap:16px;
+    }
+    @media (min-width: 980px){
+      .compareWrap{grid-template-columns:1fr 1fr;}
+    }
+
+   .system{
+  background: rgba(255,255,255,.72);
+  border:1px solid rgba(13,23,46,.12);
+  border-radius: var(--radius);
+  padding:12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  position:relative;
+  overflow:hidden;
+  min-height: 460px;
+}
+    .system::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:240px;height:240px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,122,0,.20), transparent 62%);
+      transform: rotate(12deg);
+      pointer-events:none;
+    }
+
+    .jar{
+  width:100%;
+  height:310px;
+  border-radius:24px;
+  border:1px solid rgba(13,23,46,.14);
+  background:
+    radial-gradient(ellipse at 50% 25%, rgba(255,255,255,.88), rgba(255,255,255,.20)),
+    linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.58));
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.35);
+  overflow:hidden;
+  position:relative;
+  margin:0 auto;
+  display:grid;
+  place-items:center;
+  padding:10px;
+}
+    .clickableView{
+  cursor:pointer;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.clickableView:hover{
+  opacity:.92;
+}
+
+.clickHint{
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:5;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid rgba(13,23,46,.12);
+  background:rgba(255,255,255,.82);
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  display:none;
+}
+
+    .chipEqn{
+      position:absolute;
+      bottom:12px; left:12px; right:12px;
+      background: rgba(255,255,255,.84);
+      border:1px solid rgba(13,23,46,.12);
+      border-radius:16px;
+      padding:10px 12px;
+      font-weight:900;
+      font-size:12px;
+      color: rgba(13,23,46,.85);
+      z-index:4;
+    }
+
+    .modeBox{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.76);
+    }
+
+    .mode-image{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
+  border-radius:14px;
+}
+
+    .legend{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:12px;
+    }
+    .legendItem{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.70);
+      font-size:12px;
+      font-weight:900;
+      color: var(--muted);
+    }
+    .dot{
+      width:12px; height:12px; border-radius:999px;
+    }
+    .dot.gas1{background:#2b7cff}
+    .dot.gas2{background:#ff4fd8}
+    .dot.prod{background:#ff7a00}
+    .dot.solid{background:#7c3aed}
+    .dot.aq{background:#00c2ff}
+
+    textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(13,23,46,.14);
+      background: rgba(255,255,255,.82);
+      padding:12px;
+      min-height:100px;
+      font-family: inherit;
+      font-size:13px;
+      outline:none;
+      resize:vertical;
+    }
+    textarea:focus{
+      border-color: rgba(43,124,255,.35);
+      box-shadow: 0 0 0 4px rgba(43,124,255,.12);
+    }
+
+    .tableMini{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:14px;
+      background: rgba(255,255,255,.82);
+      border:1px solid rgba(13,23,46,.12);
+    }
+    .tableMini th, .tableMini td{
+      font-size:13px;
+      padding:12px;
+      text-align:left;
+      border-bottom:1px solid rgba(13,23,46,.10);
+      vertical-align:top;
+    }
+    .tableMini th{
+      background: rgba(43,124,255,.08);
+      font-weight:800;
+    }
+    .tableMini tr:last-child td{border-bottom:0}
+
+    .toastWrap{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      z-index: 60;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      width:min(420px, calc(100vw - 36px));
+      border-radius: 16px;
+      padding:12px 12px;
+      background: rgba(255,255,255,.88);
+      border:1px solid rgba(13,23,46,.12);
+      box-shadow: var(--shadow);
+      display:flex; gap:10px;
+      align-items:flex-start;
+      animation: pop .18s ease-out;
+    }
+    @keyframes pop{from{transform: translateY(10px); opacity:.2} to{transform: translateY(0); opacity:1}}
+    .toast .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      font-weight:900;
+      color:white;
+      flex:0 0 auto;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+    }
+    .toast.ok .icon{background: linear-gradient(135deg, #22c55e, #16a34a)}
+    .toast.bad .icon{background: linear-gradient(135deg, #ef4444, #b91c1c)}
+    .toast .t{flex:1}
+    .toast .t b{display:block; font-size:13px}
+    .toast .t span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .toast .x{
+      background: transparent;border:0;cursor:pointer;
+      padding:6px 8px;border-radius:10px;color: var(--muted);
+    }
+
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background: rgba(13,23,46,.45);
+      backdrop-filter: blur(8px);
+      display:none;
+      z-index:80;
+      padding:18px;
+    }
+    .modalBackdrop.show{display:grid; place-items:center}
+    .modal{
+      width: min(860px, calc(100vw - 36px));
+      max-height: calc(100vh - 120px);
+      border-radius: 20px;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(13,23,46,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.18);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .modalHead{
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      background: linear-gradient(135deg, rgba(43,124,255,.10), rgba(255,79,216,.10));
+      border-bottom:1px solid rgba(13,23,46,.10);
+    }
+    .modalHead b{font-size:14px}
+    .modalBody{padding:16px; overflow:auto; flex:1 1 auto;}
+    .modalActions{
+      padding:12px 16px;
+      border-top:1px solid rgba(13,23,46,.10);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      background: rgba(255,255,255,.70);
+      flex:0 0 auto;
+    }
+    .iconBtn{
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.7);
+      border-radius: 12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:900;
+      color:var(--muted);
+    }
+
+    .svgTxt{font-family:"Plus Jakarta Sans", Arial, sans-serif}
+  
+  .inlineParticleBox{
+  display:none;
+  position:absolute;
+  inset:12px 12px 54px 12px;
+  z-index:4;
+  padding:10px;
+  border-radius:16px;
+  border:1px solid rgba(13,23,46,.12);
+  background:rgba(255,255,255,.95);
+  text-align:center;
+}
+
+.inlineParticleBox.show{
+  display:block;
+}
+
+.inlineParticleBox img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
+  border-radius:14px;
+  border:1px solid rgba(13,23,46,.12);
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.inlineParticleBox .cap{
+  display:none;
+}
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">⚖️</div>
+        <div class="t">
+          <b>Kesetimbangan Dinamis</b>
+          <span>Halaman 5 • Homogen dan Heterogen</span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div class="pill">
+          <span>Progress</span>
+          <b style="color:var(--ink)">5/8</b>
+        </div>
+        <div class="progressWrap">
+          <div class="progressFill"></div>
+        </div>
+        <button class="btn ghost" id="btnHelp">✨ Bantuan</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Header utama -->
+    <div class="card solid">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <h1>Halaman 5 — Kesetimbangan Homogen dan Heterogen</h1>
+          <p class="muted" style="margin:0">
+            Pada halaman ini, kamu akan mengamati <b>representasi makroskopis</b>, <b>representasi partikel</b>, dan <b>persamaan reaksi</b> untuk memahami perbedaan
+            kesetimbangan <b>homogen</b> dan <b>heterogen</b>.
+          </p>
+        </div>
+        <div class="row">
+        </div>
+      </div>
+    </div>
+
+    <!-- Pengantar -->
+    <div class="grid cols-3" style="margin-top:16px">
+      <div class="card">
+        <div class="tag">1. Fokus Konsep</div>
+        <p style="margin:0">
+          Perbedaan homogen dan heterogen ditentukan oleh <b>fase zat</b> yang terlibat dalam reaksi kesetimbangan.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="tag">2. Homogen</div>
+        <p style="margin:0">
+          Semua zat berada pada <b>fase yang sama</b>, misalnya semuanya berupa gas.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="tag">3. Heterogen</div>
+        <p style="margin:0">
+          Zat-zat berada pada <b>lebih dari satu fase</b>, misalnya padat dan gas.
+        </p>
+      </div>
+    </div>
+
+    <!-- Dua panel visual -->
+    <div class="compareWrap" style="margin-top:16px">
+      <!-- HOMOGEN -->
+      <div class="card solid">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h2>🟦 Kesetimbangan Homogen</h2>
+            <p class="muted" style="margin:0">
+              Semua komponen dalam reaksi berada pada fase yang sama.
+            </p>
+          </div>
+          <div class="pill"><b>Satu fase</b></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="margin-bottom:10px">
+          <button class="btn ghost toggleMode" data-target="homogen" data-mode="macro">Makroskopis</button>
+          <button class="btn ghost toggleMode" data-target="homogen" data-mode="particle">Partikel</button>
+          <button class="btn ghost toggleMode" data-target="homogen" data-mode="phase">Highlight fase</button>
+        </div>
+
+        <div class="system">
+          <div class="jar">
+            <div class="clickHint" id="hintHomogen">Klik mode partikel untuk buka gambar</div>
+            <svg id="svgHomogen" viewBox="0 0 760 320" width="100%" height="100%">
+              <rect x="25" y="22" width="710" height="220" rx="24" fill="rgba(255,255,255,.55)" stroke="rgba(13,23,46,.14)"/>
+
+              <!-- mode macro -->
+              <g class="viewMacro">
+                <text class="svgTxt" x="50" y="58" font-size="16" font-weight="900" fill="rgba(13,23,46,.82)">
+                  Tampilan makroskopis: sistem tampak seragam
+                </text>
+                <rect x="60" y="82" width="640" height="120" rx="20" fill="rgba(120,190,255,.18)" stroke="rgba(43,124,255,.16)"/>
+                <text class="svgTxt" x="83" y="150" font-size="22" font-weight="800" fill="rgba(27,75,178,.92)">
+                  Semua zat berada pada fase gas
+                </text>
+              </g>
+
+              <!-- mode particle -->
+              <g class="viewParticle clickableView" id="particleHomogenView" style="display:none">
+                <text class="svgTxt" x="50" y="58" font-size="16" font-weight="900" fill="rgba(13,23,46,.82)">
+                  Tampilan partikel: semua partikel bercampur dalam satu fase
+                </text>
+
+                <!-- reaktan -->
+                <circle cx="120" cy="112" r="12" fill="#2b7cff"/>
+                <circle cx="180" cy="150" r="12" fill="#2b7cff"/>
+                <circle cx="240" cy="120" r="12" fill="#2b7cff"/>
+                <circle cx="300" cy="170" r="12" fill="#2b7cff"/>
+
+                <circle cx="145" cy="185" r="12" fill="#ff4fd8"/>
+                <circle cx="210" cy="95" r="12" fill="#ff4fd8"/>
+                <circle cx="280" cy="135" r="12" fill="#ff4fd8"/>
+                <circle cx="340" cy="105" r="12" fill="#ff4fd8"/>
+
+                <!-- produk -->
+                <circle cx="470" cy="100" r="12" fill="#ff7a00"/>
+                <circle cx="525" cy="145" r="12" fill="#ff7a00"/>
+                <circle cx="585" cy="110" r="12" fill="#ff7a00"/>
+                <circle cx="635" cy="160" r="12" fill="#ff7a00"/>
+                <circle cx="550" cy="190" r="12" fill="#ff7a00"/>
+
+                <text class="svgTxt" x="80" y="225" font-size="13" font-weight="800" fill="rgba(13,23,46,.70)">
+                  Semua partikel berada dalam fase gas yang sama
+                </text>
+              </g>
+
+              <!-- mode phase -->
+              <g class="viewPhase" style="display:none">
+                <text class="svgTxt" x="50" y="58" font-size="16" font-weight="900" fill="rgba(13,23,46,.82)">
+                  Highlight fase: hanya ada satu fase
+                </text>
+                <rect x="70" y="82" width="620" height="130" rx="22" fill="rgba(0,194,255,.20)" stroke="rgba(0,194,255,.26)" stroke-width="2"/>
+                <text class="svgTxt" x="310" y="155" font-size="26" font-weight="900" fill="rgba(0,90,130,.92)">
+                  GAS
+                </text>
+              </g>
+            </svg>
+            <div id="homogenImageBox" class="inlineParticleBox">
+  <img id="homogenImagePreview" src="" alt="Representasi partikel homogen">
+  <div class="cap">Representasi partikel kesetimbangan homogen.</div>
+</div>
+
+            <div class="chipEqn">
+              2SO₂(g) + O₂(g) ⇌ 2SO₃(g)
+            </div>
+          </div>
+
+          <div class="legend">
+  <div class="legendItem"><span class="dot gas1"></span> SO₂(g)</div>
+  <div class="legendItem"><span class="dot gas2"></span> O₂(g)</div>
+  <div class="legendItem"><span class="dot prod"></span> SO₃(g)</div>
+  <div class="legendItem">Semua satu fase: gas</div>
+</div>
+</div>
+
+<div class="modeBox" style="margin-top:14px">
+          <b>Inti pengamatan:</b>
+          <p class="muted" style="margin:6px 0 0 0">
+            Pada kesetimbangan homogen, semua zat yang terlibat berada pada fase yang sama, sehingga sistem tampak seragam.
+          </p>
+        </div>
+      </div>
+
+      <!-- HETEROGEN -->
+      <div class="card solid">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h2>🟪 Kesetimbangan Heterogen</h2>
+            <p class="muted" style="margin:0">
+              Komponen reaksi berada pada lebih dari satu fase.
+            </p>
+          </div>
+          <div class="pill"><b>Lebih dari satu fase</b></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="margin-bottom:10px">
+          <button class="btn ghost toggleMode" data-target="heterogen" data-mode="macro">Makroskopis</button>
+          <button class="btn ghost toggleMode" data-target="heterogen" data-mode="particle">Partikel</button>
+          <button class="btn ghost toggleMode" data-target="heterogen" data-mode="phase">Highlight fase</button>
+        </div>
+
+        <div class="system">
+          <div class="jar">
+            <div class="clickHint" id="hintHeterogen">Klik mode partikel untuk buka gambar</div>
+            <svg id="svgHeterogen" viewBox="0 0 760 320" width="100%" height="100%">
+              <rect x="25" y="22" width="710" height="220" rx="24" fill="rgba(255,255,255,.55)" stroke="rgba(13,23,46,.14)"/>
+
+              <!-- mode macro -->
+              <g class="viewMacro">
+                <text class="svgTxt" x="50" y="58" font-size="16" font-weight="900" fill="rgba(13,23,46,.82)">
+                  Tampilan makroskopis: sistem tampak terdiri atas beberapa fase
+                </text>
+                <rect x="70" y="92" width="620" height="95" rx="18" fill="rgba(200,230,255,.18)" stroke="rgba(43,124,255,.12)"/>
+                <rect x="70" y="188" width="620" height="26" rx="14" fill="rgba(124,58,237,.26)" stroke="rgba(124,58,237,.18)"/>
+                <text class="svgTxt" x="320" y="150" font-size="22" font-weight="800" fill="rgba(43,124,255,.92)">
+                  Gas
+                </text>
+                <text class="svgTxt" x="315" y="206" font-size="18" font-weight="800" fill="rgba(90,40,160,.92)">
+                  Padatan
+                </text>
+              </g>
+
+              <!-- mode particle -->
+              <g class="viewParticle clickableView" id="particleHeterogenView" style="display:none">
+                <text class="svgTxt" x="50" y="58" font-size="16" font-weight="900" fill="rgba(13,23,46,.82)">
+                  Tampilan partikel: padatan terkumpul di bawah, gas menyebar di atas
+                </text>
+
+                <!-- gas particles -->
+                <circle cx="140" cy="110" r="12" fill="#00c2ff"/>
+                <circle cx="220" cy="145" r="12" fill="#00c2ff"/>
+                <circle cx="310" cy="115" r="12" fill="#00c2ff"/>
+                <circle cx="405" cy="155" r="12" fill="#00c2ff"/>
+                <circle cx="520" cy="120" r="12" fill="#00c2ff"/>
+                <circle cx="620" cy="145" r="12" fill="#00c2ff"/>
+
+                <!-- solid particles -->
+                <rect x="105" y="192" width="46" height="20" rx="8" fill="#7c3aed"/>
+                <rect x="180" y="188" width="54" height="24" rx="8" fill="#7c3aed"/>
+                <rect x="255" y="193" width="44" height="18" rx="8" fill="#7c3aed"/>
+                <rect x="336" y="187" width="58" height="25" rx="8" fill="#7c3aed"/>
+                <rect x="425" y="191" width="48" height="20" rx="8" fill="#7c3aed"/>
+                <rect x="500" y="188" width="60" height="24" rx="8" fill="#7c3aed"/>
+                <rect x="590" y="192" width="52" height="19" rx="8" fill="#7c3aed"/>
+
+                <text class="svgTxt" x="85" y="230" font-size="13" font-weight="800" fill="rgba(13,23,46,.70)">
+                  Partikel padat dan gas berada pada fase yang berbeda
+                </text>
+              </g>
+
+              <!-- mode phase -->
+              <g class="viewPhase" style="display:none">
+                <text class="svgTxt" x="50" y="58" font-size="16" font-weight="900" fill="rgba(13,23,46,.82)">
+                  Highlight fase: terdapat dua fase
+                </text>
+                <rect x="70" y="92" width="620" height="95" rx="18" fill="rgba(0,194,255,.20)" stroke="rgba(0,194,255,.26)" stroke-width="2"/>
+                <rect x="70" y="188" width="620" height="26" rx="14" fill="rgba(124,58,237,.26)" stroke="rgba(124,58,237,.20)" stroke-width="2"/>
+                <text class="svgTxt" x="330" y="145" font-size="24" font-weight="900" fill="rgba(0,90,130,.92)">GAS</text>
+                <text class="svgTxt" x="312" y="207" font-size="18" font-weight="900" fill="rgba(90,40,160,.92)">PADAT</text>
+              </g>
+            </svg>
+
+            <div id="heterogenImageBox" class="inlineParticleBox">
+  <img id="heterogenImagePreview" src="" alt="Representasi partikel heterogen">
+  <div class="cap">Representasi partikel kesetimbangan heterogen.</div>
+</div>
+            <div class="chipEqn">
+              CaCO₃(s) ⇌ CaO(s) + CO₂(g)
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="legendItem"><span class="dot solid"></span> CaCO₃(s) / CaO(s)</div>
+            <div class="legendItem"><span class="dot aq"></span> CO₂(g)</div>
+            <div class="legendItem">Terdapat fase padat dan gas</div>
+          </div>
+        </div>
+
+        <div class="modeBox" style="margin-top:14px">
+          <b>Inti pengamatan:</b>
+          <p class="muted" style="margin:6px 0 0 0">
+            Pada kesetimbangan heterogen, zat-zat yang terlibat berada pada lebih dari satu fase, sehingga sistem tampak tidak seragam.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- tabel ringkas -->
+    <div class="card solid" style="margin-top:16px">
+      <h2>📋 Ringkasan Perbedaan</h2>
+      <table class="tableMini">
+        <thead>
+          <tr>
+            <th>Jenis Kesetimbangan</th>
+            <th>Ciri Utama</th>
+            <th>Contoh Reaksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Homogen</b></td>
+            <td>Semua zat berada pada fase yang sama</td>
+            <td>2SO₂(g) + O₂(g) ⇌ 2SO₃(g)</td>
+          </tr>
+          <tr>
+            <td><b>Heterogen</b></td>
+            <td>Zat-zat berada pada lebih dari satu fase</td>
+            <td>CaCO₃(s) ⇌ CaO(s) + CO₂(g)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- refleksi -->
+    <div class="card solid" style="margin-top:16px">
+      <h2>📝 Refleksi Singkat</h2>
+      <p class="muted" style="margin-top:-4px">
+        Tuliskan dengan bahasamu sendiri, apa perbedaan utama antara kesetimbangan homogen dan heterogen.
+      </p>
+      <textarea id="reflection5" placeholder="...."></textarea>
+
+      <div class="divider"></div>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
+          <button class="btn ghost" id="btnSaveOnly">💾 Simpan saja</button>
+        </div>
+        <button class="btn primary" id="btnNext">Simpan & Lanjut ke Halaman 6 ➜</button>
+      </div>
+
+      <p class="muted" style="margin:10px 0 0 0">
+        Pada Halaman 6, kamu akan mengelompokkan persamaan reaksi ke dalam jenis kesetimbangan yang tepat.
+      </p>
+    </div>
+  </main>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div class="modalHead">
+        <b id="modalTitle">Modal</b>
+        <button class="iconBtn" id="modalClose" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalActions">
+        <button class="btn ghost" id="modalSecondary">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (q)=>document.querySelector(q);
+    const $$ = (q)=>Array.from(document.querySelectorAll(q));
+    const HOMOGEN_IMG = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-x56CrybL9qVdyPrssiuhiN22cJRS-Z0owEu4KbGSwseGU1-kRoXm79zw7Q-z4GEhyphenhyphenTmqmrSyC3CqjBNEE4D5GUDyAiUg5yEd4L99eRJ3SS2i-vhbqKg2_UZsdVfIZjA-Sobh7vo7EkKYVg_c1rsfudCJvdKwCbBG1_XGvWemzDZT0QZQp6hLPX3gQU2y/s1024/partikel%20homogen.png";
+
+  const HETEROGEN_IMG = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi25tS4h0SyWeiO2PR22cgJZy-qgv5ffsqJsruaNvJASmzb93D4zmzd4FyLze4fczBKiY4DK0ZlD4aSnXnkp2EIxGQkHF9UUymMwLOK-lBTc0v5NGgQpfrttPRZ5reD0mdxzBVMd7mHizJbO15odhusw4QtPblEdj20nwrGk0hUZ6EqJKfy27k6mL8mRt34/s1024/partikel%20heterogen.png";
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function toast(type, title, message, ms=4200){
+      const wrap = $("#toastWrap");
+      const t = document.createElement("div");
+      t.className = `toast ${type || "info"}`;
+      t.innerHTML = `
+        <div class="icon">${type==="ok"?"✓":type==="bad"?"!":"i"}</div>
+        <div class="t">
+          <b>${escapeHtml(title)}</b>
+          <span>${escapeHtml(message)}</span>
+        </div>
+        <button class="x" aria-label="Tutup">✕</button>
+      `;
+      t.querySelector(".x").addEventListener("click", ()=> t.remove());
+      wrap.appendChild(t);
+      if(ms) setTimeout(()=>{ if(t.isConnected) t.remove(); }, ms);
+    }
+
+    const modal = {
+      open({title, bodyHTML}){
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = bodyHTML;
+        $("#modalBackdrop").classList.add("show");
+      },
+      close(){
+        $("#modalBackdrop").classList.remove("show");
+        $("#modalBody").innerHTML = "";
+      }
+    };
+
+    $("#modalClose").addEventListener("click", ()=> modal.close());
+    $("#modalSecondary").addEventListener("click", ()=> modal.close());
+    $("#modalBackdrop").addEventListener("click", (e)=>{ if(e.target.id==="modalBackdrop") modal.close(); });
+
+    const DB_KEY = "KI_DB_v1";
+
+    function dbLoad(){
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users:{} }; }
+      catch { return { users:{} }; }
+    }
+
+    function dbSave(db){
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+
+    function getCurrentUser(){
+      try { return JSON.parse(localStorage.getItem("KI_CURRENT_USER")); }
+      catch { return null; }
+    }
+
+    function ensureUserInDB(user){
+      const db = dbLoad();
+      if(!user || !user.email) return null;
+
+      if(!db.users[user.email]){
+        db.users[user.email] = {
+          name: user.name || "-",
+          email: user.email,
+          visits: [],
+          scores: { sub1:null, sub2:null, sub3:null, sub4:null },
+          notes:  { sub1:"",   sub2:"",   sub3:"",   sub4:""   },
+          answers: {},
+          progress: {}
+        };
+        dbSave(db);
+      } else {
+        db.users[user.email].name = user.name || db.users[user.email].name;
+        dbSave(db);
+      }
+      return db;
+    }
+
+    function mustLogin(){
+      const user = getCurrentUser();
+      if(!user || !user.email){
+        alert("Kamu belum login. Kembali ke index.");
+        location.href = "index.html";
+        return null;
+      }
+      ensureUserInDB(user);
+      return user;
+    }
+
+    function saveAnswer(email, key, data){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].answers = db.users[email].answers || {};
+      db.users[email].answers[key] = { data, at: new Date().toISOString() };
+      dbSave(db);
+    }
+
+    function loadAnswer(email, key){
+      const db = dbLoad();
+      return db.users?.[email]?.answers?.[key]?.data || null;
+    }
+
+    function markProgress(email, pageKey, done=true){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].progress = db.users[email].progress || {};
+      db.users[email].progress[pageKey] = { done, at: new Date().toISOString() };
+      dbSave(db);
+    }
+
+    const user = mustLogin();
+
+ function switchMode(target, mode){
+  const svg = target === "homogen" ? $("#svgHomogen") : $("#svgHeterogen");
+  const hint = target === "homogen" ? $("#hintHomogen") : $("#hintHeterogen");
+  if(!svg) return;
+
+  svg.querySelectorAll(".viewMacro, .viewParticle, .viewPhase").forEach(el=>{
+    el.style.display = "none";
+  });
+
+  if(hint) hint.style.display = "none";
+
+  if(mode === "macro"){
+    svg.querySelector(".viewMacro").style.display = "";
+    hideInlineImages();
+  }
+
+  if(mode === "particle"){
+    svg.querySelector(".viewParticle").style.display = "";
+    if(hint) hint.style.display = "inline-flex";
+
+    if(target === "homogen"){
+      showInlineImage("homogen", HOMOGEN_IMG);
+    } else {
+      showInlineImage("heterogen", HETEROGEN_IMG);
+    }
+  }
+
+  if(mode === "phase"){
+    svg.querySelector(".viewPhase").style.display = "";
+    hideInlineImages();
+  }
+}
+
+    $$(".toggleMode").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        switchMode(btn.dataset.target, btn.dataset.mode);
+      });
+    });
+
+    $("#btnHelp").addEventListener("click", ()=>{
+      modal.open({
+        title:"Bantuan Halaman 5",
+        bodyHTML: `
+          <ol>
+            <li>Amati panel <b>homogen</b> dan <b>heterogen</b>.</li>
+            <li>Coba ubah tampilan menjadi <b>makroskopis</b>, <b>partikel</b>, dan <b>highlight fase</b>.</li>
+            <li>Bandingkan fase zat pada kedua contoh reaksi.</li>
+            <li>Tulis refleksi singkat dengan bahasamu sendiri.</li>
+            <li>Simpan lalu lanjut ke Halaman 6.</li>
+          </ol>
+        `
+      });
+    });
+
+    function validatePage5(){
+      const reflection = $("#reflection5").value.trim();
+      const ok = reflection.length >= 20;
+      return { ok, reflection };
+    }
+
+    function savePage5(){
+      const v = validatePage5();
+      if(!v.ok){
+        toast("bad","Refleksi belum lengkap","Tuliskan perbedaan homogen dan heterogen minimal satu penjelasan singkat.");
+        return null;
+      }
+
+      const data = {
+        reflection: v.reflection,
+        savedAt: new Date().toISOString()
+      };
+
+      saveAnswer(user.email, "page5", data);
+      markProgress(user.email, "page5", true);
+      localStorage.setItem("KI_Page5", JSON.stringify(data));
+
+      toast("ok","Halaman 5 tersimpan","Pemahaman tentang homogen dan heterogen berhasil disimpan.");
+      return data;
+    }
+
+   const btnAutoFill = $("#btnAutoFill");
+
+if (btnAutoFill) {
+  btnAutoFill.addEventListener("click", ()=>{
+    $("#reflection5").value = "Kesetimbangan homogen terjadi jika semua zat berada dalam satu fase, misalnya semua gas. Kesetimbangan heterogen terjadi jika zat-zat berada dalam lebih dari satu fase, misalnya padat dan gas.";
+    toast("info","Contoh refleksi terisi","Kamu boleh mengeditnya sesuai pemahamanmu.");
+  });
+}
+
+    $("#btnSaveOnly").addEventListener("click", ()=>{
+      const d = savePage5();
+      if(!d) return;
+
+      modal.open({
+        title:"Tersimpan ✅",
+        bodyHTML: `
+          <p><b>Refleksi kamu berhasil disimpan.</b></p>
+          <p>${escapeHtml(d.reflection)}</p>
+        `
+      });
+    });
+
+    $("#btnNext").addEventListener("click", ()=>{
+      const d = savePage5();
+      if(!d) return;
+      window.location.href = "hlm6.html";
+    });
+
+    const saved = loadAnswer(user.email, "page5");
+    if(saved){
+      $("#reflection5").value = saved.reflection || "";
+      toast("info","Data sebelumnya dimuat","Jawaban Halaman 5 yang terakhir tersimpan sudah ditampilkan.");
+    } else {
+      setTimeout(()=>{
+        toast("info","Mulai eksplorasi","Bandingkan visual homogen dan heterogen, lalu tulis refleksi singkat.");
+      }, 700);
+    }
+    function hideInlineImages(){
+  $("#homogenImageBox")?.classList.remove("show");
+  $("#heterogenImageBox")?.classList.remove("show");
+}
+
+function showInlineImage(target, imgUrl){
+  hideInlineImages();
+
+  if(target === "homogen"){
+    const box = $("#homogenImageBox");
+    const img = $("#homogenImagePreview");
+    if(box && img){
+      img.src = imgUrl;
+      box.classList.add("show");
+    }
+  }
+
+  if(target === "heterogen"){
+    const box = $("#heterogenImageBox");
+    const img = $("#heterogenImagePreview");
+    if(box && img){
+      img.src = imgUrl;
+      box.classList.add("show");
+    }
+  }
+}
+  </script>
+  <script>
+/* =====================================================
+   SIMPAN DATA SISWA SUB BAB 1 KE DASHBOARD GURU
+   Tidak mengubah layout halaman
+===================================================== */
+
+const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+/* GANTI BAGIAN INI SESUAI FILE HALAMAN */
+const DATA_HALAMAN_ID = "hlm5";
+const DATA_HALAMAN_JUDUL = "Halaman 5: Kesetimbangan Homogen dan Heterogen";
+
+/* Ambil identitas siswa dari login utama */
+function getCurrentStudentData(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+    return {
+      nama: user.name || user.nama || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+/* Ambil semua jawaban dari input, textarea, select, radio, checkbox */
+function collectPageAnswers(){
+  const hasil = [];
+
+  document.querySelectorAll("input, textarea, select").forEach((el, index) => {
+    const type = (el.type || "").toLowerCase();
+    const label =
+      document.querySelector(`label[for="${el.id}"]`)?.innerText?.trim() ||
+      el.closest(".field-group")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".field")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".card")?.querySelector("h2, h3")?.innerText?.trim() ||
+      el.name ||
+      el.id ||
+      `Isian ${index + 1}`;
+
+    let value = "";
+
+    if(type === "radio"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dipilih";
+    }else if(type === "checkbox"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dicentang";
+    }else{
+      value = el.value?.trim?.() || "";
+      if(!value) return;
+    }
+
+    hasil.push({
+      label: label,
+      jawaban: value
+    });
+  });
+
+  return hasil;
+}
+
+/* Simpan data halaman ke database guru */
+function simpanDataSubBab1KeGuru(status = "tersimpan otomatis"){
+  const siswa = getCurrentStudentData();
+  const jawaban = collectPageAnswers();
+
+  if(!siswa.email || siswa.email === "-"){
+    return;
+  }
+
+  let db = {};
+  try{
+    db = JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+  }catch(e){
+    db = {};
+  }
+
+  if(!db[siswa.email]){
+    db[siswa.email] = {
+      identitas: siswa,
+      halaman: {},
+      waktuMulai: new Date().toLocaleString("id-ID")
+    };
+  }
+
+  db[siswa.email].identitas = siswa;
+  db[siswa.email].halaman[DATA_HALAMAN_ID] = {
+    judul: DATA_HALAMAN_JUDUL,
+    status: status,
+    jawaban: jawaban,
+    waktuSimpan: new Date().toLocaleString("id-ID")
+  };
+  db[siswa.email].waktuUpdateTerakhir = new Date().toLocaleString("id-ID");
+
+  localStorage.setItem(DATA_GURU_SUBBAB1_KEY, JSON.stringify(db));
+}
+
+/* Simpan otomatis ketika siswa mengetik/memilih jawaban */
+document.addEventListener("input", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+document.addEventListener("change", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+/* Simpan juga saat tombol apa pun diklik */
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button") || e.target.closest("a")){
+    simpanDataSubBab1KeGuru("tersimpan dari aksi siswa");
+  }
+});
+
+/* Simpan saat siswa meninggalkan halaman */
+window.addEventListener("beforeunload", () => {
+  simpanDataSubBab1KeGuru("tersimpan saat keluar halaman");
+});
+
+/* Simpan awal saat halaman dibuka */
+simpanDataSubBab1KeGuru("halaman dibuka");
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 1,
+    pageKey: "hlm5",
+    pageTitle: "Halaman 5 — Kesetimbangan Homogen dan Heterogen"
+  });
+});
+</script>
+</body>
+</html>

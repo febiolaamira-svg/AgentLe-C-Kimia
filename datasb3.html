@@ -1,0 +1,2218 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data Sub Bab 3 • Admin Guru</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --red:#ff5c8a;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+
+    @keyframes twinkle{
+      0%,100%{opacity:.46}
+      50%{opacity:.66}
+    }
+
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+
+    .brand-title{
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      font-family:inherit;
+    }
+
+    .btn{
+      background:rgba(255,255,255,.06);
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+
+    .btn:hover,.btn-primary:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.24);
+    }
+
+    main{
+      position:relative;
+      z-index:2;
+    }
+
+    .wrap{
+      padding:clamp(18px,4vw,46px);
+      display:flex;
+      justify-content:center;
+    }
+
+    .container{
+      width:min(1320px,100%);
+      display:grid;
+      gap:16px;
+    }
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(34px,4.6vw,62px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+
+    .subtitle{
+      margin:12px 0 0;
+      max-width:980px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+
+    .card-inner{
+      padding:clamp(18px,2.6vw,28px);
+    }
+
+    h2,h3{
+      margin:0 0 10px;
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+
+    h2{
+      font-size:clamp(22px,2.4vw,30px);
+    }
+
+    .muted{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+
+    @media(max-width:900px){
+      .stats-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media(max-width:560px){
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .stat{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      padding:18px;
+      border:2px solid rgba(124,77,255,.26);
+      box-shadow:var(--shadow2);
+    }
+
+    .stat b{
+      display:block;
+      font-size:28px;
+      color:#312e81;
+      margin-bottom:4px;
+    }
+
+    .stat span{
+      color:#4b5563;
+      font-weight:800;
+      font-size:13px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:14px;
+    }
+
+    .search,.select{
+      border-radius:16px;
+      border:2px solid rgba(124,77,255,.32);
+      background:#ffffff;
+      color:#111827;
+      padding:12px 14px;
+      font-family:inherit;
+      font-weight:800;
+      outline:none;
+    }
+
+    .search{
+      flex:1;
+      min-width:240px;
+    }
+
+    .table-wrap{
+      margin-top:14px;
+      overflow:auto;
+      border-radius:22px;
+      border:2px solid rgba(124,77,255,.32);
+      background:#ffffff;
+      box-shadow:var(--shadow2);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1250px;
+      color:#111827;
+      background:#ffffff;
+    }
+
+    th,td{
+      padding:12px;
+      border-bottom:1px solid #e5e7eb;
+      text-align:left;
+      vertical-align:top;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    th{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:linear-gradient(135deg,#ff4fd8,#7c4dff);
+      color:#ffffff;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    tr:hover td{
+      background:#f8f5ff;
+    }
+
+    .score-badge{
+      display:inline-flex;
+      padding:8px 11px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#312e81;
+      font-weight:950;
+      white-space:nowrap;
+    }
+
+    .score-good{
+      background:#ecfdf5;
+      color:#166534;
+    }
+
+    .score-mid{
+      background:#fff7ed;
+      color:#9a3412;
+    }
+
+    .score-low{
+      background:#fee2e2;
+      color:#991b1b;
+    }
+
+    .small-btn{
+      border:1px solid #c7d2fe;
+      background:#ffffff;
+      color:#312e81;
+      padding:9px 11px;
+      border-radius:12px;
+      cursor:pointer;
+      font-family:inherit;
+      font-weight:950;
+      margin:2px;
+    }
+
+    .small-btn:hover{
+      background:#f6f3ff;
+    }
+
+    .empty{
+      display:none;
+      padding:18px;
+      border-radius:20px;
+      background:rgba(255,224,130,.10);
+      border:1px solid rgba(255,224,130,.30);
+      color:#fff2bd;
+      line-height:1.7;
+      font-weight:850;
+      margin-top:14px;
+    }
+
+    .empty.show{
+      display:block;
+    }
+
+    .detail{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:50;
+      background:rgba(0,0,0,.62);
+      padding:18px;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .detail.show{
+      display:flex;
+    }
+
+    .detail-card{
+      width:min(1060px, 100%);
+      max-height:86vh;
+      overflow:auto;
+      border-radius:26px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.34);
+      box-shadow:0 22px 70px rgba(0,0,0,.35);
+    }
+
+    .detail-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      padding:18px;
+      border-bottom:1px solid #e5e7eb;
+      background:#f8f5ff;
+    }
+
+    .detail-body{
+      padding:18px;
+      display:grid;
+      gap:12px;
+    }
+
+    .detail-row{
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      border-radius:16px;
+      padding:12px;
+      line-height:1.6;
+      font-weight:700;
+      white-space:pre-wrap;
+    }
+    .compact-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin-top:16px;
+  margin-bottom:16px;
+  overflow:hidden;
+  border-radius:22px;
+  background:#ffffff;
+  color:#111827;
+  box-shadow:0 18px 54px rgba(0,0,0,.28);
+  border:2px solid rgba(124,77,255,.35);
+}
+
+.compact-table th,
+.compact-table td{
+  padding:14px 13px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+  font-size:14px;
+  vertical-align:middle;
+  color:#111827;
+  line-height:1.5;
+}
+
+.compact-table th{
+  background:linear-gradient(135deg,#ff4fd8,#7c4dff);
+  color:#ffffff;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+.compact-table tbody tr:nth-child(odd) td{
+  background:#ffffff;
+}
+
+.compact-table tbody tr:nth-child(even) td{
+  background:#f8f5ff;
+}
+
+.compact-table tbody tr:hover td{
+  background:#eef2ff;
+}
+
+.compact-table td:first-child{
+  font-weight:950;
+  color:#312e81;
+}
+
+.compact-table td:nth-child(4),
+.compact-table td:nth-child(5){
+  font-weight:950;
+  text-align:center;
+  color:#166534;
+}
+
+.compact-table td:nth-child(6){
+  color:#7c2d12;
+  font-weight:800;
+}
+
+.compact-table td:nth-child(7){
+  color:#374151;
+  font-weight:800;
+}
+
+.student-card{
+  background:
+    radial-gradient(700px 220px at 20% 0%, rgba(255,79,216,.20), transparent 60%),
+    radial-gradient(700px 260px at 85% 20%, rgba(45,108,255,.20), transparent 60%),
+    rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:28px;
+  padding:0;
+  margin-top:14px;
+  box-shadow:0 18px 54px rgba(0,0,0,.30);
+  overflow:hidden;
+}
+
+.student-summary{
+  width:100%;
+  list-style:none;
+  cursor:pointer;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  background:linear-gradient(135deg, rgba(124,77,255,.35), rgba(255,79,216,.18));
+}
+
+.student-summary::-webkit-details-marker{
+  display:none;
+}
+
+.student-summary h2{
+  margin:0;
+  font-size:22px;
+  color:#ffffff;
+  font-weight:950;
+  letter-spacing:.01em;
+}
+
+.student-summary p{
+  margin:8px 0 0;
+  color:rgba(255,255,255,.86);
+  font-size:14px;
+  font-weight:750;
+}
+
+.student-summary::after{
+  content:"Buka detail ▼";
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.13);
+  font-size:12px;
+  color:rgba(255,255,255,.86);
+  font-weight:900;
+  height:max-content;
+}
+
+details[open] > .student-summary::after{
+  content:"Tutup detail ▲";
+}
+
+.student-body{
+  padding:0 16px 16px;
+  max-height:520px;
+  overflow:auto;
+}
+
+.student-mini{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.badge{
+  padding:8px 11px;
+  border-radius:999px;
+  background:#eef2ff;
+  border:1px solid #c7d2fe;
+  font-size:12px;
+  color:#312e81;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+.badge.good{
+  background:#dcfce7;
+  border-color:#86efac;
+  color:#166534;
+}
+
+.badge.warn{
+  background:#fef3c7;
+  border-color:#fcd34d;
+  color:#92400e;
+}
+
+.page-block{
+  margin-top:14px;
+  background:#ffffff;
+  border:2px solid rgba(124,77,255,.28);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 12px 34px rgba(0,0,0,.18);
+}
+
+.page-title{
+  padding:13px 15px;
+  background:linear-gradient(135deg,#312e81,#7c4dff);
+  color:#ffffff;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  font-weight:950;
+}
+
+.answer-list{
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+@media(max-width:900px){
+  .answer-list{
+    grid-template-columns:1fr;
+  }
+}
+
+.answer-item{
+  background:#f9fafb;
+  color:#111827;
+  border-radius:16px;
+  padding:13px;
+  border:1px solid #e5e7eb;
+  min-height:86px;
+  box-shadow:0 6px 18px rgba(15,23,42,.08);
+}
+
+.answer-item b{
+  display:block;
+  font-size:13px;
+  color:#312e81;
+  margin-bottom:6px;
+  font-weight:950;
+}
+
+.answer-item div{
+  white-space:pre-wrap;
+  font-size:14px;
+  line-height:1.6;
+  color:#111827;
+  max-height:150px;
+  overflow:auto;
+  font-weight:650;
+}
+
+.score-good{
+  background:#dcfce7 !important;
+  color:#166534 !important;
+}
+
+.score-mid{
+  background:#fef3c7 !important;
+  color:#92400e !important;
+}
+
+.score-low{
+  background:#fee2e2 !important;
+  color:#991b1b !important;
+}
+.print-area{
+  display:none;
+}
+.pdf-download-area{
+  display:none;
+}
+
+.pdf-export{
+  background:#ffffff;
+  color:#111827;
+  font-family:Arial, sans-serif;
+  padding:22px;
+  width:1123px;
+}
+
+.pdf-cover{
+  border:2px solid #7c4dff;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  background:#f8f5ff;
+}
+
+.pdf-cover h1{
+  margin:0;
+  color:#312e81;
+  font-size:22px;
+  text-align:center;
+}
+
+.pdf-cover p{
+  margin:6px 0 0;
+  color:#4b5563;
+  font-size:11px;
+  text-align:center;
+}
+
+.pdf-summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:12px 0 14px;
+}
+
+.pdf-stat{
+  border:1px solid #c7d2fe;
+  background:#ffffff;
+  border-radius:10px;
+  padding:9px;
+}
+
+.pdf-stat b{
+  display:block;
+  font-size:18px;
+  color:#312e81;
+}
+
+.pdf-stat span{
+  display:block;
+  margin-top:2px;
+  font-size:9px;
+  text-transform:uppercase;
+  color:#4b5563;
+  font-weight:bold;
+  letter-spacing:.04em;
+}
+
+.pdf-rekap-table,
+.pdf-answer-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:0 !important;
+  table-layout:fixed;
+}
+
+.pdf-rekap-table{
+  margin-bottom:14px;
+}
+
+.pdf-rekap-table th,
+.pdf-rekap-table td,
+.pdf-answer-table th,
+.pdf-answer-table td{
+  border:1px solid #d1d5db;
+  padding:6px;
+  font-size:9.5px;
+  vertical-align:top;
+  line-height:1.45;
+  position:static !important;
+  top:auto !important;
+  z-index:auto !important;
+  white-space:normal !important;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+
+.pdf-rekap-table th,
+.pdf-answer-table th{
+  background:#ede9fe;
+  color:#312e81;
+  font-weight:bold;
+  text-align:left;
+}
+
+.pdf-student{
+  margin:0 0 12px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  overflow:hidden;
+  page-break-inside:avoid;
+}
+
+.pdf-student-head{
+  background:#ede9fe;
+  padding:9px 10px;
+  border-bottom:1px solid #d1d5db;
+}
+
+.pdf-student-head h2{
+  margin:0;
+  font-size:14px;
+  color:#312e81;
+}
+
+.pdf-student-head p{
+  margin:4px 0 0;
+  font-size:9px;
+  color:#374151;
+  line-height:1.4;
+}
+
+.pdf-page{
+  padding:9px 10px;
+  border-top:1px solid #e5e7eb;
+}
+
+.pdf-page h3{
+  margin:0 0 5px;
+  font-size:11px;
+  color:#111827;
+}
+
+.pdf-page-time{
+  margin:0 0 7px;
+  font-size:9px;
+  color:#6b7280;
+}
+
+.pdf-answer-table th{
+  width:28%;
+}
+
+.pdf-answer-table td{
+  width:72%;
+  color:#111827;
+  white-space:pre-wrap;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+
+.pdf-empty{
+  padding:10px;
+  text-align:center;
+  font-size:10px;
+  color:#6b7280;
+  border:1px dashed #cbd5e1;
+  border-radius:10px;
+  background:#f8fafc;
+}
+
+@media print{
+  body{
+    background:#ffffff !important;
+    color:#111827 !important;
+  }
+
+  .stars,
+  .grain,
+  .vignette,
+  .topbar,
+  main,
+  .detail{
+    display:none !important;
+  }
+
+  .print-area{
+    display:block !important;
+    padding:22px;
+    color:#111827;
+    font-family:Arial, sans-serif;
+  }
+
+  .print-header{
+    text-align:center;
+    border-bottom:3px solid #7c4dff;
+    padding-bottom:12px;
+    margin-bottom:16px;
+  }
+
+  .print-header h1{
+    margin:0;
+    font-size:22px;
+    color:#312e81;
+  }
+
+  .print-header p{
+    margin:6px 0 0;
+    font-size:12px;
+    color:#4b5563;
+  }
+
+  .print-summary{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+    margin-bottom:16px;
+  }
+
+  .print-stat{
+    border:1px solid #c7d2fe;
+    background:#f8f5ff;
+    border-radius:10px;
+    padding:10px;
+  }
+
+  .print-stat b{
+    display:block;
+    font-size:18px;
+    color:#312e81;
+  }
+
+  .print-stat span{
+    display:block;
+    margin-top:3px;
+    font-size:9px;
+    color:#4b5563;
+    text-transform:uppercase;
+    font-weight:bold;
+    letter-spacing:.06em;
+  }
+
+  .print-table{
+    width:100%;
+    border-collapse:collapse;
+    color:#111827;
+  }
+
+  .print-table th,
+  .print-table td{
+    border:1px solid #d1d5db;
+    padding:7px;
+    font-size:10px;
+    vertical-align:top;
+    line-height:1.35;
+  }
+
+  .print-table th{
+    background:#ede9fe !important;
+    color:#312e81 !important;
+    font-weight:bold;
+    text-transform:uppercase;
+  }
+
+  .print-detail{
+    margin-top:18px;
+  }
+
+  .print-card{
+    page-break-inside:avoid;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    margin-bottom:12px;
+    overflow:hidden;
+  }
+
+  .print-card-head{
+    background:#f8f5ff;
+    padding:9px;
+    border-bottom:1px solid #d1d5db;
+  }
+
+  .print-card-head h2{
+    margin:0;
+    font-size:13px;
+    color:#312e81;
+  }
+
+  .print-card-head p{
+    margin:4px 0 0;
+    font-size:10px;
+    color:#4b5563;
+  }
+
+  .print-json{
+    white-space:pre-wrap;
+    font-size:9px;
+    line-height:1.35;
+    padding:9px;
+    background:#ffffff;
+  }
+}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">SB3</div>
+      <div>
+        <div class="brand-title">Data Sub Bab 3</div>
+        <div class="brand-sub">Admin Guru • Rekap Jawaban, Skor, dan Aktivitas Siswa</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a
+        class="btn"
+        href="h1.html"
+        onclick="localStorage.setItem('KI_GO_TO','admin')"
+      >
+        ⬅ Dashboard Guru
+      </a>
+
+      <a class="btn-primary" href="sb31.html">
+        Buka Sub Bab 3
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill">
+        <span class="hex"></span>
+       <span>Rekap Firebase Online • Sub Bab 3</span>
+      </div>
+
+      <section class="hero">
+        <h1 class="title">📊 Data <span class="accent">Sub Bab 3</span></h1>
+        <p class="subtitle">
+          Halaman ini membaca seluruh data jawaban peserta didik.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>Ringkasan</h2>
+
+          <div class="stats-grid">
+            <div class="stat">
+              <b id="totalData">0</b>
+              <span>Total data masuk</span>
+            </div>
+
+            <div class="stat">
+              <b id="totalSiswa">0</b>
+              <span>Siswa/kelompok unik</span>
+            </div>
+
+            <div class="stat">
+              <b id="rataSkor">0</b>
+              <span>Rata-rata skor</span>
+            </div>
+
+            <div class="stat">
+              <b id="skorTertinggi">0</b>
+              <span>Skor tertinggi</span>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <input
+              id="searchInput"
+              class="search"
+              type="search"
+              placeholder="Cari nama, kelas, kelompok, halaman, atau waktu..."
+              oninput="renderDataSB3()"
+            >
+
+            <select id="filterHalaman" class="select" onchange="renderDataSB3()">
+              <option value="">Semua halaman</option>
+              <option value="sb31">sb31 - Orientasi masalah</option>
+              <option value="sb32">sb32 - Organisasi belajar</option>
+              <option value="sb33">sb33 - Percobaan virtual</option>
+              <option value="sb34">sb34 - Penyajian hasil</option>
+              <option value="sb35">sb35 - Kuis</option>
+              <option value="sb36">sb36 - Refleksi</option>
+            </select>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn-primary" type="button" onclick="downloadExcelSB3()">
+  ⬇ Export Excel
+</button>
+
+<button class="btn-primary" type="button" onclick="downloadPDFSB3()">
+  ⬇ Download PDF
+</button>
+
+<button class="btn" type="button" onclick="bukaSemua()">
+  Buka Semua
+</button>
+
+<button class="btn" type="button" onclick="tutupSemua()">
+  Tutup Semua
+</button>
+
+<button class="btn" type="button" onclick="hapusSemuaData()">
+  Reset Data
+</button>
+            </div>
+          </div>
+
+          <div id="emptyState" class="empty">
+            Belum ada data Sub Bab 3. Data akan muncul setelah siswa menyimpan jawaban atau menyelesaikan aktivitas pada halaman sb31 sampai sb36.
+          </div>
+
+          <div id="dataContainer"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="printArea" class="print-area"></div>
+<div id="pdfDownloadArea" class="pdf-download-area"></div>
+  <div class="detail" id="detailModal">
+    <div class="detail-card">
+      <div class="detail-head">
+        <div>
+          <h2 id="detailTitle">Detail Data</h2>
+          <p
+            id="detailMeta"
+            style="margin:6px 0 0; color:#4b5563; font-weight:700;"
+          ></p>
+        </div>
+
+        <button
+          class="btn"
+          type="button"
+          onclick="closeDetail()"
+          style="color:#111827; border-color:#c7d2fe;"
+        >
+          Tutup
+        </button>
+      </div>
+
+      <div class="detail-body" id="detailBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "dataAdminGuruSB3";
+
+    function getData(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      }catch(e){
+        return [];
+      }
+    }
+
+    function setData(data){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function scoreClass(skor){
+      const n = Number(skor) || 0;
+
+      if(n >= 80) return "score-good";
+      if(n >= 60) return "score-mid";
+
+      return "score-low";
+    }
+
+    function getSiswaKey(item){
+      return [
+        item.nama || "",
+        item.kelas || "",
+        item.kelompok || "",
+        item.email || ""
+      ].join("|").toLowerCase();
+    }
+
+    function updateStats(data){
+      const total = data.length;
+      const unik = new Set(data.map(getSiswaKey).filter(Boolean)).size;
+
+      const skorValid = data
+        .map(item => Number(item.skor))
+        .filter(n => !Number.isNaN(n));
+
+      const rata = skorValid.length
+        ? Math.round(skorValid.reduce((a,b) => a + b, 0) / skorValid.length)
+        : 0;
+
+      const max = skorValid.length ? Math.max(...skorValid) : 0;
+
+      document.getElementById("totalData").textContent = total;
+      document.getElementById("totalSiswa").textContent = unik;
+      document.getElementById("rataSkor").textContent = rata;
+      document.getElementById("skorTertinggi").textContent = max;
+    }
+
+    function ringkas(item){
+      if(item.ringkasan){
+        return item.ringkasan;
+      }
+
+      if(item.jawaban){
+        const keys = Object.keys(item.jawaban);
+
+        return keys
+          .slice(0, 3)
+          .map(k => `${k}: ${JSON.stringify(item.jawaban[k])}`)
+          .join(" | ");
+      }
+
+      return "-";
+    }
+
+    function kelompokkanData(data){
+  const map = {};
+
+  data.forEach((item) => {
+    const key = getSiswaKey(item) || `tanpa-identitas-${item.id}`;
+
+    if(!map[key]){
+      map[key] = {
+        identitas:{
+          nama:item.nama || "-",
+          kelas:item.kelas || "-",
+          kelompok:item.kelompok || "-",
+          email:item.email || "-"
+        },
+        data:[],
+        totalSkor:0,
+        jumlahSkor:0,
+        updateTerakhir:"-"
+      };
+    }
+
+    map[key].data.push(item);
+
+    const skor = Number(item.skor);
+    if(!Number.isNaN(skor)){
+      map[key].totalSkor += skor;
+      map[key].jumlahSkor += 1;
+    }
+
+    if(item.waktu){
+      map[key].updateTerakhir = item.waktu;
+    }
+  });
+
+  return Object.values(map);
+}
+
+function rataSkorKelompok(group){
+  if(!group.jumlahSkor) return 0;
+  return Math.round(group.totalSkor / group.jumlahSkor);
+}
+
+function halamanTerakhirSB3(group){
+  if(!group.data.length) return "-";
+  const last = group.data[group.data.length - 1];
+  return `${last.halaman || "-"} ${last.judul ? "- " + last.judul : ""}`;
+}
+
+function detailJawabanHTML(item){
+  const jawaban = item.jawaban || {};
+  const keys = Object.keys(jawaban);
+
+  if(keys.length === 0){
+    return `
+      <div class="answer-item">
+        <b>Belum ada jawaban tertulis</b>
+        <div>-</div>
+      </div>
+    `;
+  }
+
+  return keys.map((key) => {
+    let value = jawaban[key];
+
+    if(typeof value === "object"){
+      value = JSON.stringify(value, null, 2);
+    }
+
+    return `
+      <div class="answer-item">
+        <b>${escapeHtml(key)}</b>
+        <div>${escapeHtml(value)}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderDataSB3(){
+  const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
+  const halaman = document.getElementById("filterHalaman").value;
+  const allData = getData();
+
+  updateStats(allData);
+
+  const empty = document.getElementById("emptyState");
+  const container = document.getElementById("dataContainer");
+
+  const filtered = allData.filter(item => {
+    const cocokHalaman = !halaman || item.halaman === halaman;
+
+    const text = [
+      item.waktu,
+      item.halaman,
+      item.judul,
+      item.nama,
+      item.kelas,
+      item.kelompok,
+      item.email,
+      item.status,
+      item.skor,
+      item.ringkasan,
+      JSON.stringify(item.jawaban || {})
+    ].join(" ").toLowerCase();
+
+    return cocokHalaman && text.includes(keyword);
+  });
+
+  if(allData.length === 0){
+    empty.classList.add("show");
+    empty.innerHTML = "Belum ada data Sub Bab 3. Data akan muncul setelah siswa menyimpan jawaban atau menyelesaikan aktivitas pada halaman sb31 sampai sb36.";
+    container.innerHTML = "";
+    return;
+  }
+
+  if(filtered.length === 0){
+    empty.classList.add("show");
+    empty.innerHTML = "Tidak ada data yang cocok dengan pencarian/filter.";
+    container.innerHTML = "";
+    return;
+  }
+
+  empty.classList.remove("show");
+
+  const groups = kelompokkanData(filtered);
+
+  const rekapTable = `
+    <table class="compact-table">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Kelas</th>
+          <th>Kelompok</th>
+          <th>Jumlah Data</th>
+          <th>Rata-rata Skor</th>
+          <th>Halaman Terakhir</th>
+          <th>Update Terakhir</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${groups.map((group) => {
+          const id = group.identitas;
+          return `
+            <tr>
+              <td>${escapeHtml(id.nama)}</td>
+              <td>${escapeHtml(id.kelas)}</td>
+              <td>${escapeHtml(id.kelompok)}</td>
+              <td>${group.data.length}</td>
+              <td>${rataSkorKelompok(group)}</td>
+              <td>${escapeHtml(halamanTerakhirSB3(group))}</td>
+              <td>${escapeHtml(group.updateTerakhir)}</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+
+  const detailCards = groups.map((group, index) => {
+    const id = group.identitas;
+    const rata = rataSkorKelompok(group);
+    const badgeClass = rata >= 80 ? "good" : "warn";
+
+    const halamanHTML = group.data.map((item) => {
+      return `
+        <div class="page-block">
+          <div class="page-title">
+            <span>${escapeHtml(item.halaman || "-")} - ${escapeHtml(item.judul || "-")}</span>
+            <span class="badge">${escapeHtml(item.waktu || "-")}</span>
+          </div>
+
+          <div style="padding:12px 14px 0;">
+            <span class="badge ${scoreClass(item.skor)}">Skor: ${escapeHtml(item.skor ?? "-")}</span>
+            <span class="badge">Status: ${escapeHtml(item.status || "-")}</span>
+          </div>
+
+          <div class="answer-list">
+            ${detailJawabanHTML(item)}
+          </div>
+
+          <div style="padding:0 14px 14px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="small-btn" type="button" onclick="openDetail('${item.id}')">
+              Lihat JSON
+            </button>
+            <button class="small-btn" type="button" onclick="hapusData('${item.id}')">
+              Hapus Data Ini
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <details class="student-card" ${index === 0 ? "open" : ""}>
+        <summary class="student-summary">
+          <div>
+            <h2>${escapeHtml(id.nama)}</h2>
+            <p>
+              Kelas: ${escapeHtml(id.kelas)} •
+              Kelompok: ${escapeHtml(id.kelompok)} •
+              Email: ${escapeHtml(id.email)}
+            </p>
+
+            <div class="student-mini">
+              <span class="badge">${group.data.length} data masuk</span>
+              <span class="badge ${badgeClass}">Rata-rata skor: ${rata}</span>
+              <span class="badge">Update: ${escapeHtml(group.updateTerakhir)}</span>
+            </div>
+          </div>
+        </summary>
+
+        <div class="student-body">
+          ${halamanHTML}
+        </div>
+      </details>
+    `;
+  }).join("");
+
+  container.innerHTML = rekapTable + detailCards;
+}
+
+    function openDetail(id){
+      const data = getData();
+      const item = data.find(row => row.id === id);
+
+      if(!item) return;
+
+      document.getElementById("detailTitle").textContent =
+        `${item.halaman || "-"} - ${item.judul || "Detail Data"}`;
+
+      document.getElementById("detailMeta").textContent =
+        `${item.nama || "-"} • ${item.kelas || "-"} • ${item.kelompok || "-"} • Skor ${item.skor ?? "-"}`;
+
+      document.getElementById("detailBody").innerHTML = `
+        <div class="detail-row">${escapeHtml(JSON.stringify(item, null, 2))}</div>
+      `;
+
+      document.getElementById("detailModal").classList.add("show");
+    }
+
+    function closeDetail(){
+      document.getElementById("detailModal").classList.remove("show");
+    }
+
+    function hapusData(id){
+      if(!confirm("Hapus data ini?")) return;
+
+      const data = getData().filter(item => item.id !== id);
+      setData(data);
+      renderDataSB3();
+    }
+
+    function hapusSemuaData(){
+      if(!confirm("Yakin menghapus semua data Sub Bab 3?")) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      renderDataSB3();
+    }
+    function bukaSemua(){
+  document.querySelectorAll(".student-card").forEach(item => item.open = true);
+}
+
+function tutupSemua(){
+  document.querySelectorAll(".student-card").forEach(item => item.open = false);
+}
+function labelRapiSB3(label){
+  const map = {
+    "JAWABAN1_OBSERVASI": "Jawaban observasi",
+    "JAWABAN2_ANALISIS": "Jawaban analisis",
+    "JAWABAN3_HIPOTESIS": "Jawaban hipotesis",
+    "JAWABAN4_KESIMPULAN": "Jawaban kesimpulan",
+    "JAWABAN5_PILIHAN": "Pilihan jawaban",
+
+    "jawaban1_observasi": "Jawaban observasi",
+    "jawaban2_analisis": "Jawaban analisis",
+    "jawaban3_hipotesis": "Jawaban hipotesis",
+    "jawaban4_kesimpulan": "Jawaban kesimpulan",
+    "jawaban5_pilihan": "Pilihan jawaban",
+
+    "selectedQuestions": "Rumusan masalah yang dipilih siswa",
+    "question": "Pertanyaan siswa",
+    "answer": "Jawaban siswa",
+    "reason": "Alasan siswa",
+    "reasoning": "Penjelasan/alasan siswa",
+
+    "obs1": "Observasi 1",
+    "obs2": "Observasi 2",
+    "obs3": "Observasi 3",
+
+    "ans1": "Jawaban analisis 1",
+    "ans2": "Jawaban analisis 2",
+    "ans3": "Jawaban analisis 3",
+    "ans4": "Jawaban analisis 4",
+
+    "analysis": "Analisis siswa",
+    "conclusion": "Kesimpulan siswa",
+    "finalConclusion": "Kesimpulan akhir siswa",
+    "reflection": "Refleksi siswa",
+    "reflection6": "Refleksi akhir Sub Bab 3",
+
+    "molaritas": "Molaritas",
+    "konsentrasi": "Konsentrasi",
+    "tekanan": "Tekanan",
+    "volume": "Volume",
+    "suhu": "Suhu",
+    "pergeseran": "Pergeseran kesetimbangan",
+    "arahPergeseran": "Arah pergeseran",
+    "faktor": "Faktor yang memengaruhi kesetimbangan",
+
+    "hipotesis": "Hipotesis siswa",
+    "hypothesis": "Hipotesis siswa",
+    "rumusanMasalah": "Rumusan masalah",
+    "tujuan": "Tujuan investigasi",
+    "kesimpulan": "Kesimpulan siswa",
+    "refleksi": "Refleksi siswa",
+    "catatan": "Catatan siswa"
+  };
+
+  return map[label] || label;
+}
+
+function nilaiRapiSB3(value){
+  if(value === null || value === undefined || value === ""){
+    return "-";
+  }
+
+  if(typeof value === "string"){
+    return value.trim();
+  }
+
+  if(typeof value === "number"){
+    return String(value);
+  }
+
+  if(typeof value === "boolean"){
+    return value ? "Ya" : "Tidak";
+  }
+
+  if(Array.isArray(value)){
+    return value
+      .map((item, index) => {
+        if(typeof item === "object" && item !== null){
+          return `${index + 1}. ${Object.entries(item)
+            .map(([k, v]) => `${labelRapiSB3(k)}: ${nilaiRapiSB3(v)}`)
+            .join("; ")}`;
+        }
+
+        return `${index + 1}. ${nilaiRapiSB3(item)}`;
+      })
+      .join("\n");
+  }
+
+  if(typeof value === "object"){
+    return Object.entries(value)
+      .map(([k, v]) => `${labelRapiSB3(k)}: ${nilaiRapiSB3(v)}`)
+      .join("\n");
+  }
+
+  return String(value);
+}
+
+function jawabanArraySB3(jawaban){
+  if(!jawaban) return [];
+
+  const abaikan = [
+    "_localUser",
+    "_meta",
+
+    "uid",
+    "email",
+    "nama",
+    "name",
+    "kelas",
+    "absen",
+    "noAbsen",
+    "role",
+
+    "pageKey",
+    "pageTitle",
+    "halaman",
+    "subBab",
+    "createdAt",
+    "updatedAt",
+    "timestamp",
+    "time",
+    "status",
+    "score",
+    "skor",
+
+    "K1_PAGE7_LASTRESULT",
+    "KI_PAGE7_LASTRESULT",
+    "K1_Page7_LastResult",
+    "KI_Page7_LastResult",
+    "K1_page7_lastresult",
+    "KI_page7_lastresult"
+  ];
+
+  const urutanLabel = [
+    "JAWABAN1_OBSERVASI",
+    "jawaban1_observasi",
+
+    "JAWABAN2_ANALISIS",
+    "jawaban2_analisis",
+
+    "JAWABAN3_HIPOTESIS",
+    "jawaban3_hipotesis",
+
+    "JAWABAN4_KESIMPULAN",
+    "jawaban4_kesimpulan",
+
+    "JAWABAN5_PILIHAN",
+    "jawaban5_pilihan",
+
+    "selectedQuestions",
+    "question",
+    "answer",
+    "reason",
+    "reasoning",
+
+    "obs1",
+    "obs2",
+    "obs3",
+
+    "ans1",
+    "ans2",
+    "ans3",
+    "ans4",
+
+    "analysis",
+    "conclusion",
+    "finalConclusion",
+    "reflection",
+    "reflection6",
+
+    "molaritas",
+    "konsentrasi",
+    "tekanan",
+    "volume",
+    "suhu",
+    "pergeseran",
+    "arahPergeseran",
+    "faktor",
+
+    "hipotesis",
+    "hypothesis",
+    "rumusanMasalah",
+    "tujuan",
+    "kesimpulan",
+    "refleksi",
+    "catatan"
+  ];
+
+  function isKosong(value){
+    return value === null ||
+      value === undefined ||
+      value === "" ||
+      value === "-" ||
+      value === false;
+  }
+
+  function bolehDitampilkan(key, value){
+    if(abaikan.includes(key)) return false;
+    if(key.startsWith("_")) return false;
+    if(key.toLowerCase().includes("lastresult")) return false;
+    if(key.toLowerCase().includes("page7")) return false;
+    if(isKosong(value)) return false;
+
+    return true;
+  }
+
+  const hasil = [];
+
+  urutanLabel.forEach((key) => {
+    if(Object.prototype.hasOwnProperty.call(jawaban, key)){
+      const value = jawaban[key];
+
+      if(bolehDitampilkan(key, value)){
+        hasil.push({
+          label: labelRapiSB3(key),
+          jawaban: nilaiRapiSB3(value)
+        });
+      }
+    }
+  });
+
+  Object.entries(jawaban).forEach(([key, value]) => {
+    if(urutanLabel.includes(key)) return;
+
+    if(bolehDitampilkan(key, value)){
+      hasil.push({
+        label: labelRapiSB3(key),
+        jawaban: nilaiRapiSB3(value)
+      });
+    }
+  });
+
+  return hasil.filter(item => {
+    const teks = String(item.jawaban || "").toLowerCase();
+
+    return item.label &&
+      item.jawaban &&
+      item.jawaban !== "-" &&
+      !teks.includes('"chosen"') &&
+      !teks.includes('"timeelapsed"') &&
+      !teks.includes('"endatiso"');
+  });
+}
+
+function bersihkanTeksExcelSB3(value){
+  return String(value ?? "-")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function downloadPDFSB3(){
+  const data = getData();
+
+  if(data.length === 0){
+    alert("Belum ada data untuk dibuat PDF.");
+    return;
+  }
+
+  const total = data.length;
+  const groups = kelompokkanData(data);
+  const unik = groups.length;
+
+  const skorValid = data
+    .map(item => Number(item.skor))
+    .filter(n => !Number.isNaN(n));
+
+  const rata = skorValid.length
+    ? Math.round(skorValid.reduce((a,b) => a + b, 0) / skorValid.length)
+    : 0;
+
+  const max = skorValid.length ? Math.max(...skorValid) : 0;
+
+  const rekapHTML = `
+    <table class="pdf-rekap-table">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Kelas</th>
+          <th>Kelompok</th>
+          <th>Jumlah Data</th>
+          <th>Rata-rata Skor</th>
+          <th>Halaman Terakhir</th>
+          <th>Update Terakhir</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${groups.map((group) => {
+          const id = group.identitas;
+          return `
+            <tr>
+              <td>${escapeHtml(id.nama || "-")}</td>
+              <td>${escapeHtml(id.kelas || "-")}</td>
+              <td>${escapeHtml(id.kelompok || "-")}</td>
+              <td>${group.data.length}</td>
+              <td>${rataSkorKelompok(group)}</td>
+              <td>${escapeHtml(halamanTerakhirSB3(group))}</td>
+              <td>${escapeHtml(group.updateTerakhir || "-")}</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+
+  const siswaHTML = groups.map((group) => {
+    const id = group.identitas;
+
+    const halamanHTML = group.data.map((item) => {
+      const daftarJawaban = jawabanArraySB3(item.jawaban);
+
+      const jawabanHTML = daftarJawaban.length
+        ? `
+          <table class="pdf-answer-table">
+            <thead>
+              <tr>
+                <th>Pertanyaan / Bagian</th>
+                <th>Jawaban Siswa</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${daftarJawaban.map((j) => `
+                <tr>
+                  <th>${escapeHtml(j.label || "-")}</th>
+                  <td>${escapeHtml(j.jawaban || "-")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `
+        : `
+          <div class="pdf-empty">
+            Belum ada jawaban tertulis.
+          </div>
+        `;
+
+      return `
+        <div class="pdf-page">
+          <h3>${escapeHtml(item.halaman || "-")} - ${escapeHtml(item.judul || "-")}</h3>
+          <p class="pdf-page-time">
+            Waktu simpan: ${escapeHtml(item.waktu || "-")} •
+            Skor: ${escapeHtml(item.skor ?? "-")} •
+            Status: ${escapeHtml(item.status || "-")}
+          </p>
+          ${jawabanHTML}
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <section class="pdf-student">
+        <div class="pdf-student-head">
+          <h2>${escapeHtml(id.nama || "-")}</h2>
+          <p>
+            Kelas: ${escapeHtml(id.kelas || "-")} •
+            Kelompok: ${escapeHtml(id.kelompok || "-")} •
+            Email: ${escapeHtml(id.email || "-")} •
+            Update: ${escapeHtml(group.updateTerakhir || "-")}
+          </p>
+        </div>
+
+        ${halamanHTML || `
+          <div class="pdf-page">
+            <div class="pdf-empty">
+              Belum ada halaman yang tersimpan.
+            </div>
+          </div>
+        `}
+      </section>
+    `;
+  }).join("");
+
+  const pdfArea = document.getElementById("pdfDownloadArea");
+
+  pdfArea.innerHTML = `
+    <div class="pdf-export" id="pdfExportContent">
+      <div class="pdf-cover">
+        <h1>Data Sub Bab 3 — Agent Le C</h1>
+        <p>Rekap jawaban, skor, dan aktivitas siswa pada Sub Bab 3</p>
+        <p>Diunduh pada: ${new Date().toLocaleString("id-ID")}</p>
+      </div>
+
+      <div class="pdf-summary">
+        <div class="pdf-stat">
+          <b>${total}</b>
+          <span>Total Data Masuk</span>
+        </div>
+
+        <div class="pdf-stat">
+          <b>${unik}</b>
+          <span>Siswa/Kelompok Unik</span>
+        </div>
+
+        <div class="pdf-stat">
+          <b>${rata}</b>
+          <span>Rata-rata Skor</span>
+        </div>
+
+        <div class="pdf-stat">
+          <b>${max}</b>
+          <span>Skor Tertinggi</span>
+        </div>
+      </div>
+
+      ${rekapHTML}
+      ${siswaHTML}
+    </div>
+  `;
+
+  const element = document.getElementById("pdfExportContent");
+
+  const opt = {
+    margin: 6,
+    filename: "data-sub-bab-3-agent-le-c.pdf",
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "landscape"
+    },
+    pagebreak: {
+      mode: ["css", "legacy"],
+      avoid: [".pdf-student", ".pdf-rekap-table"]
+    }
+  };
+
+  html2pdf()
+    .set(opt)
+    .from(element)
+    .save()
+    .then(() => {
+      pdfArea.innerHTML = "";
+    });
+}
+function downloadExcelSB3(){
+  const data = getData();
+
+  if(data.length === 0){
+    alert("Belum ada data untuk diexport.");
+    return;
+  }
+
+  const groups = kelompokkanData(data);
+  const rekapRows = [];
+  const jawabanRows = [];
+
+  groups.forEach((group, index) => {
+    const id = group.identitas;
+
+    rekapRows.push({
+      "No": index + 1,
+      "Nama": id.nama || "-",
+      "Kelas": id.kelas || "-",
+      "Kelompok": id.kelompok || "-",
+      "Email": id.email || "-",
+      "Jumlah Data": group.data.length,
+      "Rata-rata Skor": rataSkorKelompok(group),
+      "Halaman Terakhir": halamanTerakhirSB3(group),
+      "Update Terakhir": group.updateTerakhir || "-"
+    });
+
+    group.data.forEach((item) => {
+      const daftarJawaban = jawabanArraySB3(item.jawaban);
+
+      if(daftarJawaban.length === 0){
+        jawabanRows.push({
+          "Nama": id.nama || "-",
+          "Kelas": id.kelas || "-",
+          "Kelompok": id.kelompok || "-",
+          "Email": id.email || "-",
+          "Halaman": item.halaman || "-",
+          "Judul": item.judul || "-",
+          "Skor": item.skor ?? "-",
+          "Status": item.status || "-",
+          "Pertanyaan / Bagian": "Belum ada jawaban tertulis",
+          "Jawaban Siswa": "-",
+          "Waktu Simpan": item.waktu || "-"
+        });
+      }else{
+        daftarJawaban.forEach((j) => {
+          jawabanRows.push({
+            "Nama": id.nama || "-",
+            "Kelas": id.kelas || "-",
+            "Kelompok": id.kelompok || "-",
+            "Email": id.email || "-",
+            "Halaman": item.halaman || "-",
+            "Judul": item.judul || "-",
+            "Skor": item.skor ?? "-",
+            "Status": item.status || "-",
+            "Pertanyaan / Bagian": bersihkanTeksExcelSB3(j.label || "-"),
+            "Jawaban Siswa": bersihkanTeksExcelSB3(j.jawaban || "-"),
+            "Waktu Simpan": item.waktu || "-"
+          });
+        });
+      }
+    });
+  });
+
+  const wb = XLSX.utils.book_new();
+
+  const wsRekap = XLSX.utils.json_to_sheet(rekapRows);
+  const wsJawaban = XLSX.utils.json_to_sheet(jawabanRows);
+
+  wsRekap["!cols"] = [
+    { wch: 5 },
+    { wch: 24 },
+    { wch: 12 },
+    { wch: 14 },
+    { wch: 28 },
+    { wch: 14 },
+    { wch: 16 },
+    { wch: 34 },
+    { wch: 22 }
+  ];
+
+  wsJawaban["!cols"] = [
+    { wch: 24 },
+    { wch: 12 },
+    { wch: 14 },
+    { wch: 28 },
+    { wch: 14 },
+    { wch: 34 },
+    { wch: 10 },
+    { wch: 14 },
+    { wch: 42 },
+    { wch: 70 },
+    { wch: 22 }
+  ];
+
+  if(wsRekap["!ref"]){
+    wsRekap["!autofilter"] = {
+      ref: XLSX.utils.encode_range(XLSX.utils.decode_range(wsRekap["!ref"]))
+    };
+  }
+
+  if(wsJawaban["!ref"]){
+    wsJawaban["!autofilter"] = {
+      ref: XLSX.utils.encode_range(XLSX.utils.decode_range(wsJawaban["!ref"]))
+    };
+  }
+
+  wsRekap["!freeze"] = { xSplit: 0, ySplit: 1 };
+  wsJawaban["!freeze"] = { xSplit: 0, ySplit: 1 };
+
+  XLSX.utils.book_append_sheet(wb, wsRekap, "Rekap Siswa");
+  XLSX.utils.book_append_sheet(wb, wsJawaban, "Jawaban Rapi");
+
+  XLSX.writeFile(wb, "data-sub-bab-3-agent-le-c-rapi.xlsx");
+}
+    document.getElementById("detailModal").addEventListener("click", function(e){
+      if(e.target === this){
+        closeDetail();
+      }
+    });
+
+    // renderDataSB3();
+// Data akan dimuat dari Firebase terlebih dahulu.
+  </script>
+  <!-- FIREBASE ONLINE UNTUK DATASB3 -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+
+<script>
+function formatFirebaseTimeSB3(value) {
+  if (!value) return "-";
+
+  if (value.toDate) {
+    return value.toDate().toLocaleString("id-ID");
+  }
+
+  if (value.seconds) {
+    return new Date(value.seconds * 1000).toLocaleString("id-ID");
+  }
+
+  return String(value);
+}
+
+function ambilKelompokDariJawabanSB3(jawaban) {
+  if (!jawaban) return "-";
+
+  return (
+    jawaban.kelompok ||
+    jawaban.kelompokSiswa ||
+    jawaban.kelompokSubBab3 ||
+    jawaban.Kelompok ||
+    jawaban.group ||
+    "-"
+  );
+}
+
+function buatRingkasanSB3(jawaban) {
+  if (!jawaban) return "-";
+
+  const keys = Object.keys(jawaban).filter(k => !k.startsWith("_"));
+
+  if (keys.length === 0) return "-";
+
+  return keys
+    .slice(0, 3)
+    .map(k => {
+      let value = jawaban[k];
+
+      if (typeof value === "object" && value !== null) {
+        value = JSON.stringify(value);
+      }
+
+      return `${k}: ${value}`;
+    })
+    .join(" | ");
+}
+
+async function ambilDataFirebaseSB3() {
+  const hasilMap = new Map();
+
+  const snapshotAnswers = await db
+    .collection("answers")
+    .where("subBab", "==", 3)
+    .get();
+
+  snapshotAnswers.forEach((doc) => {
+    hasilMap.set(doc.id, doc);
+  });
+
+  const snapshotJawaban = await db
+    .collection("jawaban")
+    .where("subBab", "==", 3)
+    .get();
+
+  snapshotJawaban.forEach((doc) => {
+    if (!hasilMap.has(doc.id)) {
+      hasilMap.set(doc.id, doc);
+    }
+  });
+
+  const data = [];
+
+  hasilMap.forEach((doc) => {
+    const item = doc.data();
+    const jawaban = item.jawaban || item.answers || {};
+    const localUser = jawaban._localUser || {};
+
+    const nama =
+      item.nama ||
+      item.name ||
+      localUser.nama ||
+      localUser.name ||
+      "-";
+
+    const kelas =
+      item.kelas ||
+      localUser.kelas ||
+      "-";
+
+    const email =
+      item.email ||
+      localUser.email ||
+      "-";
+
+    const kelompok = ambilKelompokDariJawabanSB3(jawaban);
+
+    data.push({
+      id: doc.id,
+      waktu: formatFirebaseTimeSB3(item.updatedAt || item.createdAt),
+      halaman: item.pageKey || "-",
+      judul: item.pageTitle || item.halaman || "-",
+      nama: nama,
+      kelas: kelas,
+      kelompok: kelompok,
+      email: email,
+      skor: item.skor ?? item.score ?? "-",
+      status: item.status || "-",
+      ringkasan: buatRingkasanSB3(jawaban),
+      jawaban: jawaban
+    });
+  });
+
+  localStorage.setItem("dataAdminGuruSB3", JSON.stringify(data));
+  renderDataSB3();
+}
+
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    alert("Silakan login terlebih dahulu.");
+    window.location.href = "h1.html";
+    return;
+  }
+
+  ambilDataFirebaseSB3().catch((error) => {
+    console.error("Gagal mengambil data Sub Bab 3 dari Firebase:", error);
+
+    const emptyState = document.getElementById("emptyState");
+    if (emptyState) {
+      emptyState.classList.add("show");
+      emptyState.innerHTML =
+        "Gagal memuat data dari Firebase. Cek Firestore Rules dan Console browser.";
+    }
+
+    renderDataSB3();
+  });
+});
+</script>
+</body>
+</html>

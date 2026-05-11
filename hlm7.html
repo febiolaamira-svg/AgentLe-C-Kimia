@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Halaman 7 — Drill Soal & Nilai ke Excel</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- SheetJS (XLSX export) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root{
+      --bg1:#b8f7ff; --bg2:#b0b6ff; --bg3:#ffd8f0;
+      --ink:#0b1220; --muted:#5b6b86;
+      --card: rgba(255,255,255,.78);
+      --card2: rgba(255,255,255,.92);
+      --line: rgba(13,23,46,.12);
+      --primary:#2b7cff; --primary2:#00c2ff;
+      --accent:#ff7a00; --accent2:#ff4fd8;
+      --ok:#16a34a; --bad:#dc2626; --warn:#f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.12);
+      --shadow2: 0 10px 25px rgba(0,0,0,.10);
+      --radius: 18px; --radius2: 14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+  margin:0;
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+    radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+    linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+  overflow-x:hidden;
+}
+    .blob{
+      position:fixed; width:380px;height:380px;border-radius:999px;
+      filter: blur(30px); opacity:.35; z-index:-1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b1{left:-120px; top:80px; background:#47e6ff;}
+    .blob.b2{right:-140px; top:140px; background:#6b7bff; animation-delay:-5s;}
+    .blob.b3{left:20%; bottom:-160px; background:#ff5fd6; animation-delay:-9s;}
+    @keyframes drift{0%,100%{transform: translate(0,0) scale(1)} 50%{transform: translate(60px,-40px) scale(1.08)}}
+
+    header{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.55);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar{
+      max-width:1150px;margin:0 auto;
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width: 310px;}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: var(--shadow2);
+      display:grid; place-items:center;
+      color:#fff; font-weight:900;
+    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1;}
+    .brand .t b{font-size:14px}
+    .brand .t span{font-size:12px;color:var(--muted)}
+    .rightbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .progressWrap{
+      width:220px;height:10px;border-radius:999px;
+      background: rgba(13,23,46,.10);
+      overflow:hidden;
+      border:1px solid rgba(13,23,46,.10);
+    }
+    .progressFill{
+      height:100%;
+      width:78%;
+      background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+      border-radius:999px;
+    }
+
+    main{max-width:1150px;margin:0 auto;padding:18px;}
+    .grid{display:grid;gap:16px}
+    @media (min-width: 980px){
+      .grid.cols-2{grid-template-columns: 1.05fr 1.95fr}
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card.solid{background: var(--card2)}
+    h1{margin:0 0 4px 0; font-size:22px}
+    h2{margin:0 0 10px 0; font-size:15px}
+    p,li,label{font-size:13px; line-height:1.5}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background: var(--line); margin:14px 0}
+
+    .btn{
+      border:0; border-radius: 14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      user-select:none;
+    }
+    .btn:active{transform: scale(.98)}
+    .btn.primary{color:white;background: linear-gradient(135deg, var(--accent), #ff9f40);}
+    .btn.blue{color:white;background: linear-gradient(135deg, var(--primary2), var(--primary));}
+    .btn.ghost{
+      color: var(--ink);
+      background: rgba(255,255,255,.7);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+    .btn:disabled{opacity:.55; cursor:not-allowed; box-shadow:none}
+
+    .tag{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(43,124,255,.10);
+      color:#1b4bb2;
+      border:1px solid rgba(43,124,255,.15);
+      font-weight:900;
+      margin-bottom:8px;
+    }
+    .tag.green{background: rgba(34,197,94,.14); color:#137a36; border-color: rgba(34,197,94,.18);}
+    .tag.red{background: rgba(239,68,68,.14); color:#8a1f1f; border-color: rgba(239,68,68,.18);}
+
+    /* quiz */
+    .quizShell{
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(13,23,46,.12);
+      border-radius: var(--radius);
+      padding:14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+      position:relative;
+      overflow:hidden;
+      min-height: 520px;
+    }
+    .quizShell::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:240px;height:240px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,122,0,.18), transparent 62%);
+      transform: rotate(12deg);
+      pointer-events:none;
+    }
+
+    .field{
+      display:grid; gap:6px;
+    }
+    input[type="text"], select{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid rgba(13,23,46,.14);
+      background: rgba(255,255,255,.75);
+      padding:12px;
+      font-family: inherit;
+      font-size:13px;
+      outline:none;
+    }
+    input[type="text"]:focus, select:focus{
+      border-color: rgba(43,124,255,.35);
+      box-shadow: 0 0 0 4px rgba(43,124,255,.12);
+    }
+
+    .qCard{
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(13,23,46,.12);
+      border-radius: 18px;
+      padding:14px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.10);
+    }
+    .qTop{
+      display:flex; gap:10px; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .qNum{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      font-size:12px; font-weight:900; color:rgba(13,23,46,.75);
+      white-space:nowrap;
+    }
+    .qText{font-weight:900; font-size:14px; line-height:1.35}
+
+    .opts{display:grid; gap:10px; margin-top:10px}
+    .opt{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      cursor:pointer;
+      transition: box-shadow .2s ease, transform .08s ease, border-color .2s ease;
+    }
+    .opt:hover{box-shadow: 0 10px 22px rgba(0,0,0,.08)}
+    .opt input{margin-top:3px; transform: scale(1.1)}
+    .opt.selected{
+      border-color: rgba(43,124,255,.35);
+      box-shadow: 0 14px 30px rgba(43,124,255,.12);
+      background: linear-gradient(135deg, rgba(0,194,255,.14), rgba(43,124,255,.12));
+    }
+
+    .hud{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    }
+    .miniBar{
+      flex:1;
+      min-width: 200px;
+      height:10px;border-radius:999px;
+      background: rgba(13,23,46,.10);
+      overflow:hidden;border:1px solid rgba(13,23,46,.10);
+    }
+    .miniBar > i{
+      display:block;height:100%;width:0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+      transition: width .35s ease;
+    }
+
+    .review{
+      display:grid; gap:10px;
+      margin-top:12px;
+    }
+    .revItem{
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+    }
+
+    /* toast */
+    .toastWrap{
+      position: fixed; right: 18px; bottom: 18px;
+      display:flex; flex-direction:column; gap:10px;
+      z-index: 60; pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      width:min(420px, calc(100vw - 36px));
+      border-radius: 16px;
+      padding:12px 12px;
+      background: rgba(255,255,255,.88);
+      border:1px solid rgba(13,23,46,.12);
+      box-shadow: var(--shadow);
+      display:flex; gap:10px;
+      align-items:flex-start;
+      animation: pop .18s ease-out;
+    }
+    @keyframes pop{from{transform: translateY(10px); opacity:.2} to{transform: translateY(0); opacity:1}}
+    .toast .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      font-weight:900; color:white;
+      flex:0 0 auto;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+    }
+    .toast.ok .icon{background: linear-gradient(135deg, #22c55e, #16a34a)}
+    .toast.bad .icon{background: linear-gradient(135deg, #ef4444, #b91c1c)}
+    .toast .t{flex:1}
+    .toast .t b{display:block; font-size:13px}
+    .toast .t span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .toast .x{background:transparent;border:0;cursor:pointer;padding:6px 8px;border-radius:10px;color:var(--muted);}
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">7</div>
+        <div class="t">
+          <b>Drill Soal (Awal → Akhir)</b>
+          <span>• Nilai otomatis + Unduh Excel (.xlsx)</span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div class="pill">
+          <span>Progress</span>
+          <b style="color:var(--ink)">7/8</b>
+        </div>
+        <div class="progressWrap"><div class="progressFill"></div></div>
+        <button class="btn ghost" id="btnHelp">✨ Bantuan</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid cols-2">
+      <!-- LEFT: identity + controls -->
+      <div class="card">
+        <div class="tag">🧾 Identitas Siswa</div>
+
+        <div class="grid" style="gap:12px">
+          <div class="field">
+            <label><b>Nama</b></label>
+            <input type="text" id="name" placeholder="Contoh: Andi Pratama" />
+          </div>
+
+          <div class="field">
+            <label><b>Kelas</b></label>
+            <input type="text" id="klass" placeholder="Contoh: XI IPA 2" />
+          </div>
+
+          <div class="field">
+            <label><b>Mode soal</b></label>
+            <select id="mode" disabled>
+              <option value="latihan" selected>Latihan (boleh ulang)</option>
+            </select>
+            <div class="muted" style="font-size:0.9rem; margin-top:6px">Mode dikunci: hanya Latihan (boleh ulang)</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="justify-content:space-between">
+          <button class="btn blue" id="btnStart">▶ Mulai</button>
+          <button class="btn ghost" id="btnReset" disabled>🔁 Ulang dari awal</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="tag">📦 Output Nilai</div>
+        <ul style="margin:0 0 0 18px; padding:0">
+          <li>Setelah selesai, klik <b>Unduh Excel</b> untuk menyimpan nilai.</li>
+          <li>File Excel berisi: identitas, skor, waktu, dan detail jawaban.</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <div class="row">
+          <button class="btn primary" id="btnDownload" disabled>⬇ Unduh Excel (.xlsx)</button>
+          <button class="btn ghost" id="btnCopy" disabled>📋 Salin ringkasan</button>
+        </div>
+
+        <p class="muted" id="leftNote" style="margin:12px 0 0 0">
+          Soal berjalan <b>berurutan</b>. Jawab 1 → lanjut 2 → dst sampai selesai.
+        </p>
+      </div>
+
+      <!-- RIGHT: quiz -->
+      <div class="card solid">
+        <div class="quizShell" id="quizShell">
+          <div class="hud">
+            <div class="pill">
+              <span>Soal</span>
+              <b id="qCount" style="color:var(--ink)">0/0</b>
+            </div>
+            <div class="pill">
+              <span>Skor</span>
+              <b id="scoreTxt" style="color:var(--ink)">0</b>
+            </div>
+            <div class="pill">
+              <span>Waktu</span>
+              <b id="timeTxt" style="color:var(--ink)">00:00</b>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="miniBar" aria-label="progress mini bar">
+            <i id="miniFill" style="width:0%"></i>
+          </div>
+
+          <div class="divider"></div>
+
+          <div id="stage">
+            <div class="qCard">
+              <div class="qText">Klik <b>Mulai</b> untuk mengerjakan drill soal.</div>
+              <p class="muted" style="margin-top:8px">
+            Drill ini berisi <b>10 soal</b> yang mencakup 3 subbab:
+            <b>reaksi satu arah dan dua arah</b>, <b>kesetimbangan dinamis</b>,
+            serta <b>kesetimbangan homogen dan heterogen</b>.
+          </p>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="row" style="justify-content:space-between">
+            <button class="btn ghost" id="btnPrev" disabled>⬅ Sebelumnya</button>
+            <button class="btn blue" id="btnNext" disabled>Lanjut ➜</button>
+          </div>
+
+          <div id="reviewWrap" style="display:none">
+            <div class="divider"></div>
+            <div class="tag green" id="finalTag">✅ Selesai</div>
+            <div class="qCard">
+              <div class="qText" id="finalTitle">Hasil Kamu</div>
+              <p class="muted" id="finalDesc" style="margin:8px 0 0 0"></p>
+            </div>
+            <div class="review" id="review"></div>
+          </div>
+
+          <!-- Result Modal (overlay) -->
+          <div id="resultModal" style="display:none; position:fixed; inset:0; z-index:1200; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+            <div class="modalCard" style="background:white; width:94%; max-width:900px; max-height:86%; overflow:auto; border-radius:10px; padding:20px; margin:24px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,.4)">
+              <button id="resultClose" class="btn ghost" style="position:absolute;right:12px;top:12px">✖</button>
+              <h3 id="modalTitle">Hasil</h3>
+              <div id="modalDesc" class="muted" style="margin-top:6px"></div>
+
+              <div class="row" style="gap:8px; margin-top:12px">
+                <button id="tabResult" class="btn blue">Hasil</button>
+                <button id="tabExplain" class="btn ghost">Pembahasan</button>
+              </div>
+
+              <div id="modalBody" style="margin-top:12px"></div>
+
+              <div style="margin-top:12px; text-align:right">
+              <button id="modalDownload" class="btn primary">Unduh Excel</button>
+              <button id="modalGoPage8" class="btn blue">Lanjut ke Halaman 8 ➜</button>
+              <button id="modalCloseBottom" class="btn ghost">Tutup</button>
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <script>
+    const $ = (q)=>document.querySelector(q);
+    const $$ = (q)=>Array.from(document.querySelectorAll(q));
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Toast
+    function toast(type, title, message, ms=4200){
+      const wrap = $("#toastWrap");
+      const t = document.createElement("div");
+      t.className = `toast ${type||"info"}`;
+      t.innerHTML = `
+        <div class="icon">${type==="ok"?"✓":type==="bad"?"!":"i"}</div>
+        <div class="t">
+          <b>${escapeHtml(title)}</b>
+          <span>${escapeHtml(message)}</span>
+        </div>
+        <button class="x" aria-label="Tutup">✕</button>
+      `;
+      t.querySelector(".x").addEventListener("click", ()=> t.remove());
+      wrap.appendChild(t);
+      if(ms) setTimeout(()=>{ if(t.isConnected) t.remove(); }, ms);
+    }
+
+    /***********************
+     * Question bank (awal → akhir)
+     * - satu arah / dua arah / dinamis / homogen-heterogen / simbol
+     ************************/
+    const QUESTIONS = [
+  {
+    id:"q1",
+    topic:"Reaksi satu arah dan dua arah",
+    q:"Simbol yang benar untuk reaksi satu arah (irreversible) adalah…",
+    options:["⇌", "→", "↔", "="],
+    answerIndex: 1,
+    explain:"Reaksi satu arah ditulis dengan panah satu arah (→) karena berlangsung dari reaktan ke produk saja."
+  },
+  {
+    id:"q2",
+    topic:"Reaksi satu arah dan dua arah",
+    q:"Simbol yang benar untuk reaksi dua arah (reversible) adalah…",
+    options:["→", "⇌", "=", "↘"],
+    answerIndex: 1,
+    explain:"Reaksi dua arah menggunakan simbol ⇌ karena reaksi dapat berlangsung maju dan balik."
+  },
+  {
+    id:"q3",
+    topic:"Reaksi satu arah dan dua arah",
+    q:"Contoh reaksi dua arah yang benar adalah…",
+    options:[
+      "AgNO₃(aq) + NaCl(aq) → AgCl(s) + NaNO₃(aq)",
+      "2Mg(s) + O₂(g) → 2MgO(s)",
+      "N₂(g) + 3H₂(g) ⇌ 2NH₃(g)",
+      "C(s) + O₂(g) → CO₂(g)"
+    ],
+    answerIndex: 2,
+    explain:"Reaksi N₂(g) + 3H₂(g) ⇌ 2NH₃(g) adalah contoh reaksi dua arah karena dapat berlangsung maju dan balik."
+  },
+  {
+    id:"q4",
+    topic:"Kesetimbangan dinamis",
+    q:"Pada kesetimbangan dinamis, yang benar adalah…",
+    options:[
+      "Reaksi berhenti total",
+      "Laju reaksi maju sama dengan laju reaksi balik",
+      "Produk habis bereaksi",
+      "Reaktan selalu bertambah"
+    ],
+    answerIndex: 1,
+    explain:"Pada kesetimbangan dinamis, reaksi tetap berlangsung tetapi laju maju sama dengan laju balik."
+  },
+  {
+    id:"q5",
+    topic:"Kesetimbangan dinamis",
+    q:"Mengapa reaksi dua arah perlu berlangsung dalam sistem tertutup untuk mencapai kesetimbangan?",
+    options:[
+      "Agar suhu selalu naik",
+      "Agar zat tidak keluar dari sistem sehingga reaksi balik tetap dapat terjadi",
+      "Agar reaksi menjadi satu arah",
+      "Agar produk cepat habis"
+    ],
+    answerIndex: 1,
+    explain:"Sistem tertutup menjaga reaktan dan produk tetap berada dalam sistem sehingga reaksi balik dapat berlangsung."
+  },
+  {
+    id:"q6",
+    topic:"Kesetimbangan dinamis",
+    q:"Secara makroskopis, keadaan setimbang ditunjukkan oleh…",
+    options:[
+      "Warna dan konsentrasi tampak tetap",
+      "Semua partikel berhenti bergerak",
+      "Reaktan hilang seluruhnya",
+      "Produk selalu bertambah"
+    ],
+    answerIndex: 0,
+    explain:"Secara makroskopis, sistem tampak tetap atau konstan walaupun secara mikroskopis reaksi masih berlangsung."
+  },
+  {
+    id:"q7",
+    topic:"Homogen dan heterogen",
+    q:"Kesetimbangan homogen adalah kesetimbangan yang…",
+    options:[
+      "melibatkan lebih dari satu fase",
+      "semua zatnya berada pada fase yang sama",
+      "selalu menghasilkan endapan",
+      "hanya terjadi pada zat padat"
+    ],
+    answerIndex: 1,
+    explain:"Kesetimbangan homogen terjadi jika semua zat yang terlibat berada pada fase yang sama."
+  },
+  {
+    id:"q8",
+    topic:"Homogen dan heterogen",
+    q:"Kesetimbangan heterogen adalah kesetimbangan yang…",
+    options:[
+      "semua zat berada pada fase gas",
+      "semua zat berada pada fase larutan",
+      "zat-zatnya berada pada lebih dari satu fase",
+      "tidak dapat balik"
+    ],
+    answerIndex: 2,
+    explain:"Kesetimbangan heterogen terjadi jika zat-zat dalam reaksi berada pada lebih dari satu fase."
+  },
+  {
+    id:"q9",
+    topic:"Homogen dan heterogen",
+    q:"Reaksi 2SO₂(g) + O₂(g) ⇌ 2SO₃(g) termasuk kesetimbangan…",
+    options:["heterogen", "homogen", "irreversible", "tidak setimbang"],
+    answerIndex: 1,
+    explain:"Semua zat pada reaksi tersebut berada pada fase gas, jadi termasuk kesetimbangan homogen."
+  },
+  {
+    id:"q10",
+    topic:"Homogen dan heterogen",
+    q:"Reaksi CaCO₃(s) ⇌ CaO(s) + CO₂(g) termasuk kesetimbangan…",
+    options:["homogen", "heterogen", "satu arah", "tidak dapat terjadi"],
+    answerIndex: 1,
+    explain:"Reaksi ini melibatkan fase padat (s) dan gas (g), sehingga termasuk kesetimbangan heterogen."
+  }
+];
+
+    /***********************
+     * State
+     ************************/
+    const state = {
+      started:false,
+      mode:"latihan", // latihan / tes
+      startAt:null,
+      timer:null,
+      i:0,
+      answers:[], // {qid, chosenIndex, correct, timeMs}
+      score:0,
+      finished:false,
+      frozen:false // for "tes": prevent back changes
+    };
+
+    function fmtTime(sec){
+      const m = String(Math.floor(sec/60)).padStart(2,"0");
+      const s = String(sec%60).padStart(2,"0");
+      return `${m}:${s}`;
+    }
+
+    function nowMs(){ return Date.now(); }
+
+    function updateHUD(){
+      $("#qCount").textContent = `0/${QUESTIONS.length}`;
+      $("#scoreTxt").textContent = state.score;
+      const pct = state.started ? Math.round(((state.i)/QUESTIONS.length)*100) : 0;
+      $("#miniFill").style.width = `${pct}%`;
+      $("#btnPrev").disabled = !state.started || state.i===0 || (state.mode==="tes" && state.frozen);
+    }
+
+    function getIdentity(){
+      return {
+        name: $("#name").value.trim(),
+        klass: $("#klass").value.trim(),
+        mode: $("#mode").value
+      };
+    }
+
+    function validateIdentity(){
+      const id = getIdentity();
+      if(id.name.length < 2) return {ok:false, msg:"Isi Nama dulu ya."};
+      if(id.klass.length < 2) return {ok:false, msg:"Isi Kelas dulu ya."};
+      return {ok:true, id};
+    }
+
+    function startTimer(){
+      state.startAt = nowMs();
+      if(state.timer) clearInterval(state.timer);
+      state.timer = setInterval(()=>{
+        const elapsed = Math.floor((nowMs() - state.startAt)/1000);
+        $("#timeTxt").textContent = fmtTime(elapsed);
+      }, 500);
+    }
+
+    function stopTimer(){
+      if(state.timer) clearInterval(state.timer);
+      state.timer = null;
+    }
+
+    function getElapsedSec(){
+      if(!state.startAt) return 0;
+      return Math.floor((nowMs() - state.startAt)/1000);
+    }
+
+    function renderQuestion(){
+      const q = QUESTIONS[state.i];
+      const prev = state.answers[state.i]; // may exist
+      const chosen = prev ? prev.chosenIndex : null;
+
+      const html = `
+        <div class="qCard" aria-label="kartu soal">
+          <div class="qTop">
+            <div class="qNum">🧩 Soal ${state.i+1} • <span class="muted" style="font-weight:900">${escapeHtml(q.topic)}</span></div>
+            <div class="qNum">📌 Wajib jawab dulu untuk lanjut</div>
+          </div>
+
+          <div class="qText">${escapeHtml(q.q)}</div>
+
+          <div class="opts" id="opts">
+            ${q.options.map((opt, idx)=>`
+              <label class="opt ${chosen===idx ? "selected":""}" data-idx="${idx}">
+                <input type="radio" name="opt" value="${idx}" ${chosen===idx ? "checked":""}/>
+                <div><b>${escapeHtml(opt)}</b></div>
+              </label>
+            `).join("")}
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="row" style="justify-content:space-between">
+            <span class="pill"><span>Progress</span> <b style="color:var(--ink)">${state.i+1}/${QUESTIONS.length}</b></span>
+            <span class="pill"><span>Mode</span> <b style="color:var(--ink)">${state.mode.toUpperCase()}</b></span>
+          </div>
+        </div>
+      `;
+
+      $("#stage").innerHTML = html;
+
+      // bind select
+      $$("#opts .opt").forEach(el=>{
+        el.addEventListener("click", ()=>{
+          if(state.finished) return; // dikunci setelah hasil selesai
+          if(state.mode==="tes" && state.frozen) {
+            // Mode Tes: jawaban yang sudah lewat tidak bisa diubah (silent)
+            return;
+          }
+          const idx = Number(el.dataset.idx);
+          setChosen(idx);
+        });
+      });
+
+      $("#btnNext").disabled = (chosen===null || chosen===undefined);
+      updateHUD();
+    }
+
+    function setChosen(chosenIndex){
+      const q = QUESTIONS[state.i];
+
+      // highlight
+      $$("#opts .opt").forEach(el=>{
+        el.classList.toggle("selected", Number(el.dataset.idx) === chosenIndex);
+        const input = el.querySelector("input");
+        if(input) input.checked = Number(el.dataset.idx) === chosenIndex;
+      });
+
+      const correct = chosenIndex === q.answerIndex;
+
+      // compute score delta if changing answer
+      const prev = state.answers[state.i];
+      if(prev){
+        // adjust score only if correctness changes
+        if(prev.correct && !correct) state.score -= 1;
+        if(!prev.correct && correct) state.score += 1;
+      } else {
+        if(correct) state.score += 1;
+      }
+
+      state.answers[state.i] = {
+        qid: q.id,
+        chosenIndex,
+        correct,
+        timeMs: null // filled when finishing
+      };
+
+      $("#btnNext").disabled = false;
+      $("#scoreTxt").textContent = state.score;
+
+      // Tidak menampilkan notifikasi saat klik jawaban (sesuai preferensi pengguna)
+      // (no toast)
+    }
+
+    function finalizeAnswerTime(){
+      // store elapsed for each answer as total time at that moment (simple)
+      const elapsedMs = nowMs() - state.startAt;
+      const a = state.answers[state.i];
+      if(a) a.timeMs = elapsedMs;
+    }
+
+    function goNext(){
+      const a = state.answers[state.i];
+      if(!a){
+        toast("bad","Belum menjawab","Pilih salah satu jawaban dulu.", 3200);
+        return;
+      }
+
+      finalizeAnswerTime();
+
+      if(state.i < QUESTIONS.length - 1){
+        state.i++;
+        if(state.mode==="tes"){
+          // once moved forward, freeze going back
+          state.frozen = true;
+        }
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function goPrev(){
+      if(state.mode==="tes"){
+        // Mode Tes: tidak boleh kembali ke soal sebelumnya (silent)
+        return;
+      }
+      if(state.i > 0){
+        state.i--;
+        renderQuestion();
+      }
+    }
+
+    function finishQuiz(){
+      state.finished = true;
+      stopTimer();
+
+      // Lock and show modal (no page scroll) + anonymize save
+      state.frozen = true;
+      $$("#opts input").forEach(i=>i.disabled = true);
+      const _payload = buildPayload();
+      const _anon = JSON.parse(JSON.stringify(_payload));
+      _anon.meta.Name = "";
+      _anon.meta.Class = "";
+
+      // ===== Simpan ke DB untuk rekap Halaman 8 =====
+      try{
+        const u = mustLogin();
+        if(u?.email){
+          // simpan hasil drill (anon) + tandai progress
+          saveAnswer(u.email, "page7_drill", _anon);
+          markProgress(u.email, "page7", true);
+        }
+      }catch(e){/* silent */}
+
+      localStorage.setItem("KI_Page7_LastResult", JSON.stringify(_anon));
+      showResultModal();
+      $("#btnDownload").disabled = false;
+      $("#btnCopy").disabled = false;
+      $("#btnReset").disabled = false;
+      $("#name").value = "";
+      $("#klass").value = "";
+      toast("ok","Selesai!","Hasil telah muncul di tampilan hasil.", 3500);
+      return;
+
+      const id = getIdentity();
+      const total = QUESTIONS.length;
+      const score = state.score;
+      const elapsed = getElapsedSec();
+
+      $("#btnNext").disabled = true;
+      $("#btnPrev").disabled = true;
+
+      $("#reviewWrap").style.display = "block";
+      $("#finalTitle").textContent = `Skor: ${score}/${total}`;
+      $("#finalDesc").innerHTML = `
+        <span class="muted" style="font-weight:900">
+          Nama: <b>${escapeHtml(id.name)}</b> • Kelas: <b>${escapeHtml(id.klass)}</b> • Mode: <b>${escapeHtml(id.mode)}</b> • Waktu: <b>${fmtTime(elapsed)}</b>
+        </span>
+        <br/><span class="muted" style="font-weight:900">Klik <b>Unduh Excel</b> untuk menyimpan data nilai.</span>
+      `;
+
+      // Build review list
+      const rev = $("#review");
+      rev.innerHTML = "";
+      state.answers.forEach((ans, idx)=>{
+        const q = QUESTIONS[idx];
+        const chosenText = ans ? q.options[ans.chosenIndex] : "(tidak dijawab)";
+        const correctText = q.options[q.answerIndex];
+        const ok = ans && ans.correct;
+
+        const div = document.createElement("div");
+        div.className = "revItem";
+        div.innerHTML = `
+          <div class="tag ${ok ? "green" : "red"}">${ok ? "✅ Benar" : "❌ Salah"} • Soal ${idx+1}</div>
+          <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.q)}</div>
+          <div class="muted" style="font-weight:900">Jawaban kamu: <b>${escapeHtml(chosenText)}</b></div>
+          <div class="muted" style="font-weight:900">Kunci: <b>${escapeHtml(correctText)}</b></div>
+          <div class="muted" style="margin-top:6px">${escapeHtml(q.explain)}</div>
+        `;
+        rev.appendChild(div);
+      });
+
+      // enable export buttons
+      $("#btnDownload").disabled = false;
+      $("#btnCopy").disabled = false;
+      $("#btnReset").disabled = false;
+
+      // Save to localStorage (optional) — anonymize identity fields so Nama/Kelas tidak disimpan
+      const payload = buildPayload();
+      const anon = JSON.parse(JSON.stringify(payload));
+      anon.meta.Name = "";
+      anon.meta.Class = "";
+      localStorage.setItem("KI_Page7_LastResult", JSON.stringify(anon));
+
+      toast("ok","Selesai!", "Nilai siap. Silakan unduh Excel.", 4500);
+
+      // Clear identity inputs so user harus mengisi Nama & Kelas lagi untuk sesi berikutnya
+      $("#name").value = "";
+      $("#klass").value = "";
+    }
+
+    function buildPayload(){
+      const id = getIdentity();
+      const total = QUESTIONS.length;
+      const score = state.score;
+      const elapsedSec = getElapsedSec();
+      const endedAtISO = new Date().toISOString();
+
+      // Build detailed rows
+      const details = QUESTIONS.map((q, idx)=>{
+        const ans = state.answers[idx] || null;
+        const chosenIndex = ans ? ans.chosenIndex : "";
+        const chosenText = ans ? q.options[chosenIndex] : "";
+        const correctText = q.options[q.answerIndex];
+        const correct = ans ? ans.correct : false;
+        return {
+          No: idx+1,
+          Topic: q.topic,
+          Question: q.q,
+          ChosenIndex: chosenIndex,
+          Chosen: chosenText,
+          CorrectAnswer: correctText,
+          IsCorrect: correct ? 1 : 0,
+          Explanation: q.explain
+        };
+      });
+
+      return {
+        meta: {
+          Name: id.name,
+          Class: id.klass,
+          Mode: id.mode,
+          Score: score,
+          Total: total,
+          Percent: Math.round((score/total)*100),
+          TimeSeconds: elapsedSec,
+          TimeFormatted: fmtTime(elapsedSec),
+          EndedAtISO: endedAtISO
+        },
+        details
+      };
+    }
+
+    // Modal helpers for results & pembahasan (render inside overlay — no page scroll)
+    function showResultModal(){
+      const id = getIdentity();
+      const total = QUESTIONS.length;
+      const score = state.score;
+      const elapsed = getElapsedSec();
+      $("#modalTitle").textContent = `Skor: ${score}/${total}`;
+      $("#modalDesc").innerHTML = `<span class="muted" style="font-weight:900">Nama: <b>${escapeHtml(id.name)}</b> • Kelas: <b>${escapeHtml(id.klass)}</b> • Mode: <b>${escapeHtml(id.mode)}</b> • Waktu: <b>${fmtTime(elapsed)}</b></span>`;
+      renderModalResults();
+      $("#resultModal").style.display = "flex";
+      document.body.style.overflow = "hidden";
+
+      $("#tabResult").onclick = renderModalResults;
+      $("#tabExplain").onclick = renderModalExplain;
+      $("#resultClose").onclick = closeResultModal;
+      $("#modalCloseBottom").onclick = closeResultModal;
+      $("#modalDownload").onclick = downloadExcel;
+      $("#modalGoPage8").onclick = ()=> {
+        // optional: tutup modal dulu biar rapi
+        closeResultModal();
+        location.href = "hlm8.html";
+    };
+
+    }
+
+    function closeResultModal(){
+      $("#resultModal").style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    function renderModalResults(){
+      const body = $("#modalBody");
+      body.innerHTML = "";
+      state.answers.forEach((ans, idx)=>{
+        const q = QUESTIONS[idx];
+        const chosenText = ans ? q.options[ans.chosenIndex] : "(tidak dijawab)";
+        const correctText = q.options[q.answerIndex];
+        const ok = ans && ans.correct;
+        const div = document.createElement("div");
+        div.className = "revItem";
+        div.innerHTML = `
+          <div class="tag ${ok ? "green" : "red"}">${ok ? "✅ Benar" : "❌ Salah"} • Soal ${idx+1}</div>
+          <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.q)}</div>
+          <div class="muted" style="font-weight:900">Jawaban kamu: <b>${escapeHtml(chosenText)}</b></div>
+          <div class="muted" style="font-weight:900">Kunci: <b>${escapeHtml(correctText)}</b></div>
+        `;
+        body.appendChild(div);
+      });
+    }
+
+    function renderModalExplain(){
+      const body = $("#modalBody");
+      body.innerHTML = "";
+      QUESTIONS.forEach((q, idx)=>{
+        const div = document.createElement("div");
+        div.className = "revItem";
+        div.innerHTML = `
+          <div style="font-weight:900;margin-bottom:6px"><b>Soal ${idx+1}:</b> ${escapeHtml(q.q)}</div>
+          <div class="muted" style="margin-top:6px">${escapeHtml(q.explain)}</div>
+        `;
+        body.appendChild(div);
+      });
+    }
+
+    function downloadExcel(){
+      if(typeof XLSX === "undefined"){
+        toast("bad","Gagal export","Library XLSX tidak terbaca. Pastikan internet aktif (CDN).", 5200);
+        return;
+      }
+      const data = buildPayload();
+
+      // Sheet 1: Summary
+      const ws1 = XLSX.utils.json_to_sheet([data.meta]);
+
+      // Sheet 2: Detail
+      const ws2 = XLSX.utils.json_to_sheet(data.details);
+
+      // workbook
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws1, "Summary");
+      XLSX.utils.book_append_sheet(wb, ws2, "DetailJawaban");
+
+      // filename
+      const safeName = (data.meta.Name || "Siswa").replaceAll(/[^a-zA-Z0-9 _-]/g,"").trim().slice(0,40) || "Siswa";
+      const safeClass = (data.meta.Class || "Kelas").replaceAll(/[^a-zA-Z0-9 _-]/g,"").trim().slice(0,30) || "Kelas";
+      const fname = `Nilai_Kesetimbangan_${safeClass}_${safeName}.xlsx`;
+
+      XLSX.writeFile(wb, fname);
+      toast("ok","File Excel dibuat", "File sudah diunduh. Silakan kumpulkan ke guru.", 4800);
+    }
+
+    function copySummary(){
+      const p = buildPayload();
+      const t =
+`Nilai Drill Kesetimbangan
+Nama: ${p.meta.Name}
+Kelas: ${p.meta.Class}
+Mode: ${p.meta.Mode}
+Skor: ${p.meta.Score}/${p.meta.Total} (${p.meta.Percent}%)
+Waktu: ${p.meta.TimeFormatted}
+Selesai: ${p.meta.EndedAtISO}`;
+      navigator.clipboard?.writeText(t).then(()=>{
+        toast("ok","Tersalin", "Ringkasan nilai tersalin ke clipboard.", 3200);
+      }).catch(()=>{
+        toast("bad","Gagal salin", "Browser tidak mengizinkan clipboard. Salin manual dari hasil.", 4200);
+      });
+    }
+
+    function resetAll(){
+      stopTimer();
+      state.started=false;
+      state.startAt=null;
+      state.i=0;
+      state.answers=[];
+      state.score=0;
+      state.finished=false;
+      state.frozen=false;
+
+      $("#timeTxt").textContent = "00:00";
+      $("#scoreTxt").textContent = "0";
+      $("#miniFill").style.width = "0%";
+      $("#reviewWrap").style.display = "none";
+
+      $("#btnPrev").disabled = true;
+      $("#btnNext").disabled = true;
+      $("#btnDownload").disabled = true;
+      $("#btnCopy").disabled = true;
+      $("#btnReset").disabled = true;
+
+      // Clear identity inputs so next attempt requires re-entry
+      $("#name").value = "";
+      $("#klass").value = "";
+
+      $("#stage").innerHTML = `
+        <div class="qCard">
+          <div class="qText">Klik <b>Mulai</b> untuk mengerjakan drill soal.</div>
+          <p class="muted" style="margin-top:8px">
+            Materi yang diuji: <b>reaksi satu arah</b>, <b>reaksi dua arah</b>, <b>kesetimbangan dinamis</b>,
+            serta <b>homogen vs heterogen</b>.
+          </p>
+        </div>
+      `;
+      $("#qCount").textContent = `0/${QUESTIONS.length}`;
+      toast("info","Reset", "Kuis diulang dari awal.", 3200);
+    }
+
+    /***********************
+     * Buttons
+     ************************/
+    // Mode dikunci ke 'latihan' (boleh ulang). Tidak perlu handler perubahan mode.
+
+    $("#btnStart").addEventListener("click", ()=>{
+      const v = validateIdentity();
+      if(!v.ok){
+        toast("bad","Belum lengkap", v.msg, 3500);
+        return;
+      }
+      state.mode = $("#mode").value;
+      state.started=true;
+      state.i=0;
+      state.answers = new Array(QUESTIONS.length).fill(null);
+      state.score=0;
+      state.finished=false;
+      state.frozen=false;
+
+      startTimer();
+      $("#qCount").textContent = `1/${QUESTIONS.length}`;
+      $("#btnNext").disabled = true;
+      $("#btnPrev").disabled = true;
+      $("#btnReset").disabled = false;
+
+      renderQuestion();
+      toast("ok","Mulai!", "Kerjakan soal 1 sampai selesai ya.", 3500);
+    });
+
+    $("#btnNext").addEventListener("click", goNext);
+    $("#btnPrev").addEventListener("click", goPrev);
+
+    $("#btnReset").addEventListener("click", ()=>{
+      resetAll();
+    });
+
+    $("#btnDownload").addEventListener("click", downloadExcel);
+    $("#btnCopy").addEventListener("click", copySummary);
+
+    $("#btnHelp").addEventListener("click", ()=>{
+  toast("info","Bantuan",
+    "Isi Nama & Kelas, lalu kerjakan 10 soal tentang 3 subbab: reaksi satu arah dan dua arah, kesetimbangan dinamis, serta homogen dan heterogen.",
+    6000
+  );
+});
+
+    // init
+    $("#qCount").textContent = `0/${QUESTIONS.length}`;
+    toast("info","Halaman 7 siap", "Isi identitas lalu klik Mulai.", 5200);
+  </script>
+  <script>
+const DB_KEY = "KI_DB_v1";
+
+function dbLoad(){
+  try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users:{} }; }
+  catch { return { users:{} }; }
+}
+function dbSave(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+function getCurrentUser(){
+  try { return JSON.parse(localStorage.getItem("KI_CURRENT_USER")); }
+  catch { return null; }
+}
+
+function ensureUserInDB(user){
+  const db = dbLoad();
+  if(!user || !user.email) return null;
+
+  if(!db.users[user.email]){
+    db.users[user.email] = {
+      name: user.name || "-",
+      email: user.email,
+      visits: [],
+      scores: { sub1:null, sub2:null, sub3:null, sub4:null },
+      notes:  { sub1:"",   sub2:"",   sub3:"",   sub4:""   },
+      answers: {},
+      progress: {}
+    };
+    dbSave(db);
+  } else {
+    db.users[user.email].name = user.name || db.users[user.email].name;
+    dbSave(db);
+  }
+  return db;
+}
+
+function mustLogin(){
+  const user = getCurrentUser();
+  if(!user || !user.email){
+    alert("Kamu belum login. Kembali ke index.");
+    location.href = "index.html";
+    return null;
+  }
+  ensureUserInDB(user);
+  return user;
+}
+
+function saveAnswer(email, key, data){
+  const db = dbLoad();
+  if(!db.users[email]) return;
+  db.users[email].answers = db.users[email].answers || {};
+  db.users[email].answers[key] = { data, at: new Date().toISOString() };
+  dbSave(db);
+}
+
+function loadAnswer(email, key){
+  const db = dbLoad();
+  return db.users?.[email]?.answers?.[key]?.data || null;
+}
+
+function markProgress(email, pageKey, done=true){
+  const db = dbLoad();
+  if(!db.users[email]) return;
+  db.users[email].progress = db.users[email].progress || {};
+  db.users[email].progress[pageKey] = { done, at: new Date().toISOString() };
+  dbSave(db);
+}
+</script>
+<script>
+/* =====================================================
+   SIMPAN DATA SISWA SUB BAB 1 KE DASHBOARD GURU
+   Tidak mengubah layout halaman
+===================================================== */
+
+const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+/* GANTI BAGIAN INI SESUAI FILE HALAMAN */
+const DATA_HALAMAN_ID = "hlm7";
+const DATA_HALAMAN_JUDUL = "Halaman 7: Drill soal";
+
+/* Ambil identitas siswa dari login utama */
+function getCurrentStudentData(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+    return {
+      nama: user.name || user.nama || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+/* Ambil semua jawaban dari input, textarea, select, radio, checkbox */
+function collectPageAnswers(){
+  const hasil = [];
+
+  document.querySelectorAll("input, textarea, select").forEach((el, index) => {
+    const type = (el.type || "").toLowerCase();
+    const label =
+      document.querySelector(`label[for="${el.id}"]`)?.innerText?.trim() ||
+      el.closest(".field-group")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".field")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".card")?.querySelector("h2, h3")?.innerText?.trim() ||
+      el.name ||
+      el.id ||
+      `Isian ${index + 1}`;
+
+    let value = "";
+
+    if(type === "radio"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dipilih";
+    }else if(type === "checkbox"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dicentang";
+    }else{
+      value = el.value?.trim?.() || "";
+      if(!value) return;
+    }
+
+    hasil.push({
+      label: label,
+      jawaban: value
+    });
+  });
+
+  return hasil;
+}
+
+/* Simpan data halaman ke database guru */
+function simpanDataSubBab1KeGuru(status = "tersimpan otomatis"){
+  const siswa = getCurrentStudentData();
+  const jawaban = collectPageAnswers();
+
+  if(!siswa.email || siswa.email === "-"){
+    return;
+  }
+
+  let db = {};
+  try{
+    db = JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+  }catch(e){
+    db = {};
+  }
+
+  if(!db[siswa.email]){
+    db[siswa.email] = {
+      identitas: siswa,
+      halaman: {},
+      waktuMulai: new Date().toLocaleString("id-ID")
+    };
+  }
+
+  db[siswa.email].identitas = siswa;
+  db[siswa.email].halaman[DATA_HALAMAN_ID] = {
+    judul: DATA_HALAMAN_JUDUL,
+    status: status,
+    jawaban: jawaban,
+    waktuSimpan: new Date().toLocaleString("id-ID")
+  };
+  db[siswa.email].waktuUpdateTerakhir = new Date().toLocaleString("id-ID");
+
+  localStorage.setItem(DATA_GURU_SUBBAB1_KEY, JSON.stringify(db));
+}
+
+/* Simpan otomatis ketika siswa mengetik/memilih jawaban */
+document.addEventListener("input", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+document.addEventListener("change", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+/* Simpan juga saat tombol apa pun diklik */
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button") || e.target.closest("a")){
+    simpanDataSubBab1KeGuru("tersimpan dari aksi siswa");
+  }
+});
+
+/* Simpan saat siswa meninggalkan halaman */
+window.addEventListener("beforeunload", () => {
+  simpanDataSubBab1KeGuru("tersimpan saat keluar halaman");
+});
+
+/* Simpan awal saat halaman dibuka */
+simpanDataSubBab1KeGuru("halaman dibuka");
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 1,
+    pageKey: "hlm7",
+    pageTitle: "Halaman 7 — Drill Soal Sub Bab 1"
+  });
+});
+</script>
+</body>
+</html>

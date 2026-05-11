@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 4 • Menarik Kesimpulan Proses Haber</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1120px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:980px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .saved-box,.white-box{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .saved-box{border:2px solid rgba(102,242,165,.35);}
+    .white-box{border:2px solid rgba(124,77,255,.32);}
+    .saved-box h3{color:#15803d;}
+    .white-box h3{color:#111827;}
+    .saved-box p,.white-box p{margin:8px 0 0; color:#374151; font-weight:650;}
+    .empty-note{color:#7c2d12; background:#fff7ed; border:1px solid #fdba74; padding:12px; border-radius:16px; font-weight:800;}
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.summary-grid{grid-template-columns:1fr;}}
+    .summary-card{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.25);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:var(--shadow2);
+      line-height:1.6;
+      display:grid;
+      gap:8px;
+    }
+    .summary-card .icon{font-size:28px;}
+    .summary-card b{display:block; color:#312e81; font-size:17px;}
+    .summary-card p{margin:0; color:#374151; font-weight:650;}
+
+    .form-box{
+      display:grid;
+      gap:16px;
+      margin-top:14px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.28);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 14px 36px rgba(15,23,42,.15);
+    }
+    .field-group{display:grid; gap:8px;}
+    .field-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#312e81;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .field-label span{
+      width:24px;
+      height:24px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color:#ffffff;
+      background:linear-gradient(135deg, #ff4fd8, #7c4dff);
+      font-size:12px;
+      font-weight:950;
+    }
+    .select-box,.textarea-box,.input-line{
+      width:100%;
+      border-radius:18px;
+      padding:14px 15px;
+      border:2px solid #c7d2fe;
+      background:#f9fafb;
+      color:#111827;
+      font-family:inherit;
+      font-weight:700;
+      outline:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+    }
+    .textarea-box{min-height:140px; resize:vertical; line-height:1.65;}
+    .select-box:focus,.textarea-box:focus,.input-line:focus{border-color:#7c4dff; background:#ffffff; box-shadow:0 0 0 5px rgba(124,77,255,.15);}
+    .field-help{margin:0; color:#4b5563; font-size:13px; line-height:1.55; font-weight:650;}
+
+    .checklist{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+    .check-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(45,108,255,.20);
+      border-radius:18px;
+      padding:13px;
+      line-height:1.6;
+      font-weight:750;
+      box-shadow:var(--shadow2);
+    }
+    .check-item input{margin-top:4px; transform:scale(1.15); accent-color:#7c4dff;}
+
+    .feedback{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(102,242,165,.28);
+      background:rgba(102,242,165,.10);
+      color:#d8ffe8;
+      line-height:1.6;
+      font-weight:850;
+    }
+    .footer-actions{display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A4</div>
+      <div>
+        <div class="brand-title">Sub Bab 4</div>
+        <div class="brand-sub">Menarik Kesimpulan</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="subbab4-menganalisis-data.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#kesimpulan">Isi Kesimpulan</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Inkuiri Terbimbing • Menarik Kesimpulan</span></div>
+
+      <section class="hero">
+        <h1 class="title">✅ Menarik <span class="accent">Kesimpulan</span></h1>
+        <p class="subtitle">
+          Pada tahap ini, peserta didik menyusun kesimpulan akhir berdasarkan hasil analisis. Kesimpulan difokuskan pada pengaruh tekanan, suhu, dan katalis terhadap proses Haber berdasarkan prinsip Le Chatelier.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Hasil Analisis dari Halaman Sebelumnya</h2>
+          <p class="muted">Bagian ini menampilkan kembali hasil analisis yang sudah disimpan pada tahap menguji hipotesis.</p>
+          <div id="analisisTersimpan" class="saved-box" style="margin-top:14px;">
+            <h3>Memuat hasil analisis...</h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🧠 Ringkasan Konsep untuk Menyusun Kesimpulan</h2>
+          <p class="muted">
+            Gunakan ringkasan berikut sebagai pengingat sebelum menulis kesimpulan akhir. Ringkasan ini tidak perlu disalin, tetapi digunakan untuk membantu menyusun jawaban dengan runtut.
+          </p>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="icon">⚖️</div>
+              <b>Tekanan Tinggi</b>
+              <p>Kesetimbangan bergeser ke sisi jumlah mol gas lebih sedikit, yaitu sisi produk NH₃.</p>
+            </div>
+            <div class="summary-card">
+              <div class="icon">🌡️</div>
+              <b>Suhu Sedang</b>
+              <p>Reaksi pembentukan NH₃ bersifat eksoterm. Suhu sedang digunakan sebagai kompromi antara hasil dan laju reaksi.</p>
+            </div>
+            <div class="summary-card">
+              <div class="icon">🧪</div>
+              <b>Katalis Besi</b>
+              <p>Katalis mempercepat tercapainya kesetimbangan, tetapi tidak mengubah posisi kesetimbangan.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="kesimpulan">
+        <div class="card-inner">
+          <h2>✍️ Kolom Kesimpulan Akhir</h2>
+          <p class="muted">
+            Susun kesimpulan akhir dengan bahasa ilmiah. Kesimpulan harus menjawab pertanyaan penyelidikan dan menunjukkan hubungan dengan prinsip Le Chatelier.
+          </p>
+
+          <div class="form-box">
+            <div class="field-group">
+              <label class="field-label" for="jawabanPertanyaan"><span>1</span> Jawaban terhadap Pertanyaan Penyelidikan</label>
+              <textarea id="jawabanPertanyaan" class="textarea-box" placeholder="Tuliskan jawaban akhir terhadap pertanyaan penyelidikan kelompok berdasarkan hasil analisis."></textarea>
+              <p class="field-help">Jawaban harus berkaitan dengan proses Haber dan hasil analisis pada halaman sebelumnya.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="kesimpulanAkhir"><span>2</span> Kesimpulan Akhir Proses Haber</label>
+              <textarea id="kesimpulanAkhir" class="textarea-box" placeholder="Tuliskan kesimpulan akhir tentang pengaruh tekanan, suhu, dan katalis terhadap pembentukan NH₃ pada proses Haber."></textarea>
+              <p class="field-help">Sebutkan tekanan, suhu, dan katalis secara runtut dalam kesimpulan.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="contohAplikasi"><span>3</span> Penguatan Aplikasi Kesetimbangan dalam Kehidupan</label>
+              <select id="contohAplikasi" class="select-box">
+                <option value="">Pilih contoh penguatan...</option>
+                <option>Kesetimbangan hemoglobin dan oksigen</option>
+                <option>Pembentukan stalaktit dan stalagmit</option>
+                <option>Kesetimbangan CO₂ pada minuman berkarbonasi</option>
+              </select>
+              <p class="field-help">Pilih salah satu contoh yang nanti dapat digunakan sebagai bahan produk/infografis.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="hubunganAplikasi"><span>4</span> Hubungan dengan Contoh Aplikasi</label>
+              <textarea id="hubunganAplikasi" class="textarea-box" placeholder="Jelaskan secara singkat bagaimana contoh yang dipilih juga menunjukkan prinsip kesetimbangan kimia."></textarea>
+              <p class="field-help">Bagian ini berfungsi sebagai jembatan menuju tugas komunikasi hasil pada halaman berikutnya.</p>
+            </div>
+          </div>
+
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" id="cekJawab"> Kesimpulan sudah menjawab pertanyaan penyelidikan.</label>
+            <label class="check-item"><input type="checkbox" id="cekKonsep"> Kesimpulan sudah memuat prinsip Le Chatelier.</label>
+            <label class="check-item"><input type="checkbox" id="cekFaktor"> Kesimpulan sudah menyebut tekanan, suhu, dan katalis.</label>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn-primary" type="button" onclick="simpanKesimpulan()">Simpan Kesimpulan</button>
+            <button class="btn" type="button" onclick="hapusKesimpulan()">Hapus</button>
+          </div>
+          <div id="feedbackKesimpulan" class="feedback"></div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="sb44.html">⬅ Kembali ke Analisis Data</a>
+        <a class="btn-primary" href="game.html" onclick="return cekSebelumLanjut()">Next Game ➜</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+const SB4_STORAGE_KEY = "dataAdminGuruSB4";
+
+function getUserKeySB4(){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  const email =
+    user.email ||
+    user.uid ||
+    user.name ||
+    user.nama ||
+    "tanpa-user";
+
+  return String(email)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function storageKeySB4(namaKey){
+  return namaKey + "_" + getUserKeySB4();
+}
+
+function ambilIdentitasSB4(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem(storageKeySB4("kelompokSubBab4")) || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB4(payload){
+  const identitas = ambilIdentitasSB4(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  // Simpan lokal per akun siswa agar tidak saling tertukar di browser yang sama.
+  const keyDataGuruLokal = storageKeySB4(SB4_STORAGE_KEY);
+  const dataLama = JSON.parse(localStorage.getItem(keyDataGuruLokal)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(keyDataGuruLokal, JSON.stringify(dataLama));
+
+  // Simpan online ke Firebase agar tetap terbaca di datasb4.html guru.
+  if (typeof AppDB !== "undefined" && AppDB.saveAnswer) {
+    AppDB.saveAnswer({
+      subBab: 4,
+      pageKey: payload.halaman || "sb4",
+      pageTitle: payload.judul || "Sub Bab 4",
+      answers: {
+        ...(payload.jawaban || {}),
+        _localUser: {
+          nama: identitas.nama,
+          kelas: identitas.kelas,
+          kelompok: identitas.kelompok,
+          email: identitas.email
+        }
+      },
+      score: payload.skor ?? null,
+      status: payload.status || "tersimpan"
+    }).catch((error) => {
+      console.error("Gagal menyimpan Sub Bab 4 ke Firebase:", error);
+    });
+  }
+
+  return dataBaru;
+}
+</script>
+
+  <script>
+    function tampilkanAnalisis(){
+      const box = document.getElementById('analisisTersimpan');
+     const dataTersimpan = localStorage.getItem(storageKeySB4('analisisSubBab4'));
+
+      if(!dataTersimpan){
+        box.innerHTML = `
+          <h3>Belum ada hasil analisis</h3>
+          <div class="empty-note">
+            Hasil analisis dari halaman sebelumnya belum ditemukan. Peserta didik dapat kembali ke halaman analisis data untuk mengisi tabel uji hipotesis.
+          </div>
+        `;
+        return;
+      }
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        box.innerHTML = `
+          <h3>Hasil analisis tersimpan</h3>
+          <p><b>Tekanan tinggi:</b><br>${data.tekanan?.hasil || '-'}<br><b>Alasan:</b> ${data.tekanan?.alasan || '-'}<br><b>Uji hipotesis:</b> ${data.tekanan?.uji || '-'}</p>
+          <p><b>Suhu sedang:</b><br>${data.suhu?.hasil || '-'}<br><b>Alasan:</b> ${data.suhu?.alasan || '-'}<br><b>Uji hipotesis:</b> ${data.suhu?.uji || '-'}</p>
+          <p><b>Katalis besi:</b><br>${data.katalis?.hasil || '-'}<br><b>Alasan:</b> ${data.katalis?.alasan || '-'}<br><b>Uji hipotesis:</b> ${data.katalis?.uji || '-'}</p>
+        `;
+      }catch(e){
+        localStorage.removeItem(storageKeySB4('analisisSubBab4'));
+        tampilkanAnalisis();
+      }
+    }
+
+    function simpanKesimpulan(){
+      const jawaban = document.getElementById('jawabanPertanyaan').value.trim();
+      const kesimpulan = document.getElementById('kesimpulanAkhir').value.trim();
+      const contoh = document.getElementById('contohAplikasi').value;
+      const hubungan = document.getElementById('hubunganAplikasi').value.trim();
+      const checklist = ['cekJawab','cekKonsep','cekFaktor'].map((id) => document.getElementById(id).checked);
+      const fb = document.getElementById('feedbackKesimpulan');
+
+      if(!jawaban || !kesimpulan || !contoh || !hubungan){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Lengkapi jawaban pertanyaan, kesimpulan akhir, contoh aplikasi, dan hubungan konsep terlebih dahulu.';
+        return;
+      }
+
+      if(checklist.includes(false)){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Centang semua pemeriksaan kesimpulan sebelum menyimpan.';
+        return;
+      }
+
+      const data = {
+        jawaban,
+        kesimpulan,
+        contoh,
+        hubungan,
+        checklist,
+        waktuSimpan:new Date().toLocaleString('id-ID')
+      };
+
+      localStorage.setItem(storageKeySB4('kesimpulanSubBab4'), JSON.stringify(data));
+      simpanKeDataSB4({
+  halaman: "sb45",
+  judul: "Menarik Kesimpulan Proses Haber",
+  skor: 100,
+  status: "kesimpulan akhir disimpan",
+  ringkasan: "Jawaban pertanyaan, kesimpulan akhir, aplikasi, dan checklist kesimpulan sudah disimpan.",
+  jawaban: data,
+  kunci: {
+    konsep: "Kesimpulan memuat pengaruh tekanan, suhu, katalis, dan prinsip Le Chatelier pada proses Haber."
+  }
+});
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(102,242,165,.28)';
+      fb.style.background = 'rgba(102,242,165,.10)';
+      fb.style.color = '#d8ffe8';
+      fb.innerHTML = '✅ Kesimpulan akhir berhasil disimpan. Lanjutkan ke tahap mengomunikasikan hasil.';
+    }
+
+    function muatKesimpulan(){
+      const dataTersimpan = localStorage.getItem(storageKeySB4('kesimpulanSubBab4'));
+      if(!dataTersimpan) return;
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        document.getElementById('jawabanPertanyaan').value = data.jawaban || '';
+        document.getElementById('kesimpulanAkhir').value = data.kesimpulan || '';
+        document.getElementById('contohAplikasi').value = data.contoh || '';
+        document.getElementById('hubunganAplikasi').value = data.hubungan || '';
+        if(Array.isArray(data.checklist)){
+          ['cekJawab','cekKonsep','cekFaktor'].forEach((id, index) => {
+            document.getElementById(id).checked = Boolean(data.checklist[index]);
+          });
+        }
+      }catch(e){
+        localStorage.removeItem(storageKeySB4('kesimpulanSubBab4'));
+      }
+    }
+
+    function hapusKesimpulan(){
+      document.getElementById('jawabanPertanyaan').value = '';
+      document.getElementById('kesimpulanAkhir').value = '';
+      document.getElementById('contohAplikasi').value = '';
+      document.getElementById('hubunganAplikasi').value = '';
+      ['cekJawab','cekKonsep','cekFaktor'].forEach((id) => document.getElementById(id).checked = false);
+      localStorage.removeItem(storageKeySB4('kesimpulanSubBab4'));
+
+      const fb = document.getElementById('feedbackKesimpulan');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(255,224,130,.35)';
+      fb.style.background = 'rgba(255,224,130,.10)';
+      fb.style.color = '#fff2bd';
+      fb.innerHTML = 'Kesimpulan akhir sudah dihapus.';
+    }
+
+    function cekSebelumLanjut(){
+      if(!localStorage.getItem(storageKeySB4('kesimpulanSubBab4'))){
+        return confirm('Kesimpulan akhir belum disimpan. Tetap lanjut ke tahap mengomunikasikan hasil?');
+      }
+      return true;
+    }
+
+    tampilkanAnalisis();
+    muatKesimpulan();
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 4,
+    pageKey: "sb45",
+    pageTitle: "Sub Bab 4 — Menarik Kesimpulan Proses Haber"
+  });
+});
+</script>
+</body>
+</html>

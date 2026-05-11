@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Halaman 3 — Hipotesis</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.84);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .choice {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      margin-top: 10px;
+    }
+
+    .choice.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+    }
+
+    .choice.incorrect {
+      border-color: rgba(239,68,68,.22);
+      background: rgba(239,68,68,.08);
+    }
+
+    .choice b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 1</b>
+          <span>Halaman 3 • Merumuskan Hipotesis</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb1.html">📊 Data Sub Bab 1</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="grid cols-3">
+        <div class="card">
+          <div class="concept">
+            <div class="tag">🧭 Bekal 1 — Arah Reaksi</div>
+            <ul>
+              <li><b>Reaksi satu arah</b> cenderung sulit kembali seperti semula.</li>
+              <li>Contohnya reaksi yang menghasilkan endapan padat.</li>
+              <li>Reaksi dua arah dapat berlangsung maju dan balik.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="concept">
+            <div class="tag">🔄 Bekal 2 — Kesetimbangan Dinamis</div>
+            <ul>
+              <li>Secara makroskopis tampak stabil.</li>
+              <li>Secara mikroskopis reaksi tetap berlangsung.</li>
+              <li>Keadaan setimbang terjadi saat laju reaksi maju sama dengan laju reaksi balik.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="concept">
+            <div class="tag">🧪 Bekal 3 — Sistem Tertutup</div>
+            <ul>
+              <li>Kesetimbangan lebih mungkin terjadi dalam sistem tertutup.</li>
+              <li>Zat tidak keluar dari sistem.</li>
+              <li>Reaksi maju dan balik dapat terus berlangsung.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Hipotesis 1 — Arah Reaksi Pembentukan Endapan AgCl</h2>
+        <p class="muted">
+          Siswa diminta memilih hipotesis tentang reaksi pembentukan endapan AgCl.
+        </p>
+
+        <div class="choice correct">
+          <b>✅ Jawaban benar: Reaksi cenderung berlangsung satu arah</b>
+          <p>
+            Produk berupa endapan AgCl(s) terpisah dari larutan, sehingga secara pengamatan sederhana
+            reaksi tampak sulit kembali seperti keadaan semula.
+          </p>
+        </div>
+
+        <div class="choice incorrect">
+          <b>❌ Jawaban kurang tepat: Reaksi cenderung berlangsung dua arah</b>
+          <p>
+            Pilihan ini kurang tepat untuk konteks pengamatan pembentukan AgCl, karena produk utama berupa endapan
+            yang memisah dari larutan.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>Contoh alasan ideal</h3>
+          <p>
+            Reaksi pembentukan AgCl cenderung berlangsung satu arah karena ion Ag⁺ dan Cl⁻ membentuk AgCl(s)
+            berupa endapan putih yang terpisah dari larutan. Karena produk sudah mengendap, reaksi sulit kembali
+            seperti kondisi awal dalam pengamatan sederhana.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Hipotesis 2 — Perubahan Warna Larutan Co²⁺</h2>
+        <p class="muted">
+          Siswa diminta memilih hipotesis tentang perubahan warna larutan kompleks Co²⁺.
+        </p>
+
+        <div class="choice correct">
+          <b>✅ Jawaban benar: Perubahan warna dapat terjadi bolak-balik</b>
+          <p>
+            Warna larutan berubah setelah ditambahkan HCl, lalu dapat kembali setelah ditambahkan air.
+            Ini menunjukkan reaksi yang dapat berlangsung reversibel.
+          </p>
+        </div>
+
+        <div class="choice incorrect">
+          <b>❌ Jawaban kurang tepat: Perubahan warna hanya terjadi satu kali dan tidak dapat kembali</b>
+          <p>
+            Pilihan ini kurang tepat karena fenomena pada larutan Co²⁺ menunjukkan perubahan yang dapat dibalik
+            saat kondisi sistem diubah.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>Contoh alasan ideal</h3>
+          <p>
+            Perubahan warna larutan Co²⁺ dapat terjadi bolak-balik karena ketika HCl ditambahkan, komposisi spesi
+            dalam larutan berubah sehingga warna bergeser. Ketika air ditambahkan, sistem dapat bergeser kembali
+            sehingga warna mendekati keadaan semula.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Hipotesis 3 — Kondisi agar Reaksi Mencapai Kesetimbangan</h2>
+        <p class="muted">
+          Siswa diminta menentukan kondisi agar reaksi dapat mencapai keadaan setimbang.
+        </p>
+
+        <div class="choice correct">
+          <b>✅ Jawaban benar: Reaksi dapat mencapai kesetimbangan jika berlangsung dalam sistem tertutup</b>
+          <p>
+            Dalam sistem tertutup, zat-zat tetap berada di dalam sistem sehingga reaksi maju dan reaksi balik
+            dapat berlangsung terus-menerus.
+          </p>
+        </div>
+
+        <div class="choice incorrect">
+          <b>❌ Jawaban kurang tepat: Reaksi dapat mencapai kesetimbangan meskipun sistem terbuka</b>
+          <p>
+            Pilihan ini kurang tepat karena jika zat keluar dari sistem, reaksi balik dapat terganggu dan
+            keadaan setimbang sulit dipertahankan.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>Contoh alasan ideal</h3>
+          <p>
+            Kesetimbangan memerlukan reaksi maju dan balik yang berlangsung terus-menerus. Karena itu,
+            sistem sebaiknya tertutup agar zat-zat tidak keluar dari sistem dan peluang terbentuknya reaksi balik
+            tetap ada.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci Halaman 3</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">H1</div>
+            <p><b>Pilihan benar:</b> satu arah</p>
+            <p class="muted">
+              Karena terbentuk endapan AgCl yang memisah dari larutan.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">H2</div>
+            <p><b>Pilihan benar:</b> bolak-balik</p>
+            <p class="muted">
+              Karena warna dapat berubah saat ditambah HCl dan dapat kembali saat ditambah air.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">H3</div>
+            <p><b>Pilihan benar:</b> sistem tertutup</p>
+            <p class="muted">
+              Karena zat tetap berada dalam sistem sehingga reaksi maju dan balik dapat berlangsung.
+            </p>
+          </div>
+        </div>
+
+        <div class="answer">
+          <h3>Contoh jawaban lengkap siswa</h3>
+          <p>
+            Hipotesis saya adalah reaksi pembentukan AgCl cenderung berlangsung satu arah karena terbentuk endapan
+            yang terpisah dari larutan. Pada larutan Co²⁺, perubahan warna dapat terjadi bolak-balik karena warna
+            berubah ketika ditambah HCl dan dapat kembali ketika ditambah air. Reaksi dapat mencapai kesetimbangan
+            jika berlangsung dalam sistem tertutup, karena zat-zat tetap berada di dalam sistem sehingga reaksi maju
+            dan reaksi balik dapat terus berlangsung.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+
+        <div class="btnRow">
+          <a class="btn" href="keyhlm1-2.html">⬅ Kunci Halaman 1–2</a>
+          <div>
+            <a class="btn blue" href="datasb1.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keyhlm4.html">Lanjut Kunci Halaman 4 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

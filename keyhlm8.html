@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Halaman 8 — Rekap Akhir</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.84);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+    }
+
+    .status.ok {
+      color: #137a36;
+      background: rgba(34,197,94,.14);
+      border-color: rgba(34,197,94,.22);
+    }
+
+    .status.warn {
+      color: #8a5a10;
+      background: rgba(245,158,11,.16);
+      border-color: rgba(245,158,11,.24);
+    }
+
+    .status.no {
+      color: #8a1f1f;
+      background: rgba(239,68,68,.14);
+      border-color: rgba(239,68,68,.22);
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 1</b>
+          <span>Halaman 8 • Rekap Akhir dan Refleksi</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb1.html">📊 Data Sub Bab 1</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi panduan kunci dan interpretasi rekap akhir. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Kunci Aktivitas Halaman 8</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Bagian</th>
+              <th>Yang Dilakukan Siswa</th>
+              <th>Kriteria Selesai</th>
+              <th>Interpretasi Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Handout</b></td>
+              <td>Membaca handout materi kesetimbangan.</td>
+              <td><span class="status ok">Selesai jika dibaca</span></td>
+              <td>Siswa meninjau ulang konsep inti sebelum melihat rekap akhir.</td>
+            </tr>
+            <tr>
+              <td><b>Refleksi Diri</b></td>
+              <td>Mengisi Google Form refleksi.</td>
+              <td><span class="status ok">Selesai jika form diisi</span></td>
+              <td>Refleksi digunakan untuk melihat pemahaman dan kesadaran belajar siswa.</td>
+            </tr>
+            <tr>
+              <td><b>Checklist Refleksi</b></td>
+              <td>Mencentang pernyataan “Saya sudah membaca handout dan mengisi refleksi diri.”</td>
+              <td><span class="status ok">Tombol lanjut aktif</span></td>
+              <td>Checklist menjadi pengunci agar siswa tidak langsung lompat ke rekap.</td>
+            </tr>
+            <tr>
+              <td><b>Hasil Progres</b></td>
+              <td>Melihat jumlah halaman yang sudah selesai.</td>
+              <td><span class="status ok">Ideal 8/8</span></td>
+              <td>Jika belum 8/8, ada halaman yang belum tersimpan atau belum diselesaikan.</td>
+            </tr>
+            <tr>
+              <td><b>Skor Drill</b></td>
+              <td>Melihat skor Halaman 7.</td>
+              <td><span class="status ok">Ada skor</span></td>
+              <td>Skor drill menunjukkan pemahaman akhir siswa pada Sub Bab 1.</td>
+            </tr>
+            <tr>
+              <td><b>Export Excel</b></td>
+              <td>Mengunduh file rekap hasil belajar.</td>
+              <td><span class="status ok">File berhasil diunduh</span></td>
+              <td>File dapat digunakan guru sebagai arsip lokal atau bukti pengerjaan.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Refleksi Diri</h2>
+        <p class="muted">
+          Pada halaman siswa, refleksi diisi melalui Google Form. Karena jawabannya bersifat terbuka,
+          tidak ada satu jawaban tunggal. Guru menilai berdasarkan kedalaman pemahaman siswa.
+        </p>
+
+        <div class="answer">
+          <h3>Contoh refleksi ideal</h3>
+          <p>
+            Setelah mempelajari Sub Bab 1, saya memahami bahwa reaksi satu arah berlangsung dari reaktan
+            menuju produk, sedangkan reaksi dua arah dapat berlangsung maju dan balik. Kesetimbangan dinamis
+            terjadi ketika laju reaksi maju sama dengan laju reaksi balik, sehingga secara makroskopis sistem
+            tampak tetap, tetapi pada tingkat partikel reaksi masih berlangsung. Saya juga memahami bahwa
+            kesetimbangan homogen melibatkan zat dalam fase yang sama, sedangkan kesetimbangan heterogen
+            melibatkan zat dengan fase berbeda.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Kriteria refleksi baik</div>
+          <ul>
+            <li>Menyebut perbedaan reaksi satu arah dan dua arah.</li>
+            <li>Menjelaskan bahwa kesetimbangan dinamis bukan berarti reaksi berhenti.</li>
+            <li>Menyebut hubungan antara laju reaksi maju dan laju reaksi balik.</li>
+            <li>Membedakan homogen dan heterogen berdasarkan fase zat.</li>
+            <li>Menggunakan bahasa sendiri, bukan hanya menyalin definisi.</li>
+          </ul>
+        </div>
+
+        <div class="warning">
+          <h3>Refleksi yang perlu diperbaiki</h3>
+          <p>
+            Jika siswa hanya menulis “sudah paham” atau “materinya mudah” tanpa menyebut konsep kimia,
+            refleksi tersebut belum cukup kuat. Guru dapat meminta siswa menambahkan konsep yang dipahami,
+            contohnya tentang reaksi reversible atau perbedaan fase pada homogen dan heterogen.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Interpretasi Rekap Progres</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Data yang Muncul</th>
+              <th>Arti</th>
+              <th>Tindakan Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Progress 8/8</b></td>
+              <td>Siswa sudah menyelesaikan semua halaman Sub Bab 1.</td>
+              <td>Data siswa dapat dianggap lengkap.</td>
+            </tr>
+            <tr>
+              <td><b>Progress kurang dari 8/8</b></td>
+              <td>Ada halaman yang belum dikerjakan atau belum tersimpan.</td>
+              <td>Cek halaman mana yang belum selesai pada tabel progress.</td>
+            </tr>
+            <tr>
+              <td><b>Skor Drill muncul</b></td>
+              <td>Siswa sudah mengerjakan Halaman 7.</td>
+              <td>Gunakan skor sebagai nilai latihan akhir Sub Bab 1.</td>
+            </tr>
+            <tr>
+              <td><b>Skor Drill kosong</b></td>
+              <td>Data Halaman 7 belum tersimpan atau siswa belum menyelesaikan drill.</td>
+              <td>Minta siswa kembali ke Halaman 7 dan menyelesaikan drill.</td>
+            </tr>
+            <tr>
+              <td><b>Export Excel berhasil</b></td>
+              <td>Data lokal siswa berhasil dijadikan file rekap.</td>
+              <td>File dapat dikumpulkan sebagai cadangan data.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Standar Penilaian Akhir Sub Bab 1</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Progress lengkap, refleksi berisi konsep utama, dan skor drill tinggi.
+              Siswa mampu membedakan reaksi satu arah, dua arah, dinamis, homogen, dan heterogen.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Progress hampir lengkap dan skor drill sedang. Siswa memahami sebagian besar konsep,
+              tetapi masih perlu penguatan pada alasan atau pembahasan.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Progress belum lengkap, refleksi terlalu singkat, atau skor drill rendah.
+              Siswa perlu diarahkan kembali ke halaman konsep dan pembahasan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pembahasan Konsep Akhir</h2>
+
+        <div class="grid cols-2">
+          <div class="answer">
+            <h3>Konsep inti yang harus dikuasai siswa</h3>
+            <ul>
+              <li>Reaksi satu arah ditandai panah <b>→</b>.</li>
+              <li>Reaksi dua arah ditandai panah <b>⇌</b>.</li>
+              <li>Kesetimbangan dinamis terjadi saat laju maju sama dengan laju balik.</li>
+              <li>Secara makroskopis sistem tampak tetap.</li>
+              <li>Secara mikroskopis reaksi tetap berlangsung.</li>
+              <li>Homogen berarti satu fase.</li>
+              <li>Heterogen berarti lebih dari satu fase.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci Halaman 8</h2>
+
+        <div class="answer">
+          <p>
+            Halaman 8 dianggap selesai apabila siswa sudah membaca handout, mengisi refleksi diri,
+            mencentang pernyataan refleksi, melihat hasil progres, dan jika diperlukan mengunduh rekap Excel.
+            Kunci utamanya bukan jawaban pilihan ganda, tetapi kelengkapan proses belajar dan kemampuan siswa
+            merefleksikan kembali konsep kesetimbangan kimia Sub Bab 1.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keyhlm7.html">⬅ Kunci Halaman 7</a>
+          <div>
+            <a class="btn blue" href="datasb1.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="h1.html">Kembali ke Peta Eksplorasi ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

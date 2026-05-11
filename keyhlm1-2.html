@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kunci Halaman 1–2 • Sub Bab 1</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      filter: blur(32px);
+      opacity: 0.35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(60px, -40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 5vw, 52px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.72);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 900px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid #ef4444;
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .concept {
+      background: rgba(43,124,255,.09);
+      border: 1px solid rgba(43,124,255,.18);
+      border-left: 6px solid var(--primary);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .videoBox {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.65);
+    }
+
+    .videoThumb {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: rgba(0,0,0,.16);
+      overflow: hidden;
+      text-decoration: none;
+    }
+
+    .videoThumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.06);
+    }
+
+    .videoThumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.48));
+    }
+
+    .play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 30px;
+      z-index: 2;
+      background: linear-gradient(90deg, rgba(255,60,200,.82), rgba(123,74,255,.82), rgba(59,121,255,.82));
+      box-shadow: 0 16px 45px rgba(0,0,0,.35);
+    }
+
+    .videoBody {
+      padding: 14px;
+    }
+
+    .videoBody p {
+      margin: 4px 0;
+    }
+
+    .keyList {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .keyItem {
+      padding: 13px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .keyItem.good {
+      background: rgba(34, 197, 94, 0.10);
+      border-color: rgba(34,197,94,.24);
+    }
+
+    .keyItem.bad {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239,68,68,.18);
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .92);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 1</b>
+          <span>Halaman 1–2 • Orientasi & Rumusan Masalah</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb1.html">📊 Data Sub Bab 1</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="grid cols-2">
+        <div class="card solid">
+          <h2>Video 1 — Reaksi Pengendapan AgCl</h2>
+          <div class="videoBox">
+            <a class="videoThumb" href="https://www.youtube.com/shorts/Tz_p9ZKQtc8" target="_blank">
+              <img src="https://i.ytimg.com/vi/Tz_p9ZKQtc8/hqdefault.jpg" alt="Thumbnail Reaksi AgCl">
+              <div class="play">▶</div>
+            </a>
+            <div class="videoBody">
+              <p><b>Fokus pengamatan:</b> larutan AgNO₃ dicampur dengan NaCl.</p>
+              <p class="muted">Reaksi ini menunjukkan terbentuknya endapan putih AgCl.</p>
+            </div>
+          </div>
+
+          <div class="answer">
+            <h3>Kunci Pengamatan</h3>
+            <ul>
+              <li>Ketika AgNO₃ dicampur dengan NaCl, terbentuk endapan putih AgCl.</li>
+              <li>Terjadi perubahan wujud/tampilan karena muncul zat padat yang tidak larut.</li>
+              <li>Terbentuk zat baru berupa AgCl(s).</li>
+              <li>Secara pengamatan sederhana, reaksi ini cenderung berlangsung satu arah karena produk mengendap dan terpisah dari larutan.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card solid">
+          <h2>Video 2 — Perubahan Warna Kompleks Co²⁺</h2>
+          <div class="videoBox">
+            <a class="videoThumb" href="https://youtu.be/MBFX8ZlnArI" target="_blank">
+              <img src="https://i.ytimg.com/vi/MBFX8ZlnArI/hqdefault.jpg" alt="Thumbnail Reaksi CoCl4">
+              <div class="play">▶</div>
+            </a>
+            <div class="videoBody">
+              <p><b>Fokus pengamatan:</b> perubahan warna setelah ditambah HCl dan air.</p>
+              <p class="muted">Reaksi ini menunjukkan perubahan yang dapat berlangsung bolak-balik.</p>
+            </div>
+          </div>
+
+          <div class="answer">
+            <h3>Kunci Pengamatan</h3>
+            <ul>
+              <li>Larutan kompleks Co²⁺ mula-mula memiliki warna tertentu, umumnya merah muda.</li>
+              <li>Setelah ditambahkan HCl pekat, warna berubah menjadi biru karena terbentuk kompleks klorida.</li>
+              <li>Setelah ditambahkan air, warna dapat kembali ke arah merah muda.</li>
+              <li>Perubahan warna dapat terjadi bolak-balik, sehingga menunjukkan sifat reaksi reversible.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Perbandingan Kedua Reaksi</h2>
+        <p class="muted">
+          Pada halaman siswa, siswa diminta membandingkan reaksi pertama dan kedua. Berikut kunci jawaban yang disarankan.
+        </p>
+
+        <div class="keyList">
+          <div class="keyItem good">
+            ✅ <b>Reaksi pertama hanya berlangsung satu arah.</b>
+            <p class="muted">
+              Benar. Reaksi AgNO₃ dan NaCl membentuk endapan AgCl yang terpisah dari larutan.
+              Dalam pengamatan sederhana, reaksi ini cenderung tidak kembali seperti semula.
+            </p>
+          </div>
+
+          <div class="keyItem good">
+            ✅ <b>Reaksi kedua dapat berlangsung bolak-balik.</b>
+            <p class="muted">
+              Benar. Perubahan warna larutan Co²⁺ dapat bergeser ketika ditambah HCl dan dapat kembali ketika ditambah air.
+            </p>
+          </div>
+
+          <div class="keyItem bad">
+            ❌ <b>Keduanya sama.</b>
+            <p class="muted">
+              Kurang tepat. Reaksi pertama menunjukkan pembentukan endapan yang cenderung satu arah,
+              sedangkan reaksi kedua menunjukkan perubahan yang dapat bergeser bolak-balik.
+            </p>
+          </div>
+
+          <div class="keyItem bad">
+            ⚠️ <b>Saya belum yakin.</b>
+            <p class="muted">
+              Jawaban ini boleh muncul pada siswa, tetapi perlu diarahkan agar mereka membandingkan tanda makroskopis:
+              endapan pada reaksi pertama dan perubahan warna bolak-balik pada reaksi kedua.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Rumusan Masalah</h2>
+        <p class="muted">
+          Siswa diminta memilih 1–3 rumusan masalah. Jawaban yang paling sesuai adalah rumusan masalah yang menyoroti
+          perbedaan reaksi irreversible dan reversible.
+        </p>
+
+        <div class="concept">
+          <h3>Rumusan masalah paling disarankan</h3>
+          <ol>
+            <li>Mengapa reaksi pengendapan AgCl cenderung berlangsung satu arah pada pengamatan makroskopis?</li>
+            <li>Mengapa perubahan warna pada larutan Co²⁺ dapat berlangsung bolak-balik?</li>
+            <li>Kapan suatu reaksi dapat mencapai keadaan kesetimbangan?</li>
+          </ol>
+        </div>
+
+        <div class="answer">
+          <h3>Contoh jawaban ideal siswa</h3>
+          <p>
+            Reaksi pengendapan AgCl cenderung berlangsung satu arah karena terbentuk endapan yang terpisah dari larutan,
+            sedangkan perubahan warna pada larutan Co²⁺ dapat berlangsung bolak-balik karena komposisi spesi dalam larutan
+            dapat bergeser saat ditambahkan HCl atau air. Oleh karena itu, reaksi yang dapat mencapai kesetimbangan adalah
+            reaksi yang bersifat reversible atau dapat berlangsung maju dan balik.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pembahasan Konsep</h2>
+
+        <div class="concept">
+          <h3>1. Reaksi irreversible</h3>
+          <p>
+            Reaksi irreversible adalah reaksi yang pada kondisi pengamatan tertentu tampak berlangsung satu arah.
+            Pada contoh AgNO₃ dan NaCl, ion Ag⁺ bereaksi dengan ion Cl⁻ membentuk AgCl(s) yang mengendap.
+            Karena produk terpisah sebagai padatan, reaksi tampak tidak mudah kembali ke keadaan awal.
+          </p>
+        </div>
+
+        <div class="concept">
+          <h3>2. Reaksi reversible</h3>
+          <p>
+            Reaksi reversible adalah reaksi yang dapat berlangsung dua arah, yaitu reaksi maju dan reaksi balik.
+            Pada contoh kompleks Co²⁺, penambahan HCl dan air dapat mengubah komposisi spesi dalam larutan,
+            sehingga warna larutan dapat berubah dan kembali.
+          </p>
+        </div>
+
+        <div class="concept">
+          <h3>3. Arah menuju kesetimbangan dinamis</h3>
+          <p>
+            Konsep kesetimbangan dinamis muncul ketika reaksi maju dan reaksi balik berlangsung secara bersamaan
+            dengan laju yang sama. Secara makroskopis sistem tampak tidak berubah, tetapi pada tingkat partikel
+            reaksi tetap berlangsung.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="h1.html">⬅ Kembali ke Peta</a>
+          <div>
+            <a class="btn blue" href="datasb1.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keyhlm3.html">Lanjut Kunci Halaman 3 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

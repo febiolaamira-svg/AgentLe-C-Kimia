@@ -1,0 +1,4004 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent Le C • Kesetimbangan Kimia</title>
+
+  <style>
+    /* =========================
+       THEME TOKENS
+    ========================= */
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --muted2: rgba(255,255,255,.45);
+
+      --glass: rgba(255,255,255,.05);
+      --glass2: rgba(255,255,255,.03);
+
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(255,255,255,.14);
+
+      --pink:#ff2aa1;
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+
+      --shadow: 0 20px 80px rgba(0,0,0,.55);
+      --shadow2: 0 10px 40px rgba(0,0,0,.35);
+
+      --r-xxl: 44px;
+      --r-xl: 28px;
+      --r-lg: 20px;
+      --r-md: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* =========================
+       EXTRA CHEM BACKDROP LAYERS
+    ========================= */
+    .stars, .chem-lines, .grain{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%),
+        radial-gradient(2px 2px at 52% 78%, rgba(255,255,255,.22), transparent 60%),
+        radial-gradient(2px 2px at 92% 34%, rgba(255,255,255,.18), transparent 60%),
+        radial-gradient(2px 2px at 34% 12%, rgba(255,255,255,.18), transparent 60%);
+      filter: blur(.2px);
+      animation: twinkle 6s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes twinkle{
+      0%,100%{ opacity:.46; transform: translateY(0); }
+      50%{ opacity:.62; transform: translateY(-2px); }
+    }
+
+    .chem-lines{
+      opacity:.22;
+      mix-blend-mode: screen;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%23ff4fd8' stop-opacity='.35'/%3E%3Cstop offset='65%25' stop-color='%237c4dff' stop-opacity='.22'/%3E%3Cstop offset='100%25' stop-color='%232d6cff' stop-opacity='.12'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cg fill='none' stroke='white' stroke-opacity='.34'%3E%3Cpath d='M130 720 C260 640, 300 560, 420 500' stroke-width='2'/%3E%3Cpath d='M420 500 C520 450, 600 470, 690 410' stroke-width='2'/%3E%3Ccircle cx='130' cy='720' r='12'/%3E%3Ccircle cx='420' cy='500' r='16'/%3E%3Ccircle cx='690' cy='410' r='12'/%3E%3Cpath d='M1220 170 l70 40 l0 80 l-70 40 l-70-40 l0-80 z' stroke-width='2'/%3E%3Cpath d='M1140 210 L1060 250' stroke-width='2'/%3E%3Ccircle cx='1060' cy='250' r='10'/%3E%3Cpath d='M980 640 C1080 560, 1180 560, 1280 480' stroke-width='2'/%3E%3Ccircle cx='980' cy='640' r='12'/%3E%3Ccircle cx='1280' cy='480' r='12'/%3E%3C/g%3E%3Cg%3E%3Ccircle cx='800' cy='450' r='340' fill='url(%23g)' opacity='.10'/%3E%3C/g%3E%3C/svg%3E");
+      transform: translateZ(0);
+      animation: drift 12s linear infinite;
+    }
+
+    @keyframes drift{
+      0%{ transform: translate3d(0,0,0) scale(1.02); }
+      50%{ transform: translate3d(0,-8px,0) scale(1.02); }
+      100%{ transform: translate3d(0,0,0) scale(1.02); }
+    }
+
+    .grain{
+      opacity:.10;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    /* =========================
+       BACKGROUND DECOR (atoms)
+    ========================= */
+    .vignette{
+      position:fixed; inset:-20%;
+      background: radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      pointer-events:none;
+      opacity:.65;
+      z-index:1;
+    }
+    .atoms{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.18;
+      filter: blur(.2px);
+      z-index:1;
+    }
+    .atom{
+      position:absolute;
+      width:160px; height:160px;
+      border-radius:999px;
+      opacity:.6;
+      animation: floaty 8s ease-in-out infinite;
+    }
+    .atom::before, .atom::after{
+      content:"";
+      position:absolute; inset:18px;
+      border-radius:999px;
+      border:1px solid rgba(255,79,216,.35);
+      transform: rotate(55deg);
+    }
+    .atom::after{
+      border-color: rgba(124,77,255,.32);
+      transform: rotate(-55deg);
+    }
+    .atom i{
+      position:absolute; inset:18px;
+      border-radius:999px;
+      border:1px solid rgba(45,108,255,.28);
+      display:block;
+    }
+    .atom b{
+      position:absolute; left:50%; top:50%;
+      width:8px; height:8px; border-radius:50%;
+      transform: translate(-50%,-50%);
+      background: linear-gradient(135deg, rgba(255,79,216,.9), rgba(124,77,255,.9));
+      box-shadow: 0 0 18px rgba(255,79,216,.35);
+      display:block;
+    }
+
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) rotate(var(--r, 0deg)); }
+      50%{ transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 6deg)); }
+    }
+
+    /* =========================
+       CHEM FLOAT ICONS (MORE, BUT TIDY)
+    ========================= */
+    .chem-float{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:2;
+      mix-blend-mode: screen;
+    }
+
+    .chem-zone{
+      position:absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 38px;
+      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.01);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 30px 110px rgba(0,0,0,.10);
+      overflow:hidden;
+    }
+    .chem-zone::before{
+      content:"";
+      position:absolute; inset:-30%;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,79,216,.12), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(124,77,255,.12), transparent 55%);
+      filter: blur(18px);
+      opacity:.55;
+    }
+
+    .chem-badge{
+      position:absolute;
+      width:74px; height:74px;
+      border-radius:999px;
+      display:grid; place-items:center;
+      color: rgba(255,255,255,.88);
+      font-weight:900;
+      letter-spacing:.02em;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.16), transparent 45%),
+                  rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 22px 90px rgba(124,77,255,.18);
+      backdrop-filter: blur(10px);
+      animation: driftBadge 10s ease-in-out infinite;
+    }
+    .chem-badge span{
+      font-size: 22px;
+      text-shadow: 0 0 20px rgba(255,79,216,.25);
+    }
+    .chem-badge small{
+      position:absolute;
+      bottom: -14px;
+      font-size: 10px;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.42);
+      white-space:nowrap;
+    }
+
+    @keyframes driftBadge{
+      0%,100%{ transform: translateY(0) translateX(0) scale(1); opacity:.95; }
+      50%{ transform: translateY(-14px) translateX(6px) scale(1.02); opacity:.78; }
+    }
+
+    .molecule{
+      position:absolute;
+      width: 180px; height: 180px;
+      opacity:.22;
+      filter: drop-shadow(0 22px 70px rgba(255,79,216,.10));
+      animation: driftMol 14s ease-in-out infinite;
+    }
+    .molecule svg{ width:100%; height:100%; display:block; }
+    @keyframes driftMol{
+      0%,100%{ transform: translateY(0) rotate(0deg); }
+      50%{ transform: translateY(-12px) rotate(6deg); }
+    }
+
+    .flask{
+      position:absolute;
+      width:120px; height:140px;
+      opacity:.86;
+      filter: drop-shadow(0 22px 70px rgba(255,79,216,.14));
+      animation: driftFlask 12s ease-in-out infinite;
+    }
+    .flask svg{ width:100%; height:100%; display:block; }
+    @keyframes driftFlask{
+      0%,100%{ transform: translateY(0) rotate(-2deg); }
+      50%{ transform: translateY(-16px) rotate(3deg); }
+    }
+
+    @media (max-width: 980px){
+      .chem-float{ display:none; }
+    }
+
+    /* =========================
+       TOP BAR
+    ========================= */
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 12px;
+      padding:16px 18px;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,6,28,.62), rgba(10,6,28,.12));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .brand{ display:flex; gap:12px; align-items:center; min-width: 240px; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(255,79,216,.38), rgba(124,77,255,.38));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 40px rgba(0,0,0,.30);
+      font-weight:900;
+      letter-spacing:.5px;
+    }
+    .brand-title{ font-weight:900; letter-spacing:.2px; }
+    .brand-sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    .top-actions{
+      display:flex; align-items:center; gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.10);
+      font-size:13px;
+      display:flex; gap:8px; align-items:center;
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--mag), var(--vio));
+      box-shadow: 0 0 12px rgba(255,79,216,.45);
+    }
+
+    /* =========================
+       PAGE & PANELS
+    ========================= */
+    main{ position:relative; z-index:3; }
+    .panel{
+      min-height: calc(100vh - 76px);
+      padding: clamp(18px, 4vw, 46px);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .hidden{ display:none !important; }
+
+    /* =========================
+       COMMON UI
+    ========================= */
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      user-select:none;
+      box-shadow: 0 10px 40px rgba(0,0,0,.18);
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(255,42,161,.88), rgba(124,77,255,.88));
+      font-weight: 900;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+    }
+    .btn.ghost{ background: rgba(255,255,255,.03); }
+    .note{ margin-top:10px; font-size:13px; color: rgba(255,255,255,.72); }
+
+    .biodata-btn{
+  background:#ffffff !important;
+  color:#111827 !important;
+  border:1px solid rgba(255,255,255,.85) !important;
+  font-weight:950;
+  box-shadow:0 12px 34px rgba(255,255,255,.18);
+}
+
+.biodata-btn:hover{
+  background:#f8fafc !important;
+  color:#000000 !important;
+  border-color:#ffffff !important;
+  transform:translateY(-1px);
+}
+    /* =========================
+       COVER
+    ========================= */
+    .cover-grid{
+      width:min(1180px, 100%);
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: clamp(18px, 3vw, 44px);
+      align-items:center;
+    }
+    @media (max-width: 980px){
+      .cover-grid{ grid-template-columns:1fr; }
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      position:relative;
+      overflow:hidden;
+    }
+    .pill::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,79,216,.18) 35%, rgba(124,77,255,.16) 60%, transparent 100%);
+      transform: rotate(12deg) translateX(-30%);
+      animation: sheen 6.5s ease-in-out infinite;
+    }
+    @keyframes sheen{
+      0%,60%{ opacity:0; transform: rotate(12deg) translateX(-35%); }
+      70%{ opacity:1; }
+      100%{ opacity:0; transform: rotate(12deg) translateX(35%); }
+    }
+
+    .pill .hex{
+      width:14px; height:14px;
+      border-radius:4px;
+      background: linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.95));
+      box-shadow: 0 0 18px rgba(255,79,216,.25);
+      clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+      z-index:1;
+    }
+    .pill span{ z-index:1; }
+
+    .title{
+      margin-top: 28px;
+      line-height: .92;
+      font-weight: 900;
+      font-size: clamp(56px, 6.4vw, 92px);
+      letter-spacing: -0.02em;
+      position:relative;
+    }
+    .title .accent{
+      display:inline-block;
+      background: linear-gradient(90deg, var(--mag), var(--vio), var(--blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-style: italic;
+      transform: skewX(-6deg);
+      text-shadow: 0 0 40px rgba(255,79,216,.08);
+    }
+    .underline{
+      margin-top: 14px;
+      width: 120px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,79,216,.9), rgba(124,77,255,.9));
+      box-shadow: 0 12px 40px rgba(255,79,216,.18);
+    }
+    .subtitle{
+      margin-top: 18px;
+      font-size: clamp(16px, 2vw, 22px);
+      color: rgba(255,255,255,.72);
+      max-width: 520px;
+    }
+    .subtitle b{
+      color: rgba(255,255,255,.92);
+      position:relative;
+      padding-bottom: 2px;
+    }
+    .subtitle b::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:2px;
+      background: linear-gradient(90deg, rgba(255,79,216,.95), rgba(124,77,255,.95));
+      border-radius:999px;
+      opacity:.9;
+    }
+    .smallcaps{
+      margin-top: 14px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+    }
+    .toggles{
+      margin-top: 28px;
+      display:flex; gap:12px; flex-wrap:wrap;
+    }
+    .toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      position:relative;
+      overflow:hidden;
+    }
+    .toggle::after{
+      content:"";
+      position:absolute; inset:-60%;
+      background: radial-gradient(circle at 40% 50%, rgba(255,79,216,.22), transparent 55%);
+      opacity:.55;
+      transform: translateX(-30%);
+      animation: toggleGlow 7s ease-in-out infinite;
+    }
+    @keyframes toggleGlow{
+      0%,100%{ transform: translateX(-30%); opacity:.25; }
+      50%{ transform: translateX(30%); opacity:.55; }
+    }
+    .toggle .ico{
+      width:16px; height:16px;
+      border-radius:5px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      display:grid; place-items:center;
+      z-index:1;
+    }
+    .toggle .ico svg{ width:12px; height:12px; opacity:.9; }
+    .toggle{ z-index:1; }
+    .toggle > *{ position:relative; z-index:1; }
+
+    .card{
+      border-radius: var(--r-xxl);
+      padding: 26px;
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 60% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      position:relative;
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset: 10px;
+      border-radius: 36px;
+      border: 1px solid rgba(255,255,255,.08);
+      pointer-events:none;
+    }
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,79,216,.14), transparent 52%),
+        radial-gradient(circle at 70% 80%, rgba(124,77,255,.16), transparent 55%);
+      opacity:.65;
+      filter: blur(18px);
+      pointer-events:none;
+      animation: rim 10s ease-in-out infinite;
+    }
+    @keyframes rim{
+      0%,100%{ transform: translateY(0); opacity:.45; }
+      50%{ transform: translateY(-12px); opacity:.72; }
+    }
+
+    .card-inner{ padding: 18px 16px 10px; position:relative; z-index:2; }
+    .card h2{ margin: 8px 0 6px; font-size: 34px; letter-spacing: .01em; }
+    .card p{ margin:0 0 18px; color: rgba(255,255,255,.55); line-height:1.6; }
+
+    .field{ margin-top: 18px; }
+    .label{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+    .label.pink{ color: rgba(255,79,216,.85); }
+    .label.blue{ color: rgba(45,108,255,.85); }
+
+    .input{
+      width:100%;
+      padding: 18px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      color: rgba(255,255,255,.88);
+      outline:none;
+      font-size: 16px;
+      box-shadow: var(--shadow2);
+      transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+    }
+    .input::placeholder{ color: rgba(255,255,255,.28); font-weight: 700; }
+    .input:focus{
+      border-color: rgba(255,79,216,.32);
+      box-shadow: 0 0 0 4px rgba(255,79,216,.12), var(--shadow2);
+      transform: translateY(-1px);
+    }
+
+    .cta{
+      margin-top: 22px;
+      width:100%;
+      display:flex; align-items:center; justify-content:center; gap:14px;
+      padding: 18px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(90deg, rgba(255,42,161,.88), rgba(124,77,255,.88));
+      color:white;
+      font-weight: 900;
+      letter-spacing:.20em;
+      text-transform: uppercase;
+      cursor:pointer;
+      box-shadow: 0 18px 60px rgba(124,77,255,.22);
+      transition: transform .12s ease, filter .12s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .cta:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .cta::after{
+      content:"";
+      position:absolute; inset:-70%;
+      background: radial-gradient(circle at 40% 50%, rgba(255,255,255,.22), transparent 55%);
+      opacity:.35;
+      transform: translateX(-35%);
+      animation: ctaShine 5.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes ctaShine{
+      0%,65%{ opacity:0; transform: translateX(-35%); }
+      75%{ opacity:.55; }
+      100%{ opacity:0; transform: translateX(35%); }
+    }
+
+    .cta svg{ width:18px; height:18px; opacity:.95; position:relative; z-index:2; }
+    .cta{ position:relative; z-index:2; }
+    .cta span, .cta{ z-index:2; }
+
+    .foot{
+      margin-top: 18px;
+      text-align:center;
+      font-size: 12px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.22);
+    }
+
+    /* =========================
+       PRA-EKSPLORASI (AFTER LOGIN)
+    ========================= */
+    #pre{
+      padding:0;
+      min-height: calc(100vh - 76px);
+      position:relative;
+      overflow:hidden;
+    }
+    #pre .pre-wrap{
+      position:relative;
+      width:100%;
+      height: calc(100vh - 76px);
+      overflow:hidden;
+      border-radius: 0;
+    }
+    #pre .bg-illustration{
+      position:absolute;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+
+      background-image: url("dunia-molekul-belum-setimbang.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      filter: saturate(1.25) contrast(1.12) brightness(.90) blur(1.6px);
+      opacity:.58;
+
+      -webkit-mask-image: radial-gradient(
+        circle at center,
+        rgba(0,0,0,1) 38%,
+        rgba(0,0,0,.78) 55%,
+        rgba(0,0,0,.42) 70%,
+        rgba(0,0,0,0) 86%
+      );
+      mask-image: radial-gradient(
+        circle at center,
+        rgba(0,0,0,1) 38%,
+        rgba(0,0,0,.78) 55%,
+        rgba(0,0,0,.42) 70%,
+        rgba(0,0,0,0) 86%
+      );
+
+      transform: scale(1.02);
+      transition: transform .15s ease-out;
+    }
+
+    #pre canvas{
+      position:absolute;
+      inset:0;
+      z-index:1;
+    }
+
+    #pre .overlay{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:28px;
+      background: radial-gradient(circle at center, rgba(0,0,0,.30), rgba(0,0,0,.82));
+      backdrop-filter: blur(8px);
+    }
+
+    #pre .title{
+      font-size: clamp(36px,6vw,72px);
+      font-weight:900;
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    #pre .title span{
+      background: linear-gradient(90deg,var(--pink),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+
+    #pre .desc{
+      margin-top:18px;
+      max-width:760px;
+      font-size:17px;
+      line-height:1.8;
+      color:rgba(255,255,255,.72);
+    }
+    #pre .desc b{color:rgba(255,255,255,.96);}
+
+    #pre .symbolic{
+      margin-top:22px;
+      font-size:22px;
+      letter-spacing:.14em;
+      font-weight:900;
+    }
+    #pre .symbolic .fwd{ color:var(--pink); padding:0 6px; }
+    #pre .symbolic .no{
+      opacity:.45;
+      text-decoration:line-through;
+      margin-left:6px;
+    }
+
+    #pre .btn-pre{
+      margin-top:36px;
+      padding:18px 34px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: linear-gradient(90deg, rgba(255,42,161,.95), rgba(124,77,255,.95));
+      color:white;
+      font-weight:900;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      cursor:pointer;
+      box-shadow: 0 18px 70px rgba(124,77,255,.40), inset 0 0 0 1px rgba(255,255,255,.15);
+      transition:.25s ease;
+    }
+    #pre .btn-pre:hover{
+      transform:translateY(-3px) scale(1.03);
+      box-shadow: 0 24px 90px rgba(255,79,216,.45);
+    }
+
+    #pre .note{
+      margin-top:14px;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.45);
+    }
+
+    /* =========================
+       LANDING: PETA EKSPLORASI
+    ========================= */
+    .landing-wrap{ width:min(1320px, 100%); padding: 10px 0 40px; }
+
+    .hero-center{
+      text-align:center;
+      margin-top: clamp(8px, 2vw, 16px);
+      margin-bottom: clamp(22px, 3vw, 34px);
+    }
+    .hero-title{
+      margin:0;
+      font-size: clamp(56px, 8vw, 120px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: .92;
+    }
+    .hero-title .grad{
+      display:inline-block;
+      background: linear-gradient(90deg, rgba(255,79,216,.98), rgba(124,77,255,.98), rgba(45,108,255,.98));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style: italic;
+      transform: skewX(-6deg);
+    }
+    .hero-sub{
+      margin: 18px auto 0;
+      max-width: 860px;
+      font-size: 14px;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.42);
+      line-height: 1.8;
+    }
+
+    .map{
+      position:relative;
+      min-height: 560px;
+      border-radius: 38px;
+      padding: 10px 0;
+    }
+
+    .map .guide{
+      position:absolute;
+      left:50%;
+      top: 6%;
+      bottom: 8%;
+      width: 1px;
+      background-image: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,.22),
+        rgba(255,255,255,.22) 3px,
+        transparent 3px,
+        transparent 11px
+      );
+      opacity:.22;
+      transform: translateX(-.5px);
+    }
+
+    .nodes{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items:stretch;
+      margin-top: 6px;
+    }
+    @media (min-width: 980px){
+      .nodes{
+        width:min(1180px, 100%);
+        margin: 0 auto;
+      }
+    }
+    @media (max-width: 980px){
+      .nodes{ grid-template-columns:1fr; }
+      .map{ min-height:auto; }
+      .map .guide{ display:none; }
+    }
+
+    .node{
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(800px 280px at 10% 20%, rgba(255,79,216,.14), transparent 60%),
+        radial-gradient(850px 300px at 90% 40%, rgba(124,77,255,.12), transparent 62%),
+        rgba(255,255,255,.04);
+      box-shadow: 0 14px 56px rgba(0,0,0,.35);
+      padding: 18px;
+      display:flex;
+      gap:14px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, filter .12s ease;
+      min-height: 170px;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+    }
+    .node::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 25% 35%, rgba(255,79,216,.16), transparent 55%);
+      opacity:.35;
+      transform: translateX(-30%);
+      transition: opacity .12s ease;
+      pointer-events:none;
+    }
+    .node:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,.18);
+      filter: brightness(1.03);
+    }
+    .node:hover::after{ opacity:.55; }
+
+    .node .id{
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      font-weight: 900;
+      color: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      flex:0 0 auto;
+      z-index:2;
+    }
+    .node .body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:10px; z-index:2; }
+    .node .tag{
+      align-self:flex-start;
+      display:inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,79,216,.18);
+      background: rgba(255,79,216,.10);
+      color: rgba(255,79,216,.85);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .node h3{
+      margin:0;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      font-weight: 900;
+    }
+    .node p{
+      margin:0;
+      color: rgba(255,255,255,.55);
+      line-height: 1.5;
+      max-width: 560px;
+    }
+    .node .go{
+      width: 42px; height: 42px;
+      border-radius: 16px;
+      display:grid; place-items:center;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.10);
+      opacity:.9;
+      flex:0 0 auto;
+      margin-left:auto;
+      z-index:2;
+    }
+    .node .go svg{ width:18px; height:18px; }
+
+.drill-node,
+.classroom-node{
+  border-color:rgba(255,224,130,.30);
+  background:
+    radial-gradient(800px 280px at 10% 20%, rgba(255,224,130,.16), transparent 60%),
+    radial-gradient(850px 300px at 90% 40%, rgba(255,79,216,.14), transparent 62%),
+    rgba(255,255,255,.045);
+}
+.classroom-node h3{
+  color:#ffffff;
+}
+
+.classroom-node p{
+  color:rgba(255,255,255,.72);
+}
+
+.classroom-node .tag{
+  color:#ffffff;
+}
+
+.drill-node .id,
+.classroom-node .id{
+  background:linear-gradient(135deg, rgba(255,224,130,.22), rgba(255,79,216,.18));
+  color:#ffe082;
+  border-color:rgba(255,224,130,.22);
+}
+
+.drill-node .tag,
+.classroom-node .tag{
+  border-color:rgba(255,224,130,.28);
+  background:rgba(255,224,130,.10);
+  color:#ffe082;
+}
+
+.drill-node:hover,
+.classroom-node:hover{
+  border-color:rgba(255,224,130,.48);
+}
+
+    /* =========================
+       MODAL
+    ========================= */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index:40;
+    }
+    .modal.show{ display:flex; }
+    .modal-card{
+      width:min(980px, 100%);
+      border-radius: 30px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(900px 360px at 20% 0%, rgba(255,79,216,.12), transparent 60%),
+        radial-gradient(900px 420px at 90% 110%, rgba(124,77,255,.14), transparent 60%),
+        rgba(8,7,36,.84);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      padding: 18px;
+    }
+    .modal-head{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      padding: 8px 8px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .modal-title{ display:flex; flex-direction:column; gap:6px; }
+    .modal-title h3{ margin:0; font-size: 22px; letter-spacing:-.01em; }
+    .modal-title .mini{
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.48);
+    }
+    .modal-body{
+      padding: 14px 8px 10px;
+      color: rgba(255,255,255,.72);
+      line-height:1.65;
+      max-height: 62vh;
+      overflow:auto;
+    }
+    .modal-body code{
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+    .modal-actions{
+      padding: 12px 8px 6px;
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+    .toast{
+      position:fixed;
+      left: 18px;
+      bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.82);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      display:none;
+      max-width: 92vw;
+      z-index:60;
+    }
+    .toast.show{ display:block; }
+
+    /* =========================
+       FAB
+    ========================= */
+    .fab{
+      position:fixed;
+      right: 26px;
+      bottom: 26px;
+      width: 58px;
+      height: 58px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, rgba(255,79,216,.88), rgba(124,77,255,.88));
+      box-shadow: 0 20px 70px rgba(124,77,255,.25);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      z-index:25;
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .fab:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .fab svg{ width:26px; height:26px; opacity:.95; }
+   /* =========================
+   MASCOT (CENTER-BETWEEN, SAFE)
+========================= */
+#cover{ position:relative; }
+
+.cover-mascot{
+  position:absolute;
+
+  /* posisi inti */
+  left: 52%;
+  top: 70%;
+
+  /* geser aman: ke kiri & ke atas */
+  transform: translate(-62%, -56%);
+
+  width: clamp(180px, 30vw, 300px);
+  aspect-ratio: 1 / 1;
+  border-radius: 28px;
+
+  z-index: 4;
+  pointer-events: none;
+
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  
+  /* supaya tidak mengganggu fokus teks */
+  opacity: .80;
+}
+
+.cover-mascot::before{
+  content:"";
+  position:absolute; inset:-40%;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,79,216,.20), transparent 55%),
+    radial-gradient(circle at 70% 80%, rgba(124,77,255,.20), transparent 58%),
+    radial-gradient(circle at 40% 70%, rgba(45,108,255,.12), transparent 60%);
+  filter: blur(18px);
+  opacity:.9;
+}
+
+.cover-mascot img{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:block;
+  padding: 14px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 60px rgba(255,79,216,.18));
+}
+
+/* Mobile: tetap tengah, tapi lebih kecil & makin subtle */
+@media (max-width: 980px){
+  .cover-mascot{
+    width: clamp(120px, 32vw, 170px);
+    transform: translate(-50%, -52%);
+    opacity: .42;
+  }
+}
+/* =========================
+   VIDEO GATE (Pra -> Peta)
+========================= */
+.video-modal .modal-card{
+  width: min(980px, 100%);
+  border-radius: 30px;
+}
+
+.video-wrap{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  box-shadow: 0 14px 56px rgba(0,0,0,.35);
+}
+
+.video-wrap iframe{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-hint{
+  margin-top: 10px;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+}
+
+/* =========================
+   IMAGE GATE (Capaian/Tujuan) -> ukuran seperti video pengantar
+========================= */
+.media-wrap{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  box-shadow: 0 14px 56px rgba(0,0,0,.35);
+}
+
+/* kalau mau gambar penuh tanpa terpotong → pakai contain */
+.media-wrap img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* ganti ke cover kalau mau memenuhi frame */
+  object-position: center;
+}
+
+/* =========================
+   MODE COVER: PILIH GURU / SISWA
+========================= */
+.mode-cover-wrap{
+  width:min(980px, 100%);
+  display:grid;
+  gap:26px;
+  text-align:center;
+  padding:clamp(10px, 2vw, 18px);
+}
+
+#modeCover{
+  align-items:center;
+}
+
+.mode-cover-wrap .pill{
+  margin:0 auto;
+}
+
+.mode-title{
+  margin:0;
+  font-size:clamp(42px, 7vw, 82px);
+  line-height:.95;
+  font-weight:950;
+  letter-spacing:-.035em;
+}
+
+.mode-title .grad{
+  display:inline-block;
+  background:linear-gradient(90deg, var(--mag), var(--vio), var(--blue));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  font-style:italic;
+  transform:skewX(-6deg);
+}
+
+.mode-grid{
+  width:min(760px, 100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:stretch;
+}
+
+@media(max-width:760px){
+  .mode-grid{
+    grid-template-columns:1fr;
+    width:min(430px, 100%);
+  }
+}
+
+.mode-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:32px;
+  border:2px solid rgba(124,77,255,.24);
+  background:
+    radial-gradient(420px 180px at 20% 0%, rgba(255,79,216,.10), transparent 60%),
+    radial-gradient(420px 190px at 90% 100%, rgba(124,77,255,.12), transparent 62%),
+    #ffffff;
+  box-shadow:0 20px 60px rgba(15,23,42,.25);
+  padding:30px 24px;
+  min-height:240px;
+  text-align:center;
+  cursor:pointer;
+  transition:transform .16s ease, border-color .16s ease, filter .16s ease, box-shadow .16s ease;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+}
+
+.mode-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(255,79,216,.46);
+  filter:brightness(1.03);
+  box-shadow:0 26px 72px rgba(124,77,255,.32);
+}
+
+.mode-card::after{
+  content:"";
+  position:absolute;
+  inset:-45%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,79,216,.12), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(124,77,255,.10), transparent 58%);
+  opacity:.65;
+  pointer-events:none;
+}
+
+.mode-icon{
+  width:72px;
+  height:72px;
+  border-radius:24px;
+  display:grid;
+  place-items:center;
+  font-size:36px;
+  background:linear-gradient(135deg, rgba(255,79,216,.92), rgba(124,77,255,.82));
+  border:1px solid rgba(255,255,255,.45);
+  box-shadow:0 16px 38px rgba(124,77,255,.28);
+  position:relative;
+  z-index:1;
+}
+
+.mode-card h2{
+  margin:0;
+  font-size:clamp(26px, 3vw, 34px);
+  line-height:1.05;
+  position:relative;
+  z-index:1;
+  color:#111827;
+  font-weight:950;
+  letter-spacing:-.02em;
+}
+
+.mode-card .mode-action{
+  margin-top:4px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-width:190px;
+  padding:13px 16px;
+  border-radius:16px;
+  background:linear-gradient(90deg, rgba(255,42,161,.95), rgba(124,77,255,.95));
+  color:#ffffff;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-size:11px;
+  position:relative;
+  z-index:1;
+  box-shadow:0 12px 28px rgba(124,77,255,.25);
+}
+.login-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:4px;
+}
+
+.login-head h2{
+  margin:8px 0 6px;
+}
+
+.login-head p{
+  margin:0 0 18px;
+}
+
+.back-mode-btn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.88);
+  padding:10px 12px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  box-shadow:0 10px 32px rgba(0,0,0,.20);
+  transition:transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.back-mode-btn:hover{
+  transform:translateY(-1px);
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.26);
+}
+
+@media(max-width:560px){
+  .login-head{
+    flex-direction:column;
+  }
+
+  .back-mode-btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+
+.mode-card .mode-action:hover{
+  filter:brightness(1.05);
+}
+/* =========================
+   ADMIN MENU DATA GURU
+========================= */
+.admin-data-menu{
+  display:grid;
+  grid-template-columns:repeat(5, minmax(0, 1fr));
+  gap:14px;
+  margin-top:18px;
+}
+
+.admin-data-btn{
+  min-height:150px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(520px 220px at 20% 0%, rgba(255,79,216,.18), transparent 60%),
+    radial-gradient(520px 240px at 90% 100%, rgba(124,77,255,.18), transparent 62%),
+    rgba(255,255,255,.055);
+  color:rgba(255,255,255,.92);
+  text-decoration:none;
+  padding:20px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+  box-shadow:0 14px 44px rgba(0,0,0,.26);
+  transition:transform .14s ease, border-color .14s ease, background .14s ease, box-shadow .14s ease;
+}
+
+.admin-data-btn:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,255,255,.30);
+  background:
+    radial-gradient(520px 220px at 20% 0%, rgba(255,79,216,.26), transparent 60%),
+    radial-gradient(520px 240px at 90% 100%, rgba(124,77,255,.26), transparent 62%),
+    rgba(255,255,255,.085);
+  box-shadow:0 18px 56px rgba(124,77,255,.28);
+}
+
+.admin-data-icon{
+  width:54px;
+  height:54px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  font-size:26px;
+  background:linear-gradient(135deg, rgba(255,79,216,.88), rgba(124,77,255,.78));
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 12px 32px rgba(124,77,255,.24);
+}
+
+.admin-data-title{
+  font-weight:950;
+  font-size:17px;
+  line-height:1.25;
+}
+
+.admin-data-sub{
+  font-size:11px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.55);
+  line-height:1.5;
+}
+
+@media(max-width:1050px){
+  .admin-data-menu{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media(max-width:560px){
+  .admin-data-menu{
+    grid-template-columns:1fr;
+  }
+}
+/* =========================
+   PETUNJUK PENGGUNAAN WEB
+========================= */
+.petunjuk-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:14px;
+  margin-top:18px;
+}
+
+.petunjuk-item{
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(420px 180px at 20% 0%, rgba(255,79,216,.12), transparent 60%),
+    radial-gradient(420px 190px at 90% 100%, rgba(124,77,255,.12), transparent 62%),
+    rgba(255,255,255,.045);
+  padding:18px;
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  min-height:128px;
+}
+
+.petunjuk-icon{
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  background:linear-gradient(135deg, rgba(255,79,216,.90), rgba(124,77,255,.80));
+  border:1px solid rgba(255,255,255,.20);
+  flex:0 0 auto;
+  box-shadow:0 12px 32px rgba(124,77,255,.24);
+}
+
+.petunjuk-item h3{
+  margin:0 0 6px;
+  font-size:19px;
+  color:#ffffff;
+  line-height:1.2;
+}
+
+.petunjuk-item p{
+  margin:0;
+  color:rgba(255,255,255,.62);
+  line-height:1.55;
+  font-size:14px;
+}
+
+.petunjuk-note{
+  margin-top:18px;
+  border-radius:20px;
+  border:1px solid rgba(255,224,130,.22);
+  background:rgba(255,224,130,.08);
+  color:rgba(255,255,255,.74);
+  padding:15px 16px;
+  line-height:1.65;
+  font-size:14px;
+}
+
+@media(max-width:760px){
+  .petunjuk-grid{
+    grid-template-columns:1fr;
+  }
+}
+/* =========================
+   CHATLE-C - CERAH & JELAS
+   Tidak mengubah layout, hanya warna
+========================= */
+.kimi-chat-btn{
+  position:fixed;
+  right:26px;
+  bottom:96px;
+  width:62px;
+  height:62px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.65);
+  background:linear-gradient(135deg, #ff4fae, #8b5cf6);
+  color:white;
+  font-size:26px;
+  cursor:pointer;
+  z-index:35;
+  box-shadow:0 20px 70px rgba(255,79,174,.34);
+  display:grid;
+  place-items:center;
+  transition:.16s ease;
+}
+
+.kimi-chat-btn:hover{
+  transform:translateY(-2px) scale(1.03);
+  filter:brightness(1.06);
+}
+
+.kimi-panel{
+  position:fixed;
+  right:24px;
+  bottom:170px;
+  width:min(390px, calc(100vw - 32px));
+  height:min(560px, calc(100vh - 210px));
+  border-radius:28px;
+  border:2px solid rgba(190,24,93,.24);
+  background:
+    radial-gradient(700px 260px at 20% 0%, rgba(255,255,255,.78), transparent 60%),
+    radial-gradient(700px 280px at 90% 100%, rgba(255,182,218,.45), transparent 62%),
+    linear-gradient(135deg, #fff5fb, #f6edff);
+  box-shadow:0 24px 90px rgba(124,77,255,.22);
+  backdrop-filter:blur(16px);
+  z-index:34;
+  overflow:hidden;
+  display:none;
+  flex-direction:column;
+}
+
+.kimi-panel.show{
+  display:flex;
+}
+
+.kimi-head{
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid rgba(190,24,93,.18);
+  background:linear-gradient(90deg, rgba(255,79,174,.16), rgba(139,92,246,.13));
+}
+
+.kimi-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.kimi-avatar{
+  width:42px;
+  height:42px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg, #ff4fae, #8b5cf6);
+  box-shadow:0 12px 32px rgba(139,92,246,.24);
+  font-size:22px;
+}
+
+.kimi-title h3{
+  margin:0;
+  font-size:17px;
+  line-height:1.1;
+  color:#3b0a25;
+  font-weight:950;
+}
+
+.kimi-title small{
+  display:block;
+  margin-top:3px;
+  font-size:11px;
+  color:rgba(59,10,37,.62);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:800;
+}
+
+.kimi-close{
+  border:1px solid rgba(190,24,93,.20);
+  background:rgba(255,255,255,.72);
+  color:#3b0a25;
+  border-radius:12px;
+  width:36px;
+  height:36px;
+  cursor:pointer;
+  font-weight:900;
+}
+
+.kimi-messages{
+  flex:1;
+  padding:16px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  scroll-behavior:smooth;
+  background:
+    radial-gradient(420px 180px at 20% 20%, rgba(255,79,174,.10), transparent 60%),
+    radial-gradient(420px 190px at 90% 90%, rgba(139,92,246,.10), transparent 62%);
+}
+
+.kimi-msg{
+  max-width:92%;
+  padding:13px 14px;
+  border-radius:18px;
+  line-height:1.68;
+  font-size:14px;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.kimi-msg.bot{
+  max-width:94%;
+  align-self:flex-start;
+  background:#ffffff;
+  border:1px solid rgba(190,24,93,.16);
+  color:#2b1020;
+  box-shadow:0 10px 26px rgba(190,24,93,.10);
+  font-weight:600;
+}
+
+.kimi-msg.user{
+  align-self:flex-end;
+  background:linear-gradient(135deg, #ff4fae, #8b5cf6);
+  color:white;
+  font-weight:800;
+  box-shadow:0 10px 26px rgba(139,92,246,.18);
+}
+
+.kimi-input-area{
+  padding:14px;
+  border-top:1px solid rgba(190,24,93,.18);
+  display:flex;
+  gap:10px;
+  background:rgba(255,255,255,.52);
+}
+
+.kimi-input{
+  flex:1;
+  border-radius:16px;
+  border:1px solid rgba(190,24,93,.22);
+  background:#ffffff;
+  color:#2b1020;
+  padding:13px 14px;
+  outline:none;
+  font-size:14px;
+  font-weight:700;
+}
+
+.kimi-input:focus{
+  border-color:rgba(255,79,174,.60);
+  box-shadow:0 0 0 4px rgba(255,79,174,.14);
+}
+
+.kimi-input::placeholder{
+  color:rgba(59,10,37,.46);
+  font-weight:700;
+}
+
+.kimi-send{
+  width:48px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.60);
+  background:linear-gradient(135deg, #ff4fae, #8b5cf6);
+  color:white;
+  cursor:pointer;
+  font-weight:950;
+  box-shadow:0 10px 26px rgba(139,92,246,.20);
+}
+
+.kimi-source{
+  margin-top:8px;
+  font-size:11px;
+  color:rgba(59,10,37,.56);
+  letter-spacing:.04em;
+  font-weight:800;
+}
+
+/* Mode terang tetap mengikuti warna ChatLe-C yang sama */
+body.theme-light .kimi-panel{
+  background:
+    radial-gradient(700px 260px at 20% 0%, rgba(255,255,255,.78), transparent 60%),
+    radial-gradient(700px 280px at 90% 100%, rgba(255,182,218,.45), transparent 62%),
+    linear-gradient(135deg, #fff5fb, #f6edff);
+  border-color:rgba(190,24,93,.24);
+}
+
+body.theme-light .kimi-title h3,
+body.theme-light .kimi-msg.bot,
+body.theme-light .kimi-input{
+  color:#2b1020;
+}
+
+body.theme-light .kimi-title small,
+body.theme-light .kimi-source{
+  color:rgba(59,10,37,.56);
+}
+
+body.theme-light .kimi-msg.bot{
+  background:#ffffff;
+  border-color:rgba(190,24,93,.16);
+}
+
+body.theme-light .kimi-input{
+  background:#ffffff;
+  border-color:rgba(190,24,93,.22);
+}
+
+body.theme-light .kimi-input::placeholder{
+  color:rgba(59,10,37,.46);
+}
+
+body.theme-light .kimi-close{
+  background:rgba(255,255,255,.72);
+  color:#3b0a25;
+  border-color:rgba(190,24,93,.20);
+}
+
+@media(max-width:560px){
+  .kimi-chat-btn{
+    right:18px;
+    bottom:92px;
+  }
+
+  .kimi-panel{
+    right:14px;
+    bottom:160px;
+    height:min(540px, calc(100vh - 185px));
+  }
+}
+  </style>
+  
+</head>
+
+<body>
+  <!-- extra background layers -->
+  <div class="stars" aria-hidden="true"></div>
+  <div class="chem-lines" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- background decor -->
+  <div class="atoms" aria-hidden="true">
+    <div class="atom" style="left:6%; top:12%; transform:rotate(18deg) scale(1.1); --r:18deg;"><i></i><b></b></div>
+    <div class="atom" style="left:36%; top:36%; transform:rotate(-8deg) scale(.9); --r:-8deg;"><i></i><b></b></div>
+    <div class="atom" style="left:70%; top:8%; transform:rotate(10deg) scale(1.15); --r:10deg;"><i></i><b></b></div>
+    <div class="atom" style="left:78%; top:62%; transform:rotate(-14deg) scale(1.05); --r:-14deg;"><i></i><b></b></div>
+    <div class="atom" style="left:18%; top:66%; transform:rotate(22deg) scale(.85); --r:22deg;"><i></i><b></b></div>
+    <div class="atom" style="left:86%; top:36%; transform:rotate(8deg) scale(.95); opacity:.45; --r:8deg;"><i></i><b></b></div>
+  </div>
+
+  <!-- floating chem objects (MORE but tidy) -->
+  <div class="chem-float" aria-hidden="true">
+    <!-- LEFT ZONE -->
+    <div class="chem-zone" style="left: 4%; top: 20%;">
+      <div class="molecule" style="left: -18px; top: 22px; animation-duration:16s;">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2">
+            <circle cx="70" cy="70" r="14"/><circle cx="150" cy="55" r="12"/>
+            <circle cx="160" cy="140" r="14"/><circle cx="85" cy="155" r="12"/>
+            <path d="M84 76 L138 60"/><path d="M158 68 L162 124"/>
+            <path d="M150 152 L98 154"/><path d="M72 84 L82 142"/>
+          </g>
+          <g fill="rgba(255,79,216,.35)">
+            <circle cx="70" cy="70" r="4"/><circle cx="150" cy="55" r="4"/>
+            <circle cx="160" cy="140" r="4"/><circle cx="85" cy="155" r="4"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="chem-badge" style="left: 220px; top: 24px;">
+        <span>H<sub>2</sub></span><small>gas</small>
+      </div>
+
+      <div class="chem-badge" style="left: 250px; top: 140px; width:78px; height:78px; animation-duration:12s;">
+        <span>CO<sub>2</sub></span><small>karbon</small>
+      </div>
+
+      <div class="flask" style="left: 80px; top: 190px; width:140px; height:150px; animation-duration:13s;">
+        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bk" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff4fd8" stop-opacity=".9"/>
+              <stop offset=".6" stop-color="#7c4dff" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#2d6cff" stop-opacity=".85"/>
+            </linearGradient>
+          </defs>
+          <path d="M45 22h70v18l-12 16v66c0 12-10 22-22 22H79c-12 0-22-10-22-22V56L45 40V22z"
+                fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <path d="M58 96c14 10 34 10 48 0v22c0 12-10 22-22 22H80c-12 0-22-10-22-22V96z"
+                fill="url(#bk)" opacity=".92"/>
+          <circle cx="78" cy="108" r="5" fill="rgba(255,255,255,.18)"/>
+          <circle cx="96" cy="118" r="4" fill="rgba(255,255,255,.15)"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- RIGHT ZONE -->
+    <div class="chem-zone" style="right: 4%; top: 16%; width: 400px; height: 400px;">
+      <div class="molecule" style="left: 200px; top: 10px; width: 200px; height:200px; opacity:.20; animation-duration:18s;">
+        <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2">
+            <path d="M120 28 l62 36 v72 l-62 36 l-62-36V64z"/>
+            <path d="M182 64 l42-24"/><circle cx="226" cy="40" r="10"/>
+            <path d="M58 64 l-42-24"/><circle cx="14" cy="40" r="10"/>
+            <path d="M182 136 l42 24"/><circle cx="226" cy="160" r="10"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="chem-badge" style="left: 36px; top: 36px; width:80px; height:80px;">
+        <span>O<sub>2</sub></span><small>oksigen</small>
+      </div>
+
+      <div class="chem-badge" style="left: 40px; top: 150px; animation-duration:11s;">
+        <span>NH<sub>3</sub></span><small>amonia</small>
+      </div>
+
+      <div class="flask" style="left: 250px; top: 210px; width:90px; height:160px; animation-duration:11s;">
+        <svg viewBox="0 0 90 170" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="tt" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff4fd8" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#7c4dff" stop-opacity=".9"/>
+            </linearGradient>
+          </defs>
+          <rect x="28" y="10" width="34" height="130" rx="16"
+                fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <path d="M30 104c8 8 22 8 30 0v18c0 10-8 18-18 18H48c-10 0-18-8-18-18v-18z"
+                fill="url(#tt)" opacity=".9"/>
+          <circle cx="45" cy="120" r="4" fill="rgba(255,255,255,.16)"/>
+          <circle cx="54" cy="132" r="3.5" fill="rgba(255,255,255,.14)"/>
+        </svg>
+      </div>
+
+      <div class="flask" style="left: 155px; top: 235px; width:130px; height:150px; animation-duration:14s;">
+        <svg viewBox="0 0 140 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="er" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff4fd8" stop-opacity=".9"/>
+              <stop offset=".6" stop-color="#7c4dff" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#2d6cff" stop-opacity=".85"/>
+            </linearGradient>
+          </defs>
+          <path d="M58 10h24v44l18 34c6 12-2 26-16 26H40c-14 0-22-14-16-26l18-34V10z"
+                fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+          <path d="M36 106c10 10 58 10 68 0v12c0 10-8 18-18 18H54c-10 0-18-8-18-18v-12z"
+                fill="url(#er)" opacity=".92"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <div class="brand-title">Kesetimbangan Kimia</div>
+        <div class="brand-sub">Agent Le C • Terminal Lab</div>
+      </div>
+    </div>
+
+    <div class="top-actions hidden" id="topActions">
+  <div class="chip" id="whoami"><span class="dot"></span>Mode: Pengunjung</div>
+
+  <a href="pk.html" style="text-decoration:none;">
+    <button class="btn ghost" type="button">Peta Konsep & Tabel Periodik</button>
+  </a>
+
+  <button class="btn ghost" id="btnLogout" type="button">🚪 Logout</button>
+</div>
+
+  </header>
+
+  <main>
+
+        <!-- =========================
+         MODE COVER: PILIH GURU / SISWA
+    ========================== -->
+    <section class="panel" id="modeCover">
+      <div class="mode-cover-wrap">
+        <div class="pill" style="margin:0 auto;">
+          <span class="hex"></span>
+          <span>PILIH MODE AKSES</span>
+        </div>
+
+        <h1 class="mode-title">
+          Selamat Datang di<br>
+          <span class="grad">Agent Le C</span>
+        </h1>
+
+        <div class="mode-grid">
+  <button class="mode-card" type="button" onclick="pilihModeAwal('siswa')">
+    <div class="mode-icon">🎓</div>
+    <h2>Mode Siswa</h2>
+    <div class="mode-action">Masuk sebagai siswa ➜</div>
+  </button>
+
+  <button class="mode-card" type="button" onclick="pilihModeAwal('guru')">
+    <div class="mode-icon">🧑‍🏫</div>
+    <h2>Mode Guru</h2>
+    <div class="mode-action">Masuk sebagai guru ➜</div>
+  </button>
+</div>
+
+      </div>
+    </section>
+    <!-- =========================
+         COVER
+    ========================== -->
+    <section class="panel hidden" id="cover">
+      <div class="cover-grid">
+        <section>
+          <div class="pill">
+            <span class="hex"></span>
+            <span>TERMINAL INTELIJEN LAB v2.5</span>
+          </div>
+
+          <div class="title">
+            AGENT<br/>
+            <span class="accent">Le C</span>
+          </div>
+
+          <div class="underline"></div>
+
+          <div class="subtitle">
+            Platform Eksplorasi <b>Kesetimbangan Kimia</b>
+          </div>
+
+          <div class="smallcaps">Dibuat oleh Febiola Rizqi A</div>
+
+          <div class="toggles">
+            <div class="toggle">
+              <span class="ico">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M13 3L4 14h7l-1 7 10-13h-7l0-5z" stroke="white" stroke-width="2" opacity=".9"/>
+                </svg>
+              </span>
+              ADAPTIF
+            </div>
+            <div class="toggle">
+              <span class="ico">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2l8 6v8l-8 6-8-6V8l8-6z" stroke="white" stroke-width="2" opacity=".9"/>
+                </svg>
+              </span>
+              IMERSIF
+            </div>
+          </div>
+          <!-- MASCOT OVERLAY (tidak mengubah layout) -->
+        <div class="cover-mascot" aria-hidden="true">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjYT0y4yFPY220bHQTCFgRAmPK_yTteuCR8UQpo_XFjBgitrG9ApXXUz1wUkq850Xx2lqhWdr0auN5DDLogSb2_u3UcpsjqkSvO58ycCTfUYrIzcrzvwxAO6Y4_2ZRjlkZHncO1v7Ww6Ld216RRwObaMyAHKbIHzEqXfRbFOOdG94TlGllTI5WSW0SbLkbI" alt="">
+        </div>
+
+        </section>
+
+        <section class="card" aria-label="Otentikasi">
+  <div class="card-inner">
+    <div class="login-head">
+      <div>
+      </div>
+
+      <button class="back-mode-btn" type="button" onclick="kembaliKeModeCover()">
+        ⬅ Pilih Mode
+      </button>
+    </div>
+
+            <div class="field" id="fieldName">
+  <div class="label pink">NAMA PENJELAJAH</div>
+  <input class="input" id="name" placeholder="Contoh: Albert Einstein" autocomplete="name" />
+</div>
+            <div class="field" id="fieldKelas">
+  <div class="label pink">KELAS</div>
+  <input class="input" id="kelas" placeholder="Contoh: XI-3" autocomplete="off" />
+</div>
+
+            <div class="field" id="fieldAbsen">
+  <div class="label blue">NO ABSEN</div>
+  <input class="input" id="absen" type="number" inputmode="numeric"
+  placeholder="Contoh: 12" min="1" max="60" autocomplete="off" />
+</div>
+
+            <div class="field">
+              <div class="label blue">EMAIL TERMINAL</div>
+              <input class="input" id="email" type="email" inputmode="email"
+            placeholder="nama@gmail.com" autocomplete="email" />
+            </div>
+            <div class="field" id="fieldPasswordSiswa">
+  <div class="label blue">PASSWORD SISWA</div>
+
+  <div class="password-field">
+    <input class="input" id="passwordSiswa" type="password"
+      placeholder="Minimal 6 karakter" autocomplete="new-password" />
+
+    <button class="password-eye" type="button"
+      onclick="togglePasswordVisibility('passwordSiswa', this)"
+      aria-label="Lihat password">
+    </button>
+  </div>
+</div>
+
+            <div class="field hidden" id="fieldPasswordGuru">
+  <div class="label blue">PASSWORD GURU</div>
+  <input class="input" id="passwordGuru" type="password"
+  placeholder="Masukkan password guru" autocomplete="current-password" />
+</div>
+
+            <button class="cta" id="start">
+              MULAI ANALISIS
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M13 6l6 6-6 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            <div class="foot">Protected by Agent Le C Neural Interface</div>
+            <div class="note" id="coverNote"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- =========================
+         PETUNJUK PENGGUNAAN WEB
+    ========================== -->
+    <section class="panel hidden" id="petunjuk" aria-label="Petunjuk Penggunaan Web">
+      <div class="landing-wrap">
+        <div class="card" style="border-radius:28px; max-width:1050px; margin:0 auto;">
+          <div class="card-inner">
+            <div style="text-align:center;">
+              <div class="pill" style="margin:0 auto 18px;">
+                <span class="hex"></span>
+                <span>PETUNJUK PENGGUNAAN WEB</span>
+              </div>
+
+              <h2 style="font-size:clamp(34px, 5vw, 62px); margin:0; line-height:.98;">
+                Petunjuk Penggunaan<br>
+                <span style="display:inline-block; background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue)); -webkit-background-clip:text; background-clip:text; color:transparent; font-style:italic; transform:skewX(-6deg);">
+                  Agent Le C
+                </span>
+              </h2>
+
+              <p style="max-width:760px; margin:16px auto 0; color:rgba(255,255,255,.66); line-height:1.7;">
+                Bacalah petunjuk berikut sebelum memulai eksplorasi agar jawaban, skor, dan data belajar tersimpan dengan benar.
+              </p>
+            </div>
+
+            <div class="petunjuk-grid">
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">🔐</div>
+                <div>
+                  <h3>Login sesuai mode</h3>
+                  <p>Siswa masuk melalui Mode Siswa. Guru masuk melalui Mode Guru menggunakan email dan password guru.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">🧾</div>
+                <div>
+                  <h3>Isi identitas dengan benar</h3>
+                  <p>Nama, kelas, nomor absen, email, dan password siswa harus diisi lengkap agar data tersimpan rapi.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">🧭</div>
+                <div>
+                  <h3>Ikuti alur eksplorasi</h3>
+                  <p>Siswa memulai dari Pra-Eksplorasi, lalu Capaian Pembelajaran, Tujuan Pembelajaran, dan Peta Eksplorasi.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">🧪</div>
+                <div>
+                  <h3>Kerjakan sub bab berurutan</h3>
+                  <p>Pilih Sub Bab 1 sampai Sub Bab 4 sesuai alur pembelajaran. Isi jawaban dengan lengkap sebelum lanjut.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">💾</div>
+                <div>
+                  <h3>Pastikan jawaban tersimpan</h3>
+                  <p>Setelah mengisi, klik tombol simpan atau lanjut. Jangan menutup halaman sebelum proses penyimpanan selesai.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">📊</div>
+                <div>
+                  <h3>Guru melihat data siswa</h3>
+                  <p>Mode Guru membuka dashboard data, kunci jawaban, dan rekap jawaban siswa sesuai sub bab dan drill soal.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">⭐</div>
+                <div>
+                  <h3>Gunakan Drill Soal</h3>
+                  <p>Drill Soal digunakan untuk latihan akhir dan mengecek pemahaman representasi kesetimbangan kimia.</p>
+                </div>
+              </div>
+
+              <div class="petunjuk-item">
+                <div class="petunjuk-icon">🎓</div>
+                <div>
+                  <h3>Ruang Kelas Digital</h3>
+                  <p>Gunakan Ruang Kelas Digital untuk melihat update materi tambahan, informasi pembelajaran, dan tugas.</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:20px;">
+              <button class="btn primary" id="lanjutDariPetunjuk" type="button">
+                Saya Mengerti, Lanjut ➜
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- =========================
+         PRA-EKSPLORASI (AFTER LOGIN)
+    ========================== -->
+    <section class="panel hidden" id="pre" aria-label="Pra-Eksplorasi">
+      <div class="pre-wrap">
+        <div class="bg-illustration" aria-hidden="true"></div>
+        <canvas id="mol" aria-hidden="true"></canvas>
+
+        <div class="overlay">
+          <div class="title">
+            Dunia Molekul<br/>
+            <span>Belum Setimbang</span>
+          </div>
+
+          <div class="desc">
+            Pada level mikroskopik, partikel <b>bergerak cepat</b> dan
+            <b>bertumbukan secara acak</b>.
+            Ikatan dapat terbentuk sesaat, namun sistem ini
+            <b>belum memungkinkan reaksi balik</b>.
+            <br/><br/>
+            Akibatnya, reaksi hanya berlangsung <b>satu arah</b> dan
+            jumlah produk terus bertambah tanpa pernah mencapai keseimbangan.
+          </div>
+
+          <div class="symbolic">
+            A + B <span class="fwd">→</span> C
+            <span class="no">⇌</span>
+          </div>
+
+          <button class="btn-pre" id="enterExplorationBtn" type="button">
+            Mulai Eksplorasi
+          </button>
+
+          <div class="note">
+            Pra-Eksplorasi • Representasi Mikroskopik
+          </div>
+        </div>
+      </div>
+    </section>
+
+   <!-- =========================
+     CAPAIAN PEMBELAJARAN (TANPA JUDUL)
+========================== -->
+<section class="panel hidden" id="capaian" aria-label="Capaian Pembelajaran">
+  <div class="landing-wrap">
+
+    <div class="card" style="border-radius:28px; max-width:980px; margin:0 auto;">
+      <div class="media-wrap">
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTRQ1jXNRV_oG6BIeteinkOskoHt8-n2a3l484CS3v164IOCwuTLQlaeNyqeK89uw8B4vETIJI_zBALUNnMfL4NVJUIlVppSuwmb8g5YjZB10wK99W_rINnI4BYBiPmLXqz6fx9MT8LC6KcTMw7iirTO6W7WObvDnFIyrnhKqqG4YssXiNIH-t8bVTqBUc/s1920/ca1.jpg"
+          alt="Capaian Pembelajaran"
+        />
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
+        <button class="btn ghost" id="backToPreFromCapaian" type="button">⬅ Kembali</button>
+        <button class="btn primary" id="goTujuan" type="button">Lanjut</button>
+      </div>
+
+      <div class="note" style="text-align:center; margin-top:10px;">
+        Tahap 1 • Capaian Pembelajaran
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================
+     TUJUAN PEMBELAJARAN (TANPA JUDUL)
+========================== -->
+<section class="panel hidden" id="tujuan" aria-label="Tujuan Pembelajaran">
+  <div class="landing-wrap">
+
+    <div class="card" style="border-radius:28px; max-width:980px; margin:0 auto;">
+      <div class="media-wrap">
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjsO4dpxyJVQG_7BJU1ZbhyNveiZfSO5JAim2URyXfXJ2VfDiZ0hDcfW0ARA9Q8Zsr4DP7eWbWQ15sMXlc9z3HHlKEcyELjEOzkAravEGdXPgsSyYmx7-EPBlZQguHO8wQCLJXzNX0FC_XIc6yluSDrdb2IaHW3acP8i5_KinCZXM0vc6Ii2Sq2im6pSLlY/s1920/ca2.jpg"
+          alt="Tujuan Pembelajaran"
+        />
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
+        <button class="btn ghost" id="backToCapaian" type="button">⬅ Kembali</button>
+        <button class="btn primary" id="goLanding" type="button">Masuk Peta Eksplorasi</button>
+      </div>
+
+      <div class="note" style="text-align:center; margin-top:10px;">
+        Tahap 2 • Tujuan Pembelajaran
+      </div>
+    </div>
+
+  </div>
+</section>
+
+    <!-- =========================
+         LANDING (ORDERLY GRID)
+    ========================== -->
+    <section class="panel hidden" id="landing">
+      <div class="landing-wrap">
+        <!-- tombol kembali ke pra-eksplorasi -->
+    <div class="landing-actions" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin: 8px 0 14px;">
+  <button class="btn ghost" id="backToPreBtn" type="button">
+    ⬅ Kembali ke Pra-Eksplorasi
+  </button>
+
+  <a href="biodata.html" style="text-decoration:none;">
+  <button class="btn biodata-btn" type="button">
+    👩‍💻 Biodata Pengembang
+  </button>
+</a>
+</div>
+        <div class="hero-center">
+          <h1 class="hero-title">
+            Peta<br/>
+            <span class="grad">Eksplorasi</span>
+          </h1>
+          <div class="hero-sub">
+            PILIH TERMINAL DATA DI BAWAH INI UNTUK MEMULAI<br/>
+            SINKRONISASI PENGETAHUAN KIMIA TINGKAT LANJUT.
+          </div>
+        </div>
+
+        <div class="map">
+          <div class="guide" aria-hidden="true"></div>
+
+          <div class="nodes" aria-label="4 sub bab dan drill soal">
+            <!-- 01 -->
+            <div class="node" data-sub="1">
+              <div class="id">01</div>
+              <div class="body">
+                <div class="tag">INKUIRI TERBIMBING</div>
+                <h3>Konsep Kesetimbangan</h3>
+                <p>Dasar kesetimbangan dinamis, reaksi bolak-balik, dan kondisi setimbang.</p>
+              </div>
+              <div class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- 02 -->
+            <div class="node" data-sub="2">
+              <div class="id">02</div>
+              <div class="body">
+                <div class="tag">DATA TERMINAL</div>
+                <h3>Hukum Kesetimbangan & Tetapan (K)</h3>
+                <p>Kc, Kp, hubungan K, serta interpretasi nilai K dalam reaksi setimbang.</p>
+              </div>
+              <div class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- 03 -->
+            <div class="node" data-sub="3">
+              <div class="id">03</div>
+              <div class="body">
+                <div class="tag">SIMULASI SISTEM</div>
+                <h3>Faktor Pergeseran Kesetimbangan</h3>
+                <p>Prinsip Le Chatelier: konsentrasi, tekanan/volume, suhu, dan katalis.</p>
+              </div>
+              <div class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                </svg>
+              </div>
+            </div>
+
+                        <!-- 04 -->
+            <div class="node" data-sub="4">
+              <div class="id">04</div>
+              <div class="body">
+                <div class="tag">APLIKASI DUNIA NYATA</div>
+                <h3>Aplikasi dalam Industri & Kehidupan</h3>
+                <p>Contoh: Haber, Contact process, minuman bersoda, dan optimasi proses industri.</p>
+              </div>
+              <div class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- DRILL SOAL -->
+            <div class="node drill-node" data-drill="soal">
+              <div class="id">★</div>
+              <div class="body">
+                <div class="tag">LATIHAN ADAPTIF</div>
+                <h3>Drill Soal</h3>
+                <p>Latihan soal cepat untuk menguji pemahaman konsep kesetimbangan kimia setelah melakukan eksplorasi.</p>
+              </div>
+              <div class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- GOOGLE CLASSROOM -->
+            <a class="node classroom-node"
+               data-external="classroom"
+               href="classroom.html"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="text-decoration:none;">
+              <div class="id">GC</div>
+              <div class="body">
+                <div class="tag">KELAS DIGITAL</div>
+                <h3>Ruang Kelas Digital</h3>
+                <p>Tempat update materi tambahan, informasi pembelajaran, dan pengumpulan tugas melalui Google Classroom.</p>
+              </div>
+              <div class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+                </svg>
+              </div>
+            </a>
+          </div>
+
+          <div class="note" style="text-align:center; margin-top:16px;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         DASHBOARD PEMBUAT (ADMIN)
+    ========================== -->
+    <section class="panel hidden" id="admin">
+      <div class="landing-wrap" style="padding-top:0;">
+        <div class="hero-center" style="margin-bottom:18px;">
+          <h1 class="hero-title" style="font-size: clamp(42px, 6vw, 86px);">
+            Dashboard<br/>
+            <span class="grad">Pembuat</span>
+          </h1>
+          <div class="hero-sub" style="max-width: 980px;">
+            DATA TERSIMPAN DI BROWSER (LOCAL). UNTUK MULTI PERANGKAT, BUTUH BACKEND/SERVER.
+          </div>
+     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px;">
+  <button class="btn ghost" id="btnBackFromAdmin" type="button">⬅ Kembali ke Peta</button>
+  <button class="btn primary" id="btnRefreshAdmin" type="button">Refresh Data</button>
+
+  <!-- BARU -->
+  <button class="btn ghost" id="btnExportCSV" type="button">⬇ Export Excel (CSV)</button>
+  <button class="btn ghost" id="btnExportPDF" type="button">📄 Export PDF</button>
+
+  <button class="btn ghost" id="btnResetData" type="button">Reset Data (Hapus)</button>
+</div>
+
+
+        <div class="card" style="border-radius:28px;">
+  <div class="card-inner">
+    <h2 style="margin:0 0 10px; font-size:24px;">Pusat Data Guru</h2>
+    <p style="margin:0 0 14px; color:rgba(255,255,255,.6);">
+      Pilih kategori data yang ingin dilihat. Setiap tombol akan membuka halaman data sesuai sub bab atau drill soal.
+    </p>
+
+    <div class="admin-data-menu">
+      <a class="admin-data-btn" href="datasb1.html">
+        <div class="admin-data-icon">01</div>
+        <div class="admin-data-title">Data Sub Bab 1</div>
+        <div class="admin-data-sub">Konsep Kesetimbangan</div>
+      </a>
+
+      <a class="admin-data-btn" href="datasb2.html">
+        <div class="admin-data-icon">02</div>
+        <div class="admin-data-title">Data Sub Bab 2</div>
+        <div class="admin-data-sub">Tetapan Kesetimbangan</div>
+      </a>
+
+      <a class="admin-data-btn" href="datasb3.html">
+        <div class="admin-data-icon">03</div>
+        <div class="admin-data-title">Data Sub Bab 3</div>
+        <div class="admin-data-sub">Pergeseran Kesetimbangan</div>
+      </a>
+
+      <a class="admin-data-btn" href="datasb4.html">
+        <div class="admin-data-icon">04</div>
+        <div class="admin-data-title">Data Sub Bab 4</div>
+        <div class="admin-data-sub">Aplikasi Kesetimbangan</div>
+      </a>
+
+      <a class="admin-data-btn" href="datadrill.html">
+        <div class="admin-data-icon">★</div>
+        <div class="admin-data-title">Data Drill Soal</div>
+        <div class="admin-data-sub">Latihan Akhir</div>
+      </a>
+    </div>
+
+    <div class="note" style="margin-top:18px; text-align:center;">
+      Dashboard guru menampilkan pintasan data. Detail tabel nilai ditampilkan pada halaman masing-masing.
+    </div>
+  </div>
+</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FAB -->
+  <button class="fab" id="fab" aria-label="Quick action">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M12 2l1.6 6.2L20 10l-6.1 1.8L12 18l-1.9-6.2L4 10l6.4-1.8L12 2z"
+            stroke="white" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M5 20l2-2M19 20l-2-2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <!-- CHATBOT KIMI -->
+<button class="kimi-chat-btn hidden" id="kimiBtn" type="button" aria-label="Buka Chatbot Kimi">
+  🤖
+</button>
+
+<div class="kimi-panel" id="kimiPanel" aria-label="Chatbot Kimi">
+  <div class="kimi-head">
+    <div class="kimi-title">
+      <div class="kimi-avatar">🧪</div>
+      <div>
+        <h3>ChatLe-C</h3>
+<small>khusus materi kesetimbangan</small>
+      </div>
+    </div>
+
+    <button class="kimi-close" id="kimiClose" type="button">×</button>
+  </div>
+
+  <div class="kimi-messages" id="kimiMessages">
+    <div class="kimi-msg bot">
+      Halo, aku Le-C. Aku hanya bisa menjawab berdasarkan handout kesetimbangan kimia yang diberikan dalam web.
+    </div>
+  </div>
+
+  <div class="kimi-input-area">
+    <input
+      class="kimi-input"
+      id="kimiInput"
+      type="text"
+      placeholder="Tanya materi kesetimbangan..."
+      autocomplete="off"
+    />
+    <button class="kimi-send" id="kimiSend" type="button">➤</button>
+  </div>
+</div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Sub bab">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title">
+          <div class="mini" id="modalMini">SUB BAB</div>
+          <h3 id="modalTitle">Judul</h3>
+        </div>
+        <button class="btn ghost" id="closeModal">Tutup</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="backToMap">Kembali</button>
+        <button class="btn primary" id="nextSub">Sub bab berikutnya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO GATE (Pra-Eksplorasi -> Peta Eksplorasi) -->
+<div class="modal video-modal" id="videoGate" role="dialog" aria-modal="true" aria-label="Video Pra-Eksplorasi">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title">
+        <div class="mini">PRA-EKSPLORASI</div>
+        <h3>Video Pengantar Eksplorasi</h3>
+      </div>
+      <button class="btn ghost" id="closeVideoGate" type="button">Tutup</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="video-wrap">
+        <iframe
+          id="videoGateFrame"
+          title="Video Pra-Eksplorasi"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="video-hint">Video diputar di tab ini. Setelah selesai, klik “Lanjut ke Peta”.</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn ghost" id="skipVideoGate" type="button">Lewati</button>
+      <button class="btn primary" id="goMapAfterVideo" type="button">Lanjut ke Peta</button>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
+<!-- FIREBASE LOGIN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+
+<script src="chatlec-data.js"></script>
+
+<script>
+  /* =========================
+     CONFIG & STATE
+  ========================= */
+    const ADMIN_EMAIL = "appbeechem@gmail.com";
+const ADMIN_PASSWORD = "anor123";
+
+    const session = { name:"", email:"", kelas:"", absen:"", role:"visitor" };
+
+    let currentSub = 1;
+
+    const SUBS = {
+      1: {
+        mini: "SUB BAB 01",
+        title: "Konsep Kesetimbangan",
+        body: `
+          <p>Tempat konten <b>Konsep Kesetimbangan</b>.</p>
+          <p class="muted">Nanti Anda bisa tempel HTML materi Anda di sini, atau kita bikin sistem router halaman sub bab.</p>
+        `
+      },
+      2: {
+        mini: "SUB BAB 02",
+        title: "Hukum Kesetimbangan dan Tetapan Kesetimbangan (K)",
+        body: `<p>Tempat konten <b>Hukum Kesetimbangan & Tetapan (K)</b>.</p>`
+      },
+      3: {
+        mini: "SUB BAB 03",
+        title: "Faktor Pergeseran Kesetimbangan",
+        body: `<p>Tempat konten <b>Faktor Pergeseran Kesetimbangan</b>.</p>`
+      },
+      4: {
+        mini: "SUB BAB 04",
+        title: "Aplikasi Kesetimbangan dalam Industri dan Kehidupan",
+        body: `<p>Tempat konten <b>Aplikasi Kesetimbangan</b>.</p>`
+      }
+    };
+
+
+function findIntentAnswer(q){
+  for(const intent of CHATLEC_INTENTS){
+    const matched = intent.questions.some(item => {
+      const text = normalizeText(item);
+      return q.includes(text) || text.includes(q);
+    });
+
+    if(matched){
+      const found = KIMI_HANDOUT.find(item =>
+        normalizeText(item.title).includes(normalizeText(intent.titleIncludes))
+      );
+
+      if(found){
+        return {
+          answer: formatKimiContent(found.content),
+          source: found.title
+        };
+      }
+    }
+  }
+
+  return null;
+}
+    /* =========================
+       HELPERS
+    ========================= */
+    const $ = (s) => document.querySelector(s);
+    function isGmail(email){
+  return /^[^\s@]+@gmail\.com$/i.test(email.trim());
+    }
+    function showToast(msg){
+      const toast = $("#toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=> toast.classList.remove("show"), 2200);
+    }
+
+    function setWhoami(role, email){
+      $("#whoami").innerHTML = `<span class="dot"></span>Mode: ${role === "creator" ? "Pembuat (Admin)" : "Pengunjung"}${email ? " • " + email : ""}`;
+    }
+
+    function setTopbarAuthed(isAuthed){
+      const el = document.getElementById("topActions");
+      if (!el) return;
+      el.classList.toggle("hidden", !isAuthed);
+    }
+
+     function showPage(pageId){
+  $("#modeCover").classList.add("hidden");
+  $("#cover").classList.add("hidden");
+  $("#petunjuk").classList.add("hidden");
+  $("#pre").classList.add("hidden");
+  $("#capaian").classList.add("hidden");
+  $("#tujuan").classList.add("hidden");
+  $("#landing").classList.add("hidden");
+
+  const adminEl = $("#admin");
+  if (adminEl) adminEl.classList.add("hidden");
+
+  $("#" + pageId).classList.remove("hidden");
+
+  localStorage.setItem("KI_LAST_PAGE", pageId);
+setKimiVisibleByPage(pageId);
+
+  if (pageId === "pre") startPreAnimation();
+}
+function pilihModeAwal(mode){
+  localStorage.setItem("KI_SELECTED_MODE", mode);
+
+  showPage("cover");
+
+  const coverNote = document.getElementById("coverNote");
+
+  const fieldName = document.getElementById("fieldName");
+  const fieldKelas = document.getElementById("fieldKelas");
+  const fieldAbsen = document.getElementById("fieldAbsen");
+  const fieldPasswordGuru = document.getElementById("fieldPasswordGuru");
+  const fieldPasswordSiswa = document.getElementById("fieldPasswordSiswa");
+
+  const nameInput = document.getElementById("name");
+  const kelasInput = document.getElementById("kelas");
+  const absenInput = document.getElementById("absen");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("passwordGuru");
+
+  if(mode === "guru"){
+    fieldName.classList.add("hidden");
+    fieldKelas.classList.add("hidden");
+    fieldAbsen.classList.add("hidden");
+    fieldPasswordGuru.classList.remove("hidden");
+    if(fieldPasswordSiswa) fieldPasswordSiswa.classList.add("hidden");
+
+    nameInput.value = "";
+    kelasInput.value = "";
+    absenInput.value = "";
+    emailInput.placeholder = "Masukkan email guru";
+
+    if(passwordInput) passwordInput.value = "";
+
+    if(coverNote){
+      coverNote.textContent = "Mode guru dipilih. Masukkan email guru dan password.";
+    }
+
+    showToast("Mode guru dipilih.");
+  }else{
+    fieldName.classList.remove("hidden");
+    fieldKelas.classList.remove("hidden");
+    fieldAbsen.classList.remove("hidden");
+    fieldPasswordGuru.classList.add("hidden");
+
+    emailInput.placeholder = "nama@gmail.com";
+
+    if(passwordInput) passwordInput.value = "";
+
+    if(coverNote){
+      coverNote.textContent = "Mode siswa dipilih. Silakan isi identitas belajar.";
+      if(fieldPasswordSiswa) fieldPasswordSiswa.classList.remove("hidden");
+    }
+
+    showToast("Mode siswa dipilih.");
+  }
+}
+function kembaliKeModeCover(){
+  localStorage.removeItem("KI_SELECTED_MODE");
+
+  const fieldName = document.getElementById("fieldName");
+  const fieldKelas = document.getElementById("fieldKelas");
+  const fieldAbsen = document.getElementById("fieldAbsen");
+  const fieldPasswordGuru = document.getElementById("fieldPasswordGuru");
+
+  const nameInput = document.getElementById("name");
+  const kelasInput = document.getElementById("kelas");
+  const absenInput = document.getElementById("absen");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("passwordGuru");
+  const coverNote = document.getElementById("coverNote");
+
+  fieldName.classList.remove("hidden");
+  fieldKelas.classList.remove("hidden");
+  fieldAbsen.classList.remove("hidden");
+  fieldPasswordGuru.classList.add("hidden");
+
+  nameInput.value = "";
+  kelasInput.value = "";
+  absenInput.value = "";
+  emailInput.value = "";
+  emailInput.placeholder = "nama@gmail.com";
+
+  if(passwordInput) passwordInput.value = "";
+  if(coverNote) coverNote.textContent = "";
+
+  showPage("modeCover");
+  showToast("Kembali ke pilihan mode akses.");
+}
+
+    // ======= STORAGE MODEL (LOCAL) =======
+    const DB_KEY = "KI_DB_v1";
+    const SUB_COUNT = 7;
+
+function makeScores(){
+  const obj = {};
+  for(let i=1;i<=SUB_COUNT;i++) obj["sub"+i] = null;
+  return obj;
+}
+
+function makeNotes(){
+  const obj = {};
+  for(let i=1;i<=SUB_COUNT;i++) obj["sub"+i] = "";
+  return obj;
+}
+
+function ensureSubs(u){
+  // pastikan ada scores & notes sampai sub7 (untuk data lama yang cuma sub1-4)
+  u.scores = u.scores || {};
+  u.notes  = u.notes  || {};
+  for(let i=1;i<=SUB_COUNT;i++){
+    const k = "sub"+i;
+    if(!(k in u.scores)) u.scores[k] = null;
+    if(!(k in u.notes))  u.notes[k]  = "";
+  }
+  return u;
+}
+
+    function dbLoad(){
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users: {} }; }
+      catch { return { users: {} }; }
+    }
+    function dbSave(db){
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+
+    function upsertVisit({ name, email, kelas, absen }){
+
+      const db = dbLoad();
+      if (!db.users[email]) {
+        db.users[email] = {
+  name,
+  email,
+  kelas: kelas || "",
+  absen: absen || "",
+  visits: [],
+  scores: makeScores(),
+  notes:  makeNotes()
+};
+
+      } else {
+  db.users[email].name = name || db.users[email].name;
+  db.users[email].kelas = kelas || db.users[email].kelas || "";
+  db.users[email].absen = absen || db.users[email].absen || "";
+
+  ensureSubs(db.users[email]); // ✅ penting
+}
+
+      db.users[email].visits.push(new Date().toISOString());
+      dbSave(db);
+    }
+
+    function fmtTime(iso){
+      if (!iso) return "-";
+      try {
+        const d = new Date(iso);
+        return d.toLocaleString("id-ID");
+      } catch { return iso; }
+    }
+
+function doLogout(){
+  if (typeof auth !== "undefined") {
+  auth.signOut().catch(console.error);
+}
+  // hapus session login & routing
+  localStorage.removeItem("KI_CURRENT_USER");
+  localStorage.removeItem("KI_LAST_PAGE");
+  localStorage.removeItem("KI_GO_TO");
+
+  // reset session runtime
+  session.name = "";
+  session.kelas = "";
+  session.absen = "";
+  session.email = "";
+  session.role = "visitor";
+
+  setWhoami("visitor", "");
+  setTopbarAuthed(false); // ✅ hide lagi
+
+  localStorage.removeItem("KI_SELECTED_MODE");
+showPage("modeCover");
+showToast("Anda sudah logout. Silakan pilih mode akses lagi.");
+}
+
+// tombol logout (topbar)
+$("#btnLogout").addEventListener("click", () => {
+  if (!confirm("Logout dan kembali ke halaman login?")) return;
+  doLogout();
+});
+
+/* =========================
+   EXPORT HELPERS (GLOBAL) ✅
+========================= */
+function getAdminRows(){
+  const db = dbLoad();
+  const users = Object.values(db.users || {});
+  users.sort((a,b) => {
+    const la = a.visits?.[a.visits.length-1] || "";
+    const lb = b.visits?.[b.visits.length-1] || "";
+    return lb.localeCompare(la);
+  });
+
+ return users.map(u => {
+  ensureSubs(u);
+
+  const last = u.visits?.[u.visits.length-1] || "";
+  const count = u.visits?.length || 0;
+
+  const row = {
+    nama: u.name || "-",
+    kelas: u.kelas || "-",
+    absen: u.absen || "-",
+    email: u.email || "-",
+    kunjunganTerakhir: fmtTime(last),
+    jumlahKunjungan: count
+  };
+
+  for(let i=1;i<=SUB_COUNT;i++){
+    const k = "sub"+i;
+    const s = (u.scores?.[k] ?? null);
+    row["nilaiSub"+i] = (s === null) ? "-" : String(s);
+    row["catatanSub"+i] = (u.notes?.[k] || "-");
+  }
+
+  return row;
+});
+
+}
+
+function csvEscape(v){
+  const s = String(v ?? "");
+  if (/[,"\n]/.test(s)) return `"${s.replaceAll('"','""')}"`;
+  return s;
+}
+
+function downloadCSV(filename, rows){
+  const header = [
+  "Nama","Kelas","No Absen","Email",
+  "Kunjungan Terakhir","Jumlah Kunjungan",
+  ...Array.from({length: SUB_COUNT}, (_,i)=>`Nilai Sub ${i+1}`),
+  ...Array.from({length: SUB_COUNT}, (_,i)=>`Catatan Sub ${i+1}`)
+];
+
+
+  const lines = [];
+  lines.push(header.map(csvEscape).join(","));
+
+  for(const r of rows){
+  const base = [
+    r.nama, r.kelas, r.absen, r.email,
+    r.kunjunganTerakhir, r.jumlahKunjungan
+  ];
+
+  const scores = [];
+  const notes = [];
+  for(let i=1;i<=SUB_COUNT;i++){
+    scores.push(r["nilaiSub"+i]);
+    notes.push(r["catatanSub"+i]);
+  }
+
+  lines.push([...base, ...scores, ...notes].map(csvEscape).join(","));
+}
+
+  const csv = "\uFEFF" + lines.join("\n"); // BOM UTF-8 biar Excel kebaca
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 800);
+}
+
+async function exportPDF(filename, rows){
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    throw new Error("jsPDF tidak terbaca. CDN mungkin terblokir/offline.");
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Laporan Pengunjung & Nilai", 40, 50);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(11);
+  doc.text(`Generated: ${new Date().toLocaleString("id-ID")}`, 40, 72);
+  doc.text(`Total pengunjung: ${rows.length}`, 40, 90);
+
+  const head = [[
+    "Nama","Kelas","No Absen","Email",
+    "Kunjungan Terakhir","Jumlah Kunjungan",
+    "Nilai Sub 1","Catatan Sub 1"
+  ]];
+
+  const body = rows.map(r => [
+    r.nama, r.kelas, r.absen, r.email,
+    r.kunjunganTerakhir, String(r.jumlahKunjungan),
+    r.nilaiSub1, r.catatanSub1
+  ]);
+
+  if (!doc.autoTable) {
+    throw new Error("autoTable tidak terbaca. Pastikan jspdf-autotable sudah termuat.");
+  }
+
+  doc.autoTable({
+    head,
+    body,
+    startY: 110,
+    styles: { fontSize: 9, cellPadding: 6 },
+    margin: { left: 40, right: 40 }
+  });
+
+  doc.save(filename);
+}
+
+
+function renderAdmin(){
+  const note = document.getElementById("adminNote");
+  if(note){
+    note.textContent = "Pilih salah satu menu data untuk membuka halaman rekap.";
+  }
+}
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /* =========================
+       PRA-EKSPLORASI ANIMATION
+    ========================= */
+    const canvas = document.getElementById("mol");
+    const ctx = canvas.getContext("2d");
+
+    const particles = [];
+    const N = 140;
+    let preAnimStarted = false;
+    let parallaxBound = false;
+
+    function preBounds(){
+      const wrap = document.querySelector("#pre .pre-wrap");
+      const r = wrap.getBoundingClientRect();
+      return { w: Math.max(1, Math.floor(r.width)), h: Math.max(1, Math.floor(r.height)) };
+    }
+
+    function resizeMol(){
+      const { w, h } = preBounds();
+      if (canvas.width !== w) canvas.width = w;
+      if (canvas.height !== h) canvas.height = h;
+    }
+
+    function spawn(){
+      return {
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        vx:(Math.random()-.5)*4.5,
+        vy:(Math.random()-.5)*4.5,
+        r:2.4+Math.random()*1.8,
+        type:Math.random()<0.45?"A":Math.random()<0.9?"B":"C"
+      };
+    }
+
+    function color(p){
+      if(p.type==="A") return "rgba(45,108,255,.9)";
+      if(p.type==="B") return "rgba(124,77,255,.9)";
+      return "rgba(255,79,216,.95)";
+    }
+
+    function bindParallaxOnce(){
+      if (parallaxBound) return;
+      parallaxBound = true;
+
+      const bg = document.querySelector("#pre .bg-illustration");
+      if(!bg) return;
+
+      let raf = null;
+      window.addEventListener("mousemove", (e)=>{
+        if($("#pre").classList.contains("hidden")) return;
+        if(raf) return;
+        raf = requestAnimationFrame(()=>{
+          const x = (e.clientX / innerWidth - 0.5) * 10;
+          const y = (e.clientY / innerHeight - 0.5) * 10;
+          bg.style.transform = `translate(${x}px, ${y}px) scale(1.04)`;
+          raf = null;
+        });
+      });
+
+      window.addEventListener("mouseleave", ()=>{
+        bg.style.transform = "scale(1.02)";
+      });
+    }
+
+    function startPreAnimation(){
+      if (preAnimStarted) return;
+      preAnimStarted = true;
+
+      resizeMol();
+      window.addEventListener("resize", resizeMol);
+
+      particles.length = 0;
+      for(let i=0;i<N;i++) particles.push(spawn());
+
+      bindParallaxOnce();
+
+      (function loop(){
+        // render hanya saat pre aktif
+        if (!$("#pre").classList.contains("hidden")) {
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+
+          // ikatan sementara A-B (tanpa balik)
+          for(let i=0;i<particles.length;i++){
+            for(let j=i+1;j<particles.length;j++){
+              const a=particles[i], b=particles[j];
+              if(a.type==="C"||b.type==="C") continue;
+
+              const dx=a.x-b.x, dy=a.y-b.y;
+              const d=Math.hypot(dx,dy);
+              if(d<80 && Math.random()<0.012){
+                ctx.strokeStyle="rgba(255,255,255,.14)";
+                ctx.lineWidth=1;
+                ctx.beginPath();
+                ctx.moveTo(a.x,a.y);
+                ctx.lineTo(b.x,b.y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          // partikel
+          for(const p of particles){
+            ctx.fillStyle=color(p);
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fill();
+
+            // glow
+            ctx.globalAlpha=.22;
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.r*2.2,0,Math.PI*2);
+            ctx.fill();
+            ctx.globalAlpha=1;
+
+            p.x+=p.vx;
+            p.y+=p.vy;
+
+            if(p.x<0||p.x>canvas.width) p.vx*=-1;
+            if(p.y<0||p.y>canvas.height) p.vy*=-1;
+          }
+        }
+
+        requestAnimationFrame(loop);
+      })();
+    }
+
+    function enterExploration(){
+  // tampilkan video dulu (di tab yang sama)
+  openVideoGate();
+}
+function proceedAfterVideo(){
+  // habis video -> CAPAIAN
+  const pre = $("#pre");
+  pre.style.transition = "opacity .9s ease";
+  pre.style.opacity = "0";
+  setTimeout(()=>{
+    pre.style.opacity = "";
+    pre.style.transition = "";
+    showPage("capaian");
+    showToast("Membuka Capaian Pembelajaran…");
+  }, 900);
+}
+
+function goToTujuan(){
+  showPage("tujuan");
+  showToast("Membuka Tujuan Pembelajaran…");
+}
+
+function goToLanding(){
+  showPage("landing");
+  showToast("Memuat Peta Eksplorasi…");
+}
+
+
+    function backToPre(){
+  // transisi halus landing -> pre
+  const landing = $("#landing");
+  landing.style.transition = "opacity .6s ease";
+  landing.style.opacity = "0";
+
+  setTimeout(() => {
+    landing.style.opacity = "";
+    landing.style.transition = "";
+    showPage("pre");
+    showToast("Kembali ke Pra-Eksplorasi…");
+  }, 600);
+}
+
+/* =========================
+   VIDEO GATE LOGIC
+========================= */
+const YT_ID = "dwCuFMD6S4o";
+
+function openVideoGate(){
+  const gate = $("#videoGate");
+  const frame = $("#videoGateFrame");
+
+  // embed URL (plays inline + autoplay setelah klik)
+  const src = `https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&playsinline=1&rel=0&modestbranding=1`;
+
+  frame.src = src;
+  gate.classList.add("show");
+}
+
+function closeVideoGate(){
+  const gate = $("#videoGate");
+  const frame = $("#videoGateFrame");
+
+  gate.classList.remove("show");
+
+  // stop video (reset src)
+  frame.src = "";
+}
+
+
+    /* =========================
+       COVER -> PRE
+    ========================= */
+    $("#start").addEventListener("click", async () => {
+  const name = $("#name").value.trim();
+  const kelas = $("#kelas").value.trim();
+  const absen = $("#absen").value.trim();
+  const email = $("#email").value.trim().toLowerCase();
+  const passwordSiswa = ($("#passwordSiswa")?.value || "").trim();
+
+    const selectedMode = localStorage.getItem("KI_SELECTED_MODE") || "siswa";
+  const passwordGuru = ($("#passwordGuru")?.value || "").trim();
+
+  if(selectedMode === "guru"){
+    if(!email){
+      $("#coverNote").textContent = "Email guru wajib diisi.";
+      showToast("Email guru wajib diisi.");
+      $("#email").focus();
+      return;
+    }
+
+    if(email !== ADMIN_EMAIL){
+      $("#coverNote").textContent = "Email guru tidak sesuai.";
+      showToast("Gunakan email guru yang benar.");
+      $("#email").focus();
+      return;
+    }
+
+    if(!passwordGuru){
+      $("#coverNote").textContent = "Password guru wajib diisi.";
+      showToast("Password guru wajib diisi.");
+      $("#passwordGuru").focus();
+      return;
+    }
+
+    if(passwordGuru !== ADMIN_PASSWORD){
+      $("#coverNote").textContent = "Password guru salah.";
+      showToast("Password guru salah.");
+      $("#passwordGuru").focus();
+      return;
+    }
+    try {
+  await AuthApp.login(email, passwordGuru);
+} catch (error) {
+  $("#coverNote").textContent = "Login Firebase guru gagal: " + error.message;
+  showToast("Login Firebase guru gagal.");
+  return;
+}
+
+
+    session.name = "Guru";
+    session.kelas = "";
+    session.absen = "";
+    session.email = email;
+    session.role = "creator";
+
+    $("#coverNote").textContent = "";
+    setWhoami(session.role, session.email);
+    setTopbarAuthed(true);
+
+    localStorage.setItem("KI_CURRENT_USER", JSON.stringify({
+  name: session.name,
+  nama: session.name,
+  kelas: session.kelas,
+  absen: session.absen,
+  email: session.email,
+  role: "creator"
+}));
+
+    showPage("landing");
+showToast("Login guru berhasil. Membuka Peta Eksplorasi.");
+return;
+  }
+
+     if(!name){
+  $("#coverNote").textContent = "Nama wajib diisi.";
+  showToast("Nama wajib diisi.");
+  return;
+}
+
+if(!email){
+  $("#coverNote").textContent = "Email wajib diisi.";
+  showToast("Email wajib diisi.");
+  return;
+}
+
+if(!isGmail(email)){
+  $("#coverNote").textContent = "Email harus menggunakan format: nama@gmail.com";
+  showToast("Email harus @gmail.com");
+  $("#email").focus();
+  return;
+}
+if(!kelas){
+  $("#coverNote").textContent = "Kelas wajib diisi.";
+  showToast("Kelas wajib diisi.");
+  $("#kelas").focus();
+  return;
+}
+
+if(!absen){
+  $("#coverNote").textContent = "No absen wajib diisi.";
+  showToast("No absen wajib diisi.");
+  $("#absen").focus();
+  return;
+}
+
+const absenNum = Number(absen);
+if(!Number.isInteger(absenNum) || absenNum < 1 || absenNum > 60){
+  $("#coverNote").textContent = "No absen harus angka 1–60.";
+  showToast("No absen tidak valid.");
+  $("#absen").focus();
+  return;
+}
+
+if(!passwordSiswa || passwordSiswa.length < 6){
+  $("#coverNote").textContent = "Password siswa minimal 6 karakter.";
+  showToast("Password siswa minimal 6 karakter.");
+  $("#passwordSiswa").focus();
+  return;
+}
+
+try {
+  let firebaseUser = null;
+
+  try {
+    // Coba login dulu untuk siswa lama
+    const loginResult = await AuthApp.login(email, passwordSiswa);
+    firebaseUser = loginResult;
+  } catch (loginError) {
+    console.warn("Login gagal, mencoba daftar otomatis:", loginError.code);
+
+    try {
+      // Kalau belum punya akun, daftar otomatis
+      firebaseUser = await AuthApp.registerSiswa({
+        nama: name,
+        email: email,
+        password: passwordSiswa,
+        kelas: kelas,
+        absen: String(absenNum)
+      });
+    } catch (registerError) {
+      console.error("Daftar otomatis gagal:", registerError.code);
+
+      if (registerError.code === "auth/email-already-in-use") {
+        $("#coverNote").textContent =
+          "Email ini sudah terdaftar. Gunakan password yang pernah dibuat sebelumnya.";
+        showToast("Email sudah terdaftar. Password harus sama.");
+        $("#passwordSiswa").focus();
+        return;
+      }
+
+      throw registerError;
+    }
+  }
+  // PENTING:
+  // Setelah login/daftar, selalu update profil siswa di Firestore.
+  // Ini mencegah nama, kelas, absen kosong di database jawaban.
+  await db.collection("users").doc(firebaseUser.uid).set({
+    uid: firebaseUser.uid,
+    nama: name,
+    name: name,
+    email: email,
+    kelas: kelas,
+    absen: String(absenNum),
+    noAbsen: String(absenNum),
+    role: "siswa",
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+
+  session.name = name;
+  session.kelas = kelas;
+  session.absen = String(absenNum);
+  session.email = email;
+  session.role = "siswa";
+
+  $("#coverNote").textContent = "";
+  setWhoami(session.role, session.email);
+  setTopbarAuthed(true);
+
+  localStorage.setItem("KI_CURRENT_USER", JSON.stringify({
+    uid: firebaseUser.uid,
+    name: session.name,
+    nama: session.name,
+    kelas: session.kelas,
+    absen: session.absen,
+    email: session.email,
+    role: "siswa"
+  }));
+
+  upsertVisit({
+    name: session.name,
+    email: session.email,
+    kelas: session.kelas,
+    absen: session.absen
+  });
+
+  showPage("petunjuk");
+showToast("Login berhasil. Membuka Petunjuk Penggunaan Web…");
+} catch (error) {
+  console.error(error);
+  $("#coverNote").textContent = "Gagal login/daftar Firebase: " + error.message;
+  showToast("Gagal login Firebase.");
+}
+    });
+
+    $("#enterExplorationBtn").addEventListener("click", enterExploration);
+    $("#backToPreBtn").addEventListener("click", backToPre);
+    $("#lanjutDariPetunjuk").addEventListener("click", () => {
+  showPage("pre");
+  showToast("Memuat Pra-Eksplorasi…");
+});
+
+     // CAPAIAN -> TUJUAN
+    $("#goTujuan").addEventListener("click", goToTujuan);
+
+    // TUJUAN -> LANDING
+    $("#goLanding").addEventListener("click", goToLanding);
+
+    // tombol kembali
+    $("#backToPreFromCapaian").addEventListener("click", () => {
+      showPage("pre");
+      showToast("Kembali ke Pra-Eksplorasi…");
+    });
+
+    $("#backToCapaian").addEventListener("click", () => {
+      showPage("capaian");
+      showToast("Kembali ke Capaian Pembelajaran…");
+    });
+
+    /* =========================
+       SUB BAB MODAL
+    ========================= */
+    const modal = $("#modal");
+
+    function openSub(sub){
+      currentSub = Number(sub);
+      const data = SUBS[currentSub];
+
+      $("#modalMini").textContent = data.mini;
+      $("#modalTitle").textContent = data.title;
+      $("#modalBody").innerHTML = data.body;
+
+      modal.classList.add("show");
+    }
+
+    function closeSub(){ modal.classList.remove("show"); }
+
+   document.querySelectorAll(".node").forEach(node => {
+  node.addEventListener("click", () => {
+    if (node.dataset.external === "classroom") {
+      return;
+    }
+
+    if(node.dataset.drill === "soal"){
+  const currentUser = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+
+  const isGuru =
+    session.role === "creator" ||
+    currentUser.role === "creator" ||
+    currentUser.role === "guru" ||
+    session.email === "appbeechem@gmail.com" ||
+    currentUser.email === "appbeechem@gmail.com";
+
+  if (isGuru) {
+    window.location.href = "keysdrill.html";
+  } else {
+    window.location.href = "drillsoal.html";
+  }
+
+  return;
+}
+
+    const sub = Number(node.dataset.sub);
+
+    if (sub === 1) {
+  const currentUser = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+
+  const isGuru =
+    session.role === "creator" ||
+    currentUser.role === "creator" ||
+    currentUser.role === "guru" ||
+    session.email === "appbeechem@gmail.com" ||
+    currentUser.email === "appbeechem@gmail.com";
+
+  if (isGuru) {
+    window.location.href = "keyhlm1-2.html";
+  } else {
+    window.location.href = "hlm1-2.html";
+  }
+
+  return;
+}
+    if (sub === 2) {
+  const currentUser = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+
+  const isGuru =
+    session.role === "creator" ||
+    currentUser.role === "creator" ||
+    currentUser.role === "guru" ||
+    session.email === "appbeechem@gmail.com" ||
+    currentUser.email === "appbeechem@gmail.com";
+
+  if (isGuru) {
+    window.location.href = "keys21.html";
+  } else {
+    window.location.href = "sb21.html";
+  }
+
+  return;
+}
+    if (sub === 3) {
+  const currentUser = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+
+  const isGuru =
+    session.role === "creator" ||
+    currentUser.role === "creator" ||
+    currentUser.role === "guru" ||
+    session.email === "appbeechem@gmail.com" ||
+    currentUser.email === "appbeechem@gmail.com";
+
+  if (isGuru) {
+    window.location.href = "keys31.html";
+  } else {
+    window.location.href = "sb31.html";
+  }
+
+  return;
+}
+    if (sub === 4) {
+      const currentUser = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+
+      const isGuru =
+        session.role === "creator" ||
+        currentUser.role === "creator" ||
+        currentUser.role === "guru" ||
+        session.email === "appbeechem@gmail.com" ||
+        currentUser.email === "appbeechem@gmail.com";
+
+      if (isGuru) {
+        window.location.href = "keys41.html";
+      } else {
+        window.location.href = "sb41.html";
+      }
+
+      return;
+    }
+
+    openSub(sub);
+  });
+});
+
+    $("#closeModal").addEventListener("click", closeSub);
+    $("#backToMap").addEventListener("click", closeSub);
+    modal.addEventListener("click", (e) => { if(e.target === modal) closeSub(); });
+
+    $("#nextSub").addEventListener("click", () => {
+      const next = (currentSub >= 4) ? 1 : (currentSub + 1);
+      openSub(next);
+    });
+
+    /* =========================
+       FAB
+    ========================= */
+    $("#fab").addEventListener("click", () => {
+      if (session.role === "creator") {
+        renderAdmin();
+        showPage("admin");
+        showToast("Membuka Dashboard Pembuat…");
+      } else {
+        showToast("Siap dikembangkan: progress, nilai, dan halaman materi ✨");
+      }
+    });
+
+    $("#btnBackFromAdmin").addEventListener("click", () => {
+      showPage("landing");
+      showToast("Kembali ke Peta Eksplorasi.");
+    });
+
+    $("#btnRefreshAdmin").addEventListener("click", () => {
+      renderAdmin();
+      showToast("Data diperbarui.");
+    });
+
+    $("#btnResetData").addEventListener("click", () => {
+      if (!confirm("Yakin hapus semua data pengunjung & nilai di perangkat ini?")) return;
+      localStorage.removeItem(DB_KEY);
+      renderAdmin();
+      showToast("Data dihapus.");
+    });
+
+    $("#btnExportCSV").addEventListener("click", () => {
+  const rows = getAdminRows();
+  if (!rows.length) return showToast("Belum ada data untuk diexport.");
+  const stamp = new Date().toISOString().slice(0,10);
+  downloadCSV(`KesetimbanganKimia_Data_${stamp}.csv`, rows);
+  showToast("CSV berhasil dibuat.");
+});
+
+$("#btnExportPDF").addEventListener("click", async () => {
+  const rows = getAdminRows();
+  if (!rows.length) return showToast("Belum ada data untuk diexport.");
+  const stamp = new Date().toISOString().slice(0,10);
+
+  try{
+    await exportPDF(`KesetimbanganKimia_Laporan_${stamp}.pdf`, rows);
+    showToast("PDF berhasil dibuat.");
+  }catch(e){
+    console.error(e);
+    showToast("Gagal membuat PDF (cek koneksi CDN jsPDF).");
+  }
+});
+
+$("#goMapAfterVideo").addEventListener("click", () => {
+  closeVideoGate();
+  proceedAfterVideo();
+});
+
+$("#skipVideoGate").addEventListener("click", () => {
+  closeVideoGate();
+  proceedAfterVideo();
+});
+
+$("#closeVideoGate").addEventListener("click", () => {
+  closeVideoGate();
+});
+
+// klik area gelap untuk tutup
+$("#videoGate").addEventListener("click", (e) => {
+  if (e.target === $("#videoGate")) closeVideoGate();
+});
+
+    /* =========================
+       INIT
+    ========================= */
+    setWhoami("visitor", "");
+
+// ===== INIT ROUTING (persist last page) =====
+(function initRoute(){
+  const go = localStorage.getItem("KI_GO_TO");
+  const userRaw = localStorage.getItem("KI_CURRENT_USER");
+  const last = localStorage.getItem("KI_LAST_PAGE") || "cover";
+
+  if (go) localStorage.removeItem("KI_GO_TO");
+
+  // kalau belum login, selalu cover + topActions disembunyikan
+  if (!userRaw) {
+  setTopbarAuthed(false);
+  showPage("modeCover");
+  return;
+}
+
+  try {
+    const u = JSON.parse(userRaw);
+    if (!u?.email) {
+      setTopbarAuthed(false); // ✅
+      showPage("cover");
+      return;
+    }
+
+    session.email = (u.email || "").toLowerCase();
+    session.name  = u.name || "";
+    session.kelas = u.kelas || "";
+    session.absen = u.absen || "";
+    session.role  = (session.email === ADMIN_EMAIL) ? "creator" : "visitor";
+    setWhoami(session.role, session.email);
+
+    setTopbarAuthed(true);    // ✅ sudah login → tampilkan
+
+    const target = go || last || "landing";
+    if (target === "modeCover") showPage("modeCover");
+else if (target === "cover") showPage("cover");
+else if (target === "pre") showPage("pre");
+    else if (target === "capaian") showPage("capaian");
+    else if (target === "tujuan") showPage("tujuan");
+    else if (target === "admin") showPage("admin");
+    else showPage("landing");
+
+  } catch(e){
+    setTopbarAuthed(false);   // ✅
+    showPage("modeCover");
+  }
+})();
+/* =========================
+   CHATBOT KIMI LOGIC
+========================= */
+function normalizeText(text){
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[^\w\s\[\]\^\+\-\=\⇌\→]/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function formatKimiContent(text){
+  return String(text || "")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .trim();
+}
+
+function findKimiAnswer(question){
+  const q = normalizeText(question);
+
+  if(!q){
+    return {
+      answer: "Tulis pertanyaanmu dulu ya. Contoh: apa itu kesetimbangan dinamis?",
+      source: "Panduan ChatLe-C"
+    };
+  }
+
+  const greetingWords = [
+    "hai", "haii", "halo", "hallo", "hi", "hello",
+    "pagi", "siang", "sore", "malam",
+    "assalamualaikum", "salam"
+  ];
+
+  if(greetingWords.includes(q)){
+    return {
+      answer: "Hai juga! Aku ChatLe-C. Aku siap membantu menjawab pertanyaan tentang materi kesetimbangan kimia berdasarkan handout.",
+      source: "Sapaan ChatLe-C"
+    };
+  }
+
+  if(q.length < 4){
+    return {
+      answer: "Aku ChatLe-C. Coba tulis pertanyaan yang lebih lengkap tentang kesetimbangan kimia ya.",
+      source: "Panduan ChatLe-C"
+    };
+  }
+
+  const offTopicWords = [
+    "politik", "presiden", "game", "film", "lagu", "pacar", "uang",
+    "sejarah indonesia", "bahasa inggris", "coding", "html",
+    "javascript", "instagram", "tiktok", "makanan", "olahraga"
+  ];
+
+  if(offTopicWords.some(word => q.includes(word))){
+    return {
+      answer: "Tidak terdeteksi dalam materi handout.",
+      source: "Di luar handout"
+    };
+  }
+
+  /* =========================
+     JAWABAN LANGSUNG HANDOUT
+  ========================= */
+  const directHandout = [
+  {
+    checks: [
+      "sub bab 1",
+      "subbab 1",
+      "handout 1",
+      "handout sub bab 1",
+      "materi sub bab 1"
+    ],
+    title: "handout sub bab 1"
+  },
+  {
+    checks: [
+      "sub bab 2",
+      "subbab 2",
+      "handout 2",
+      "handout sub bab 2",
+      "materi sub bab 2"
+    ],
+    title: "handout sub bab 2"
+  },
+  {
+    checks: [
+      "sub bab 3",
+      "subbab 3",
+      "handout 3",
+      "handout sub bab 3",
+      "materi sub bab 3"
+    ],
+    title: "handout sub bab 3"
+  },
+  {
+    checks: [
+      "sub bab 4",
+      "subbab 4",
+      "handout 4",
+      "handout sub bab 4",
+      "materi sub bab 4"
+    ],
+    title: "handout sub bab 4"
+  }
+];
+
+  for(const rule of directHandout){
+    if(rule.checks.some(text => q.includes(text))){
+      const item = KIMI_HANDOUT.find(data =>
+        normalizeText(data.title).includes(rule.title)
+      );
+
+      if(item){
+        return {
+          answer: formatKimiContent(item.content),
+          source: item.title
+        };
+      }
+    }
+  }
+
+  /* =========================
+     CEK BANK PERTANYAAN SISWA
+     Agar kalimat selinier tetap terbaca
+  ========================= */
+  const intentAnswer = findIntentAnswer(q);
+  if(intentAnswer){
+    return intentAnswer;
+  }
+
+  /* =========================
+     PENCARIAN SKOR KETAT
+  ========================= */
+  const stopWords = [
+    "apa", "itu", "yang", "dan", "atau", "dalam", "pada", "ke", "di",
+    "jelaskan", "sebutkan", "contoh", "materi", "tentang", "bagaimana",
+    "kenapa", "mengapa", "adalah", "dengan", "untuk", "dari", "saja",
+    "dong", "kak", "min", "tolong", "maksud", "pengertian"
+  ];
+
+  const qWords = q
+    .split(" ")
+    .filter(word => word.length > 2 && !stopWords.includes(word));
+
+  let best = null;
+  let bestScore = 0;
+
+  for(const item of KIMI_HANDOUT){
+    let score = 0;
+
+    const title = normalizeText(item.title);
+    const content = normalizeText(item.content);
+    const keywords = item.keywords.map(k => normalizeText(k));
+
+    for(const keyword of keywords){
+      if(q === keyword){
+        score += 28;
+      }else if(q.includes(keyword) && keyword.length > 3){
+        score += 16;
+      }else if(keyword.includes(q) && q.length > 4){
+        score += 10;
+      }
+    }
+
+    for(const word of qWords){
+      if(keywords.some(k => k === word)){
+        score += 10;
+      }else if(keywords.some(k => k.includes(word))){
+        score += 5;
+      }
+
+      if(title.includes(word)){
+        score += 5;
+      }
+
+      if(content.includes(word)){
+        score += 1;
+      }
+    }
+
+    /*
+      Pengaman:
+      Kalau pertanyaan terlalu umum, jangan asal mengambil materi panjang.
+      Contoh: "reaksi", "gas", "produk", "kimia".
+    */
+    if(qWords.length <= 1 && score < 14){
+      score = 0;
+    }
+
+    if(score > bestScore){
+      bestScore = score;
+      best = item;
+    }
+  }
+
+  if(!best || bestScore < 8){
+    return {
+      answer: "Tidak terdeteksi dalam materi handout.",
+      source: "Di luar handout"
+    };
+  }
+
+  return {
+    answer: formatKimiContent(best.content),
+    source: best.title
+  };
+}
+
+function addKimiMessage(type, text, source){
+  const box = document.getElementById("kimiMessages");
+  if(!box) return;
+
+  const msg = document.createElement("div");
+  msg.className = `kimi-msg ${type}`;
+
+  if(source && type === "bot"){
+    msg.innerHTML = `${escapeHtml(text)}<div class="kimi-source">Sumber: ${escapeHtml(source)}</div>`;
+  }else{
+    msg.textContent = text;
+  }
+
+  box.appendChild(msg);
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendKimiQuestion(){
+  const input = document.getElementById("kimiInput");
+  if(!input) return;
+
+  const question = input.value.trim();
+  if(!question) return;
+
+  addKimiMessage("user", question);
+  input.value = "";
+
+  setTimeout(() => {
+    const result = findKimiAnswer(question);
+    addKimiMessage("bot", result.answer, result.source);
+  }, 350);
+}
+
+function setKimiVisibleByPage(pageId){
+  const btn = document.getElementById("kimiBtn");
+  const panel = document.getElementById("kimiPanel");
+  if(!btn || !panel) return;
+
+  const show = pageId === "landing";
+  btn.classList.toggle("hidden", !show);
+
+  if(!show){
+    panel.classList.remove("show");
+  }
+}
+
+document.getElementById("kimiBtn")?.addEventListener("click", () => {
+  document.getElementById("kimiPanel")?.classList.toggle("show");
+});
+
+document.getElementById("kimiClose")?.addEventListener("click", () => {
+  document.getElementById("kimiPanel")?.classList.remove("show");
+});
+
+document.getElementById("kimiSend")?.addEventListener("click", sendKimiQuestion);
+
+document.getElementById("kimiInput")?.addEventListener("keydown", (e) => {
+  if(e.key === "Enter"){
+    sendKimiQuestion();
+  }
+});
+
+  </script>
+
+<script>
+async function daftarSiswaFirebase() {
+  const nama = document.getElementById("nama")?.value || "";
+  const email = document.getElementById("email")?.value || "";
+  const password = document.getElementById("password")?.value || "";
+  const kelas = document.getElementById("kelas")?.value || "";
+  const absen = document.getElementById("absen")?.value || "";
+
+  if (!nama || !email || !password) {
+    alert("Nama, email, dan password wajib diisi.");
+    return;
+  }
+
+  try {
+    await AuthApp.registerSiswa({
+      nama,
+      email,
+      password,
+      kelas,
+      absen
+    });
+
+    alert("Pendaftaran berhasil. Silakan mulai belajar.");
+    window.location.href = "hlm1-2.html";
+  } catch (error) {
+    alert("Gagal daftar: " + error.message);
+  }
+}
+
+async function loginFirebase() {
+  const email = document.getElementById("email")?.value || "";
+  const password = document.getElementById("password")?.value || "";
+
+  if (!email || !password) {
+    alert("Email dan password wajib diisi.");
+    return;
+  }
+
+  try {
+    await AuthApp.login(email, password);
+    alert("Login berhasil.");
+    window.location.href = "hlm1-2.html";
+  } catch (error) {
+    alert("Gagal login: " + error.message);
+  }
+}
+</script>
+
+</body>
+</html>

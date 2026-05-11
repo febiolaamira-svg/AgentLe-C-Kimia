@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Drill Soal — Representasi Kesetimbangan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.88);
+      --card2: rgba(255, 255, 255, 0.96);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --purple: #7c3aed;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.62);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.78);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.88);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 13px;
+      padding: 11px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .tableWrap {
+      overflow-x: auto;
+      border-radius: 14px;
+    }
+
+    .question {
+      border-radius: 18px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.80);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .qtop {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .qnum {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      border: 1px solid rgba(43,124,255,.15);
+      color: #1b4bb2;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.14);
+      border: 1px solid rgba(34,197,94,.25);
+      color: #137a36;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .rep {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(124,58,237,.12);
+      border: 1px solid rgba(124,58,237,.22);
+      color: #5b21b6;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .needsFix {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(245,158,11,.14);
+      border: 1px solid rgba(245,158,11,.28);
+      color: #92400e;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .optionList {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .option {
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .option.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+      font-weight: 900;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Drill Soal</b>
+          <span>keydrill.html • Representasi Kesetimbangan Kimia</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datadrill.html">📊 Data Drill</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci, pembahasan, dan jenis representasi soal drill. Silakan login sebagai guru terlebih dahulu.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci Cepat dan Jenis Representasi</h2>
+
+        <div class="tableWrap">
+          <table class="tableMini">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Kunci Valid</th>
+                <th>Jenis Representasi</th>
+                <th>Topik</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Catatan Soal yang Perlu Direvisi di drillsoal.html</h2>
+
+        <div class="warning">
+          <ul>
+            <li><b>Soal 3:</b> kunci valid lebih tepat <b>B</b>, karena alasan paling jelas adalah semua zat berada pada fase gas. Jika tetap memakai E, alasan “tidak terjadi perubahan fase” kurang kuat.</li>
+            <li><b>Soal 12:</b> hasil hitung dari data soal adalah sekitar <b>3,70</b>, tetapi tidak ada di opsi. Opsi C sebaiknya direvisi menjadi <b>3,70</b>, bukan 4,44.</li>
+            <li><b>Soal 15:</b> jika H₂O ditulis sebagai <b>H₂O(l)</b>, maka reaksi opsi E tetap mengalami perubahan jumlah mol gas. Agar opsi E benar sebagai “tidak bergeser”, ubah menjadi <b>H₂O(g)</b>.</li>
+            <li><b>Soal 16:</b> secara konsep, reaksi ke kanan menghasilkan CO₂(g). Jadi pengurangan CO₂ dan penurunan tekanan mendorong ke kanan. Kunci valid: <b>B dan D</b>, bukan B dan C.</li>
+            <li><b>Soal 20:</b> peristiwa iodium-amilum dipengaruhi suhu, bukan tekanan. Kunci valid: <b>C dan E</b>, bukan B, C, E.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Pembahasan Lengkap Setiap Soal</h2>
+        <div id="questionContainer"></div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rubrik Umum Drill Soal</h2>
+
+        <div class="answer">
+          <p>
+            Nilai drill dapat dipakai untuk melihat kemampuan siswa membaca berbagai representasi kimia.
+            Siswa yang kuat biasanya mampu berpindah dari representasi simbolik ke matematis, dari fenomena makroskopik ke konsep mikroskopik,
+            serta menghubungkan tabel/gambar dengan asas Le Chatelier.
+          </p>
+        </div>
+
+        <div class="tableWrap">
+          <table class="tableMini">
+            <thead>
+              <tr>
+                <th>Kategori</th>
+                <th>Rentang</th>
+                <th>Interpretasi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Sangat Baik</b></td>
+                <td>80–100</td>
+                <td>Siswa menguasai konsep kesetimbangan, perhitungan Kc/Kp, pergeseran kesetimbangan, dan aplikasi kontekstual.</td>
+              </tr>
+              <tr>
+                <td><b>Cukup</b></td>
+                <td>60–75</td>
+                <td>Siswa memahami konsep dasar, tetapi perlu latihan pada soal matematis, multi-jawaban, atau interpretasi representasi.</td>
+              </tr>
+              <tr>
+                <td><b>Perlu Bimbingan</b></td>
+                <td>0–55</td>
+                <td>Siswa perlu mengulang konsep kesetimbangan dinamis, Kc/Kp, Le Chatelier, serta hubungan makro-submikro-simbolik.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="drillsoal.html">⬅ Lihat Drill Soal</a>
+          <div>
+            <a class="btn blue" href="datadrill.html">📊 Lihat Data Drill</a>
+            <a class="btn primary" href="h1.html">Kembali ke Peta Eksplorasi ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const drillKeyData = [
+      {
+        no: 1,
+        key: "E",
+        representation: "Verbal-konseptual",
+        topic: "Kesetimbangan dinamis",
+        needsFix: false,
+        question: "Pernyataan yang tepat mengenai keadaan setimbang dalam suatu reaksi kimia.",
+        answer: "Saat kesetimbangan tercapai, laju reaksi maju sama dengan laju reaksi balik.",
+        discussion: "Kesetimbangan kimia bersifat dinamis. Artinya, reaksi maju dan reaksi balik tetap berlangsung pada tingkat mikroskopik, tetapi lajunya sama. Karena lajunya sama, konsentrasi reaktan dan produk tampak tetap secara makroskopik. Jadi bukan berarti reaksi berhenti."
+      },
+      {
+        no: 2,
+        key: "A, B, C, E",
+        representation: "Verbal-konseptual",
+        topic: "Syarat tercapainya kesetimbangan",
+        needsFix: false,
+        question: "Keadaan awal yang memungkinkan reaksi bolak-balik mencapai setimbang.",
+        answer: "Reaktan saja, produk saja, reaktan dan produk dalam jumlah sama, atau reaktan dan produk dalam jumlah berapa pun.",
+        discussion: "Sistem dapat mencapai kesetimbangan dari berbagai keadaan awal selama reaksi bersifat bolak-balik dan terjadi dalam sistem tertutup. Reaksi dapat dimulai dari reaktan, dari produk, atau dari campuran keduanya. Pernyataan bahwa reaktan dan produk hanya bisa setimbang jika jumlahnya tidak sama adalah keliru."
+      },
+      {
+        no: 3,
+        key: "B",
+        representation: "Submikroskopik + simbolik",
+        topic: "Kesetimbangan homogen sintesis amonia",
+        needsFix: true,
+        question: "Klasifikasi kesetimbangan berdasarkan fase zat pada reaksi N₂, H₂, dan NH₃.",
+        answer: "Kesetimbangan homogen karena semua zat berada dalam fase gas.",
+        discussion: "Reaksi sintesis amonia adalah N₂(g) + 3H₂(g) ⇌ 2NH₃(g). Semua zat yang terlibat berada pada fase gas. Karena seluruh komponen berada pada fase yang sama, sistem ini termasuk kesetimbangan homogen. Opsi B adalah alasan yang paling tepat. Opsi E kurang kuat karena tidak menekankan fase semua zat."
+      },
+      {
+        no: 4,
+        key: "A, B, D",
+        representation: "Makroskopik visual + tabel + simbolik",
+        topic: "Pengaruh suhu pada kesetimbangan kobalt klorida",
+        needsFix: false,
+        question: "Analisis perubahan warna larutan CoCl₂ saat suhu diubah.",
+        answer: "Pemanasan menghasilkan warna biru, pendinginan menghasilkan warna merah muda, dan suhu memengaruhi arah pergeseran kesetimbangan.",
+        discussion: "Perubahan warna menunjukkan perubahan posisi kesetimbangan. Pada sistem kobalt klorida, pemanasan umumnya menggeser sistem ke arah kompleks biru, sedangkan pendinginan menggeser sistem ke arah kompleks merah muda. Hal ini sesuai dengan asas Le Chatelier, yaitu sistem akan bergeser untuk mengurangi pengaruh perubahan suhu."
+      },
+      {
+        no: 5,
+        key: "B",
+        representation: "Simbolik + matematis",
+        topic: "Ekspresi Kp",
+        needsFix: false,
+        question: "Menentukan ekspresi Kp untuk 2NO(g) + Cl₂(g) ⇌ 2NOCl(g).",
+        answer: "Kp = P_NOCl² / (P_NO² · P_Cl₂).",
+        discussion: "Pada tetapan tekanan Kp, tekanan parsial produk diletakkan di pembilang dan tekanan parsial reaktan di penyebut. Pangkat setiap zat mengikuti koefisien reaksi. Karena koefisien NOCl adalah 2, maka P_NOCl dipangkatkan 2. Koefisien NO juga 2, sehingga P_NO dipangkatkan 2."
+      },
+      {
+        no: 6,
+        key: "A",
+        representation: "Simbolik + matematis",
+        topic: "Perhitungan Kp dan Kc",
+        needsFix: false,
+        question: "Menghitung Kp dan Kc pada penguraian NH₄Cl(s).",
+        answer: "Kp = 2,76 × 10⁻³ dan Kc = 1,05 × 10⁻⁶.",
+        discussion: "NH₄Cl(s) tidak dimasukkan dalam Kp karena merupakan padatan murni. Tekanan total gas adalah 0,105 atm dan NH₃ serta HCl terbentuk dengan perbandingan 1 : 1. Maka P_NH₃ = P_HCl = 0,105/2 = 0,0525 atm. Kp = 0,0525 × 0,0525 = 2,76 × 10⁻³. Karena Δn = 2, Kp = Kc(RT)², sehingga Kc = Kp/(RT)² = sekitar 1,05 × 10⁻⁶."
+      },
+      {
+        no: 7,
+        key: "B, C, E",
+        representation: "Simbolik-konseptual",
+        topic: "Pergeseran kesetimbangan eksoterm",
+        needsFix: false,
+        question: "Faktor yang memperbanyak N₂O₄ pada reaksi 2NO₂(g) ⇌ N₂O₄(g), ΔH < 0.",
+        answer: "Menurunkan suhu, menaikkan tekanan, dan menambah konsentrasi NO₂.",
+        discussion: "Reaksi pembentukan N₂O₄ bersifat eksoterm dan jumlah mol gas produk lebih sedikit. Penurunan suhu menggeser kesetimbangan ke arah eksoterm, yaitu ke kanan. Peningkatan tekanan menggeser ke sisi jumlah mol gas lebih sedikit, yaitu N₂O₄. Penambahan NO₂ sebagai reaktan juga mendorong pembentukan N₂O₄."
+      },
+      {
+        no: 8,
+        key: "C",
+        representation: "Verbal-konseptual",
+        topic: "Ciri kesetimbangan kimia",
+        needsFix: false,
+        question: "Menentukan ciri kesetimbangan kimia dari beberapa pernyataan.",
+        answer: "(2), (3), dan (4).",
+        discussion: "Kesetimbangan kimia terjadi pada reaksi dua arah. Pada keadaan setimbang, laju reaksi maju sama dengan laju reaksi balik. Secara makroskopik tidak tampak perubahan karena konsentrasi zat tetap. Sistem terbuka dan konsentrasi yang terus berubah bukan ciri kesetimbangan."
+      },
+      {
+        no: 9,
+        key: "C",
+        representation: "Simbolik + matematis",
+        topic: "Perhitungan Kp sistem heterogen",
+        needsFix: false,
+        question: "Menghitung Kp pada pemanasan NaHCO₃ dalam wadah tertutup.",
+        answer: "Kp = 0,16.",
+        discussion: "Padatan NaHCO₃ dan Na₂CO₃ tidak masuk dalam ekspresi Kp. Gas yang masuk hanya CO₂ dan H₂O(g). Tekanan total gas 0,8 atm dan tekanan parsial CO₂ sama dengan H₂O, sehingga masing-masing 0,4 atm. Maka Kp = P_CO₂ × P_H₂O = 0,4 × 0,4 = 0,16."
+      },
+      {
+        no: 10,
+        key: "E",
+        representation: "Verbal-argumentatif",
+        topic: "Konsep reaksi bolak-balik",
+        needsFix: false,
+        question: "Menanggapi pendapat bahwa kesetimbangan hanya terjadi pada reaksi ke kanan.",
+        answer: "Salah, karena reaksi bolak-balik bisa setimbang.",
+        discussion: "Kesetimbangan kimia hanya dapat terjadi jika reaksi bersifat reversible atau bolak-balik. Pada keadaan setimbang, reaksi maju dan balik tetap berlangsung dengan laju yang sama. Jadi, kesetimbangan bukan hanya reaksi yang berjalan ke kanan."
+      },
+      {
+        no: 11,
+        key: "A",
+        representation: "Makroskopik-verbal",
+        topic: "Warna NO₂ dan pembentukan N₂O₄",
+        needsFix: false,
+        question: "Mendukung kesimpulan reaksi eksoterm ke arah pembentukan N₂O₄.",
+        answer: "Perubahan warna menunjukkan perpindahan kesetimbangan.",
+        discussion: "NO₂ berwarna coklat, sedangkan N₂O₄ tidak berwarna atau jauh lebih pucat. Jika warna gas berubah dari coklat pekat menjadi lebih pucat, berarti sebagian NO₂ berubah menjadi N₂O₄. Perubahan warna merupakan bukti makroskopik adanya pergeseran komposisi kesetimbangan."
+      },
+      {
+        no: 12,
+        key: "Tidak ada opsi tepat. Nilai benar ≈ 3,70",
+        representation: "Matematis + simbolik",
+        topic: "Perhitungan Kc",
+        needsFix: true,
+        question: "Menghitung Kc untuk N₂(g) + 3H₂(g) ⇌ 2NH₃(g).",
+        answer: "Kc = 3,70 berdasarkan data yang diberikan.",
+        discussion: "Rumus Kc adalah [NH₃]² / ([N₂][H₂]³). Dengan [NH₃] = 0,4 M, [N₂] = 0,2 M, dan [H₂] = 0,6 M, maka Kc = 0,4² / (0,2 × 0,6³) = 0,16 / (0,2 × 0,216) = 0,16 / 0,0432 = 3,70. Karena opsi 3,70 tidak tersedia, soal perlu direvisi. Opsi C sebaiknya diganti menjadi 3,70."
+      },
+      {
+        no: 13,
+        key: "A",
+        representation: "Aplikatif-industri",
+        topic: "Optimasi proses Haber",
+        needsFix: false,
+        question: "Keputusan industri saat suhu rendah meningkatkan hasil tetapi memperlambat reaksi.",
+        answer: "Gunakan suhu moderat dan tambahkan katalis.",
+        discussion: "Pembentukan NH₃ bersifat eksoterm, sehingga suhu rendah menguntungkan hasil kesetimbangan. Namun suhu yang terlalu rendah membuat laju reaksi lambat. Industri menggunakan suhu moderat agar laju reaksi cukup cepat, lalu menambahkan katalis untuk mempercepat tercapainya kesetimbangan."
+      },
+      {
+        no: 14,
+        key: "A",
+        representation: "Matematis + simbolik",
+        topic: "Perhitungan Kc dari disosiasi PCl₅",
+        needsFix: false,
+        question: "Menghitung Kc untuk PCl₅(g) ⇌ PCl₃(g) + Cl₂(g).",
+        answer: "Kc = 1/3.",
+        discussion: "Mula-mula [PCl₅] = 4,00 M. Pada setimbang [Cl₂] = 1,00 M, maka [PCl₃] juga 1,00 M karena perbandingan koefisien 1 : 1. PCl₅ yang terurai 1,00 M, sehingga sisa PCl₅ = 3,00 M. Maka Kc = [PCl₃][Cl₂]/[PCl₅] = 1 × 1 / 3 = 1/3."
+      },
+      {
+        no: 15,
+        key: "E, jika H₂O ditulis H₂O(g). Jika tetap H₂O(l), tidak ada opsi tepat.",
+        representation: "Simbolik-konseptual",
+        topic: "Pengaruh volume terhadap jumlah mol gas",
+        needsFix: true,
+        question: "Menentukan reaksi yang tidak bergeser saat volume diperbesar.",
+        answer: "Opsi E hanya benar jika H₂O dianggap gas, bukan cair.",
+        discussion: "Perubahan volume memengaruhi kesetimbangan gas jika jumlah mol gas reaktan dan produk berbeda. Untuk reaksi CO(g) + H₂O(l) ⇌ CO₂(g) + H₂(g), jika H₂O adalah cairan, jumlah mol gas kiri = 1 dan kanan = 2, sehingga volume tetap memengaruhi arah pergeseran. Agar opsi E menjadi reaksi yang tidak bergeser, H₂O sebaiknya ditulis sebagai H₂O(g), sehingga jumlah mol gas kiri = 2 dan kanan = 2."
+      },
+      {
+        no: 16,
+        key: "B, D",
+        representation: "Simbolik-konseptual",
+        topic: "Le Chatelier pada sistem heterogen",
+        needsFix: true,
+        question: "Faktor yang menggeser 2NaHCO₃(s) ⇌ Na₂CO₃(s) + H₂O(l) + CO₂(g) ke kanan.",
+        answer: "CO₂ dikeluarkan dari sistem dan tekanan diturunkan.",
+        discussion: "Sisi kanan menghasilkan CO₂(g). Jika CO₂ dikeluarkan, sistem bergeser ke kanan untuk mengganti CO₂ yang berkurang. Karena sisi kanan memiliki gas sedangkan sisi kiri tidak memiliki gas, penurunan tekanan juga menggeser kesetimbangan ke sisi jumlah mol gas lebih besar, yaitu ke kanan. Volume diperkecil atau tekanan diperbesar justru cenderung mengurangi jumlah gas, sehingga tidak mendorong ke kanan."
+      },
+      {
+        no: 17,
+        key: "C",
+        representation: "Makroskopik-kontekstual",
+        topic: "Pengaruh suhu pada kompleks iodium-amilum",
+        needsFix: false,
+        question: "Faktor yang memengaruhi hilang dan munculnya warna biru iodium-amilum.",
+        answer: "Perubahan suhu sistem.",
+        discussion: "Warna biru pada kompleks iodium-amilum hilang saat dipanaskan dan muncul kembali saat didinginkan. Perubahan yang diberikan adalah perubahan suhu. Jadi peristiwa ini menunjukkan bahwa posisi kesetimbangan dapat dipengaruhi oleh suhu."
+      },
+      {
+        no: 18,
+        key: "B",
+        representation: "Aplikatif-industri + simbolik",
+        topic: "Proses Haber dan suhu",
+        needsFix: false,
+        question: "Tindakan yang tidak tepat untuk meningkatkan hasil amonia.",
+        answer: "Menaikkan suhu sistem hingga 1000 °C.",
+        discussion: "Pembentukan NH₃ bersifat eksoterm. Jika suhu dinaikkan terlalu tinggi, kesetimbangan bergeser ke arah reaktan sehingga hasil NH₃ menurun. Tekanan tinggi dan penambahan reaktan dapat mendorong pembentukan NH₃. Katalis membantu laju reaksi, tetapi tidak menggeser kesetimbangan."
+      },
+      {
+        no: 19,
+        key: "A, B, E",
+        representation: "Kontekstual + simbolik",
+        topic: "Pembentukan stalaktit dan stalagmit",
+        needsFix: false,
+        question: "Analisis pembentukan stalaktit saat CO₂ terlepas.",
+        answer: "Berkurangnya CO₂ menggeser kesetimbangan ke kiri, menghasilkan CaCO₃, dan mendukung pembentukan stalaktit.",
+        discussion: "Pada sistem CaCO₃(s) + CO₂(g) + H₂O(l) ⇌ Ca²⁺(aq) + 2HCO₃⁻(aq), jika CO₂ berkurang karena lepas ke udara, kesetimbangan bergeser ke kiri untuk mengganti CO₂. Pergeseran ke kiri menghasilkan CaCO₃(s) sebagai endapan. Endapan CaCO₃ yang terbentuk perlahan dapat menjadi stalaktit atau stalagmit."
+      },
+      {
+        no: 20,
+        key: "C, E",
+        representation: "Makroskopik-kontekstual",
+        topic: "Kesetimbangan iodium-amilum",
+        needsFix: true,
+        question: "Faktor yang memengaruhi posisi kesetimbangan pada percobaan iodium-amilum.",
+        answer: "Perubahan suhu sistem dan pembentukan kembali kompleks iodium-amilum saat didinginkan.",
+        discussion: "Pada percobaan ini, warna biru hilang ketika dipanaskan dan muncul kembali ketika didinginkan. Ini menunjukkan bahwa perubahan suhu menggeser posisi kesetimbangan. Tekanan tidak menjadi faktor utama karena sistem bukan kesetimbangan gas. Jadi kunci valid adalah C dan E."
+      }
+    ];
+
+    function renderSummary() {
+      const tbody = document.getElementById("summaryBody");
+
+      tbody.innerHTML = drillKeyData.map(item => `
+        <tr>
+          <td><b>${item.no}</b></td>
+          <td><b>${item.key}</b></td>
+          <td>${item.representation}</td>
+          <td>${item.topic}</td>
+          <td>${item.needsFix ? "Perlu revisi di drillsoal.html" : "Aman"}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById("questionContainer");
+
+      container.innerHTML = drillKeyData.map(item => `
+        <article class="question">
+          <div class="qtop">
+            <span class="qnum">Soal ${item.no}</span>
+            <span class="key">Kunci: ${item.key}</span>
+            <span class="rep">${item.representation}</span>
+            ${item.needsFix ? `<span class="needsFix">Perlu Revisi</span>` : ""}
+          </div>
+
+          <h3>${item.topic}</h3>
+
+          <p class="muted">
+            <b>Inti soal:</b> ${item.question}
+          </p>
+
+          <div class="answer">
+            <h3>Jawaban Valid</h3>
+            <p>${item.answer}</p>
+          </div>
+
+          <div class="${item.needsFix ? "warning" : "answer"}">
+            <h3>Pembahasan</h3>
+            <p>${item.discussion}</p>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    renderSummary();
+    renderQuestions();
+    cekGuru();
+  </script>
+</body>
+</html>

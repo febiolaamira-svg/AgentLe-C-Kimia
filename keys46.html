@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB46 — Artikel Kelompok</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 { left: -120px; top: 80px; background: #47e6ff; }
+    .blob.b2 { right: -140px; top: 140px; background: #6b7bff; animation-delay: -5s; }
+    .blob.b3 { left: 20%; bottom: -160px; background: #ff5fd6; animation-delay: -9s; }
+
+    @keyframes drift {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(60px,-40px) scale(1.08); }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid { background: var(--card2); }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted { color: var(--muted); }
+    .hero .muted { color: rgba(255,255,255,.74); }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+      .grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td { border-bottom: 0; }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly { display: none; }
+    .teacherOnly.show { display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 4</b>
+          <span>keys46.html • Artikel Kelompok</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb4.html">📊 Data Sub Bab 4</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan panduan penilaian artikel kelompok Sub Bab 4. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Kunci Konsep Artikel</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Bagian Artikel</th>
+              <th>Isi yang Benar</th>
+              <th>Catatan Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Judul</b></td>
+              <td>Judul harus memuat hubungan kesetimbangan kimia dengan proses Haber dan pengomposan.</td>
+              <td>Judul tidak harus sama persis, tetapi harus jelas dan sesuai topik.</td>
+            </tr>
+            <tr>
+              <td><b>Gagasan utama</b></td>
+              <td>Kesetimbangan kimia dapat diterapkan dalam industri dan kehidupan sehari-hari.</td>
+              <td>Harus menghubungkan proses Haber dan pengomposan sebagai contoh aplikasi.</td>
+            </tr>
+            <tr>
+              <td><b>Proses Haber</b></td>
+              <td>N₂(g) + 3H₂(g) ⇌ 2NH₃(g). Tekanan tinggi, suhu sedang, katalis besi, pemisahan NH₃, dan daur ulang gas digunakan untuk efisiensi produksi amonia.</td>
+              <td>Katalis tidak menggeser kesetimbangan, hanya mempercepat tercapainya kesetimbangan.</td>
+            </tr>
+            <tr>
+              <td><b>Pengomposan</b></td>
+              <td>Dalam pengomposan dapat terbentuk asam asetat. Asam asetat mengalami kesetimbangan ionisasi.</td>
+              <td>Hubungkan dengan kondisi lingkungan, keasaman, dan pengolahan sampah organik.</td>
+            </tr>
+            <tr>
+              <td><b>Reaksi asam asetat</b></td>
+              <td><span class="formula">CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq)</span></td>
+              <td>Reaksi dua arah menunjukkan kesetimbangan asam-basa karena CH₃COOH dapat terionisasi dan ionnya dapat bergabung kembali.</td>
+            </tr>
+            <tr>
+              <td><b>Kesimpulan</b></td>
+              <td>Kesetimbangan kimia penting untuk memahami proses industri dan proses alami/lingkungan.</td>
+              <td>Kesimpulan harus merangkum Haber dan pengomposan, bukan hanya salah satunya.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Jawaban Pertanyaan Diskusi Pengomposan</h2>
+
+        <div class="answer">
+          <h3>1. Apakah reaksi CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq) termasuk kesetimbangan kimia?</h3>
+          <p>
+            Ya, reaksi tersebut termasuk kesetimbangan kimia karena berlangsung dua arah. CH₃COOH dapat terionisasi menghasilkan CH₃COO⁻ dan H⁺,
+            tetapi CH₃COO⁻ dan H⁺ juga dapat bergabung kembali membentuk CH₃COOH. Karena kedua proses terjadi secara bolak-balik,
+            sistem tersebut menunjukkan kesetimbangan asam-basa.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>2. Apa arti reaksi dua arah dalam konteks proses pengomposan?</h3>
+          <p>
+            Reaksi dua arah berarti zat hasil penguraian bahan organik tidak hanya membentuk ion, tetapi ion tersebut juga dapat kembali membentuk molekul asal.
+            Dalam pengomposan, asam asetat dapat melepaskan H⁺ sehingga memengaruhi keasaman lingkungan kompos.
+            Namun sebagian CH₃COO⁻ dan H⁺ dapat bergabung kembali menjadi CH₃COOH.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>3. Bagaimana proses ini berkontribusi terhadap pengolahan sampah organik di sekolah?</h3>
+          <p>
+            Pengomposan membantu menguraikan sampah organik menjadi bahan yang lebih bermanfaat.
+            Pemahaman kesetimbangan asam-basa membantu siswa memahami bahwa proses pengomposan dipengaruhi oleh kondisi kimia,
+            misalnya keasaman, aktivitas mikroorganisme, dan pembentukan senyawa organik.
+            Dengan demikian, pengomposan dapat menjadi contoh penerapan kesetimbangan kimia dalam pengolahan limbah organik di sekolah.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Rancangan Artikel yang Sangat Baik</h2>
+
+        <div class="answer">
+          <h3>Nama Kelompok / Anggota</h3>
+          <p>
+            Kelompok 1 — Aulia, Bima, Citra, Deni.
+          </p>
+
+          <h3>Judul Artikel</h3>
+          <p>
+            Peranan Kesetimbangan Kimia pada Proses Haber dan Pengomposan di Sekolah.
+          </p>
+
+          <h3>Gagasan Utama Artikel</h3>
+          <p>
+            Kesetimbangan kimia tidak hanya dipelajari dalam teori, tetapi juga digunakan untuk menjelaskan proses industri dan kehidupan sehari-hari.
+            Proses Haber menunjukkan penerapan kesetimbangan dalam produksi amonia, sedangkan pengomposan menunjukkan penerapan kesetimbangan asam-basa pada pengolahan sampah organik.
+          </p>
+
+          <h3>Poin Pembahasan Proses Haber</h3>
+          <p>
+            Proses Haber menggunakan reaksi N₂(g) + 3H₂(g) ⇌ 2NH₃(g). Karena produk memiliki jumlah mol gas lebih sedikit,
+            tekanan tinggi menggeser kesetimbangan ke arah pembentukan NH₃. Reaksi pembentukan NH₃ bersifat eksoterm,
+            sehingga suhu rendah menguntungkan hasil, tetapi suhu sedang digunakan agar laju reaksi tetap cukup cepat.
+            Katalis besi digunakan untuk mempercepat tercapainya kesetimbangan tanpa menggeser posisi kesetimbangan.
+            NH₃ yang terbentuk dipisahkan agar kesetimbangan bergeser ke kanan membentuk produk lagi.
+          </p>
+
+          <h3>Poin Pembahasan Pengomposan</h3>
+          <p>
+            Pada pengomposan, bahan organik diuraikan oleh mikroorganisme dan dapat menghasilkan senyawa organik seperti asam asetat.
+            Asam asetat mengalami kesetimbangan ionisasi: CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq).
+            Reaksi ini menunjukkan bahwa asam asetat dapat melepaskan ion H⁺, tetapi ion CH₃COO⁻ dan H⁺ juga dapat bergabung kembali.
+            Kesetimbangan ini berkaitan dengan perubahan keasaman dalam proses pengomposan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Checklist Artikel yang Benar</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Checklist</th>
+              <th>Status yang Diharapkan</th>
+              <th>Validasi Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Artikel memuat judul, pendahuluan, pembahasan, kesimpulan, dan daftar pustaka.</td>
+              <td>Wajib ada.</td>
+              <td>Struktur artikel harus runtut.</td>
+            </tr>
+            <tr>
+              <td>Artikel memuat proses Haber sebagai contoh industri.</td>
+              <td>Wajib ada.</td>
+              <td>Harus menjelaskan tekanan, suhu, katalis, dan pemisahan NH₃.</td>
+            </tr>
+            <tr>
+              <td>Artikel memuat pengomposan sebagai contoh kehidupan/sekolah.</td>
+              <td>Wajib ada.</td>
+              <td>Harus dikaitkan dengan pengolahan sampah organik.</td>
+            </tr>
+            <tr>
+              <td>Artikel mencantumkan reaksi CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq).</td>
+              <td>Wajib ada.</td>
+              <td>Harus dijelaskan sebagai reaksi dua arah/kesetimbangan asam-basa.</td>
+            </tr>
+            <tr>
+              <td>Bahasa artikel ilmiah, komunikatif, dan mudah dipahami.</td>
+              <td>Wajib ada.</td>
+              <td>Bahasa tidak boleh hanya berupa salinan poin tanpa penjelasan.</td>
+            </tr>
+            <tr>
+              <td>Artikel mencantumkan sumber rujukan.</td>
+              <td>Wajib ada.</td>
+              <td>Sumber dapat berupa buku, handout, atau sumber belajar tepercaya.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Jawaban yang Masih Cukup</h2>
+
+        <div class="warning">
+          <h3>Contoh</h3>
+          <p>
+            Artikel kami membahas proses Haber dan pengomposan. Proses Haber menggunakan tekanan tinggi, suhu sedang, dan katalis.
+            Pengomposan menghasilkan asam asetat yang dapat membentuk ion H⁺.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Catatan Guru</div>
+          <p>
+            Jawaban ini sudah mengarah benar, tetapi belum lengkap. Siswa perlu menambahkan persamaan reaksi,
+            alasan tekanan tinggi, alasan suhu sedang, peran katalis yang benar, dan penjelasan reaksi dua arah CH₃COOH.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Jawaban yang Perlu Diperbaiki</h2>
+
+        <div class="wrong">
+          <h3>Contoh kurang tepat</h3>
+          <p>
+            Katalis pada proses Haber membuat kesetimbangan bergeser ke kanan. Dalam pengomposan, asam asetat terionisasi sempurna sehingga tidak dapat terbentuk kembali.
+          </p>
+        </div>
+
+        <div class="warning">
+          <h3>Arahan Perbaikan</h3>
+          <p>
+            Katalis tidak menggeser posisi kesetimbangan, tetapi mempercepat tercapainya kesetimbangan.
+            Asam asetat adalah asam lemah, sehingga ionisasinya bersifat reversible dan dapat membentuk kesetimbangan:
+            CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq).
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rubrik Penilaian SB46</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Artikel lengkap, struktur runtut, membahas proses Haber dan pengomposan dengan benar,
+              menjelaskan reaksi CH₃COOH dua arah, menggunakan bahasa ilmiah komunikatif, serta mencantumkan sumber.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Artikel sudah memuat Haber dan pengomposan, tetapi penjelasan masih umum,
+              belum lengkap pada alasan kesetimbangan, atau sumber rujukan belum jelas.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Artikel tidak mengaitkan topik dengan kesetimbangan kimia, salah menjelaskan katalis,
+              tidak menuliskan reaksi CH₃COOH, atau link artikel tidak dapat dibuka.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB46</h2>
+
+        <div class="answer">
+          <p>
+            Kunci utama SB46 adalah artikel kelompok harus menunjukkan bahwa kesetimbangan kimia dapat diterapkan pada proses industri dan kehidupan sehari-hari.
+            Proses Haber menjelaskan penerapan kesetimbangan dalam produksi amonia, sedangkan pengomposan menjelaskan kesetimbangan asam-basa melalui reaksi
+            <b>CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq)</b>. Artikel yang baik harus lengkap, runtut, komunikatif, dan memiliki sumber rujukan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keysgame.html">⬅ Kunci Game</a>
+          <div>
+            <a class="btn blue" href="datasb4.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys47.html">Lanjut Kunci SB47 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

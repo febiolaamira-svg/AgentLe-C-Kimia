@@ -1,0 +1,1585 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Halaman 8 — Rekap Akhir & Export Data</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- SheetJS (XLSX export) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root{
+  --bg1:#b8f7ff; --bg2:#b0b6ff; --bg3:#ffd8f0;
+
+  /* teks utama untuk area gelap */
+  --ink:#f3f7ff;
+  --muted:#c6d0e1;
+
+  /* teks untuk area card terang */
+  --ink-dark:#0b1220;
+  --muted-dark:#5b6b86;
+
+  --card: rgba(255,255,255,.78);
+  --card2: rgba(255,255,255,.92);
+  --line: rgba(255,255,255,.10);
+      --primary:#2b7cff; --primary2:#00c2ff;
+      --accent:#ff7a00; --accent2:#ff4fd8;
+      --ok:#16a34a; --bad:#dc2626; --warn:#f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.12);
+      --shadow2: 0 10px 25px rgba(0,0,0,.10);
+      --radius: 18px; --radius2: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+  margin:0;
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+    radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+    linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+  overflow-x:hidden;
+}
+    .blob{
+      position:fixed; width:380px;height:380px;border-radius:999px;
+      filter: blur(30px); opacity:.35; z-index:-1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b1{left:-120px; top:80px; background:#47e6ff;}
+    .blob.b2{right:-140px; top:140px; background:#6b7bff; animation-delay:-5s;}
+    .blob.b3{left:20%; bottom:-160px; background:#ff5fd6; animation-delay:-9s;}
+    @keyframes drift{0%,100%{transform: translate(0,0) scale(1)} 50%{transform: translate(60px,-40px) scale(1.08)}}
+
+    header{
+  position:sticky; top:0; z-index:20;
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+    .topbar{
+      max-width:1150px;margin:0 auto;
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width: 310px;}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: var(--shadow2);
+      display:grid; place-items:center;
+      color:#fff; font-weight:900;
+    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1;}
+    .brand .t b{font-size:14px}
+    .brand .t span{font-size:12px;color:var(--muted)}
+    .rightbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .progressWrap{
+      width:220px;height:10px;border-radius:999px;
+      background: rgba(13,23,46,.10);
+      overflow:hidden;
+      border:1px solid rgba(13,23,46,.10);
+    }
+    .progressFill{
+      height:100%;
+      width:100%;
+      background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+      border-radius:999px;
+    }
+
+    main{max-width:1150px;margin:0 auto;padding:18px;}
+    .grid{display:grid;gap:16px}
+    @media (min-width: 980px){
+  .grid.cols-2{grid-template-columns: 1fr 1fr}
+  .grid.cols-3{grid-template-columns: 1.1fr 1fr 1fr}
+}
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card.solid{background: var(--card2)}
+    h1{margin:0 0 4px 0; font-size:22px}
+    h2{margin:0 0 10px 0; font-size:15px}
+    p,li,label{font-size:13px; line-height:1.5}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background: var(--line); margin:14px 0}
+
+    .btn{
+      border:0; border-radius: 14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      user-select:none;
+    }
+    .btn:active{transform: scale(.98)}
+    .btn.primary{color:white;background: linear-gradient(135deg, var(--accent), #ff9f40);}
+    .btn.blue{color:white;background: linear-gradient(135deg, var(--primary2), var(--primary));}
+    .btn.ghost{
+      color: var(--ink);
+      background: rgba(255,255,255,.7);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+    .btn.danger{color:white;background: linear-gradient(135deg, #ef4444, #b91c1c);}
+    .btn:disabled{opacity:.55; cursor:not-allowed; box-shadow:none}
+
+    .tag{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(43,124,255,.10);
+      color:#1b4bb2;
+      border:1px solid rgba(43,124,255,.15);
+      font-weight:900;
+      margin-bottom:8px;
+    }
+    .tag.green{background: rgba(34,197,94,.14); color:#137a36; border-color: rgba(34,197,94,.18);}
+    .tag.red{background: rgba(239,68,68,.14); color:#8a1f1f; border-color: rgba(239,68,68,.18);}
+    .tag.orange{background: rgba(245,158,11,.16); color:#8a5a10; border-color: rgba(245,158,11,.18);}
+
+    .kpi{display:grid; gap:10px;}
+    .kpi .box{
+      border-radius: 18px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 12px 28px rgba(0,0,0,.08);
+      padding:14px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .kpi .box b{font-size:22px}
+    .kpi .box .label{font-weight:900; font-size:12px; color:var(--muted)}
+    .kpi .box .hint{font-size:12px; color:var(--muted); margin-top:6px}
+    .kpi .box i{
+      width:38px; height:38px; border-radius:14px; display:grid; place-items:center;
+      color:white; font-weight:900;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      flex:0 0 auto;
+    }
+
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+    }
+    .table th,.table td{
+      text-align:left;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(13,23,46,.10);
+      font-size:13px;
+      vertical-align:top;
+    }
+    .table th{font-size:12px;color:var(--muted); font-weight:900}
+    .table tr:last-child td{border-bottom:0}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.75);
+      font-weight:900; font-size:12px;
+      white-space:nowrap;
+    }
+    .badge.ok{border-color: rgba(34,197,94,.24); background: rgba(34,197,94,.14); color:#137a36;}
+    .badge.no{border-color: rgba(239,68,68,.22); background: rgba(239,68,68,.14); color:#8a1f1f;}
+    .badge.maybe{border-color: rgba(245,158,11,.24); background: rgba(245,158,11,.16); color:#8a5a10;}
+
+    /* toast */
+    .toastWrap{position: fixed; right: 18px; bottom: 18px; display:flex; flex-direction:column; gap:10px; z-index: 60; pointer-events:none;}
+    .toast{pointer-events:auto; width:min(420px, calc(100vw - 36px)); border-radius: 16px; padding:12px 12px; background: rgba(255,255,255,.88); border:1px solid rgba(13,23,46,.12); box-shadow: var(--shadow); display:flex; gap:10px; align-items:flex-start; animation: pop .18s ease-out;}
+    @keyframes pop{from{transform: translateY(10px); opacity:.2} to{transform: translateY(0); opacity:1}}
+    .toast .icon{width:36px; height:36px; border-radius:12px; display:grid; place-items:center; font-weight:900; color:white; flex:0 0 auto; background: linear-gradient(135deg, var(--primary2), var(--primary));}
+    .toast.ok .icon{background: linear-gradient(135deg, #22c55e, #16a34a)}
+    .toast.bad .icon{background: linear-gradient(135deg, #ef4444, #b91c1c)}
+    .toast .t{flex:1}
+    .toast .t b{display:block; font-size:13px}
+    .toast .t span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .toast .x{background:transparent;border:0;cursor:pointer;padding:6px 8px;border-radius:10px;color:var(--muted);}
+  .frameBox{
+  border:1px solid rgba(13,23,46,.12);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+iframe{
+  width:100%;
+  border:0;
+  display:block;
+  background:#fff;
+}
+
+.handoutFrame{height:600px;}
+.formFrame{
+  height: 950px;
+}
+  </style>
+  <style>
+  .slidePage{
+    display:none;
+    animation: fadeSlide .35s ease;
+  }
+
+  .slidePage.active{
+    display:block;
+  }
+
+  @keyframes fadeSlide{
+    from{opacity:0; transform:translateY(10px)}
+    to{opacity:1; transform:translateY(0)}
+  }
+
+  .stepNav{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+
+  .stepChip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.08);
+    color:#e9eeff;
+    font-size:12px;
+    font-weight:800;
+  }
+
+  .stepChip.active{
+    background:linear-gradient(135deg, rgba(0,194,255,.22), rgba(255,79,216,.18));
+    border-color:rgba(255,255,255,.22);
+    box-shadow:0 8px 18px rgba(0,0,0,.16);
+  }
+
+  .glassCard{
+    background: rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    padding:16px;
+  }
+
+  .frameBox{
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,.14);
+  }
+
+  iframe{
+    width:100%;
+    border:0;
+    display:block;
+    background:#fff;
+  }
+
+  .handoutFrame{height:620px;}
+  .formFrame{height:720px;}
+
+  .checkRow{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:16px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.10);
+    color:#f3f7ff;
+  }
+
+  .checkRow input{
+    margin-top:4px;
+    transform:scale(1.15);
+  }
+  /* ===== Teks area gelap ===== */
+body, h1, h2, h3, .glassCard, .stepChip, .checkRow, .brand .t b{
+  color: var(--ink);
+}
+
+.brand .t span,
+.glassCard .muted,
+.stepChip,
+.checkRow label{
+  color: var(--muted);
+}
+
+/* ===== Semua card terang pakai teks gelap ===== */
+.card,
+.card.solid,
+.kpi .box,
+.table,
+#drillPreview,
+.frameBox,
+.pill,
+.badge,
+.tag,
+.tag.green,
+.tag.red,
+.tag.orange{
+  color: var(--ink-dark);
+}
+
+/* teks umum di card */
+.card h1,
+.card h2,
+.card h3,
+.card p,
+.card li,
+.card label,
+.card b,
+.card strong,
+.card .label,
+.card .hint,
+.card .muted,
+.card .row,
+.card .divider,
+.kpi .box .label,
+.kpi .box .hint,
+.table th,
+.table td,
+#drillPreview,
+#drillPreview p,
+#drillPreview li{
+  color: var(--ink-dark);
+}
+
+/* muted di card terang */
+.card .muted,
+.kpi .box .hint,
+.table th,
+#s1Note, #s2Note, #s3Note, #s4Note,
+#drillNote, #pagesNote,
+#uEmail, #uTime{
+  color: var(--muted-dark) !important;
+}
+
+/* tombol ghost pada card terang */
+.btn.ghost{
+  color: var(--ink-dark);
+}
+
+/* pill atas header tetap gelap agar terbaca */
+header .pill,
+header .pill span,
+header .pill b{
+  color: var(--ink-dark) !important;
+}
+
+/* tabel */
+.table th{
+  color: var(--muted-dark);
+}
+
+.table td{
+  color: var(--ink-dark);
+}
+
+/* badge status */
+.badge{
+  color: var(--ink-dark);
+}
+
+/* sub-card kecil kanan */
+.card .card{
+  color: var(--ink-dark);
+}
+
+.card .card b,
+.card .card .muted,
+.card .card .label{
+  color: var(--ink-dark);
+}
+
+.card .card .muted{
+  color: var(--muted-dark) !important;
+}
+
+/* preview drill */
+#drillPreview *{
+  color: var(--ink-dark);
+}
+
+#drillPreview .muted{
+  color: var(--muted-dark) !important;
+}
+
+/* form area text penjelas */
+#slide1 .card.solid p,
+#slide2 .card.solid p{
+  color: var(--muted-dark);
+}
+
+/* checkbox section */
+.checkRow{
+  color: var(--ink);
+}
+
+.checkRow label{
+  color: var(--ink);
+}
+.handoutCard{
+  padding:18px;
+}
+
+.handoutCard .frameBox{
+  min-height: 900px;
+}
+
+.handoutCard iframe{
+  width:100%;
+  height:900px;
+}
+.formCard{
+  padding:18px;
+}
+
+.formCard .frameBox{
+  min-height: 900px;
+}
+
+.formCard iframe{
+  width:100%;
+  height:900px;
+}
+/* ===== PROGRESS PAGE ONLY ===== */
+.progressHero{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:18px;
+  padding:18px 20px;
+  border-radius:22px;
+  background:linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+}
+
+.progressHeroLeft h1{
+  margin:0 0 6px 0;
+}
+
+.progressHeroRight{
+  display:flex;
+  align-items:center;
+}
+
+.progressTopStats{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.statCard{
+  background:rgba(255,255,255,.92);
+  border:1px solid rgba(13,23,46,.10);
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 14px 32px rgba(0,0,0,.10);
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  color:var(--ink-dark);
+}
+
+.statIcon{
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  background:linear-gradient(135deg, rgba(0,194,255,.16), rgba(255,79,216,.14));
+  border:1px solid rgba(43,124,255,.12);
+  flex:0 0 auto;
+}
+
+.statLabel{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted-dark);
+  margin-bottom:4px;
+}
+
+.statValue{
+  font-size:22px;
+  font-weight:800;
+  color:var(--ink-dark);
+  line-height:1.15;
+}
+
+.statSub{
+  font-size:12px;
+  color:var(--muted-dark);
+  margin-top:4px;
+  line-height:1.45;
+}
+
+.progressPanel{
+  background:rgba(255,255,255,.92);
+  border:1px solid rgba(13,23,46,.10);
+  border-radius:22px;
+  box-shadow:0 16px 36px rgba(0,0,0,.10);
+  padding:18px;
+  color:var(--ink-dark);
+}
+
+.panelHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.scoreGrid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:12px;
+}
+
+.scoreMini{
+  border:1px solid rgba(13,23,46,.10);
+  background:rgba(248,250,255,.96);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
+
+.scoreMini.highlight{
+  background:linear-gradient(135deg, rgba(0,194,255,.08), rgba(255,79,216,.07));
+}
+
+.scoreMiniTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.scoreMiniLabel{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted-dark);
+}
+
+.scoreMiniValue{
+  display:block;
+  font-size:24px;
+  color:var(--ink-dark);
+  line-height:1.1;
+  margin-bottom:6px;
+}
+
+.scoreMiniNote{
+  font-size:12px;
+  color:var(--muted-dark);
+  line-height:1.45;
+}
+
+.exportList{
+  margin:0 0 0 18px;
+  padding:0;
+  color:var(--ink-dark);
+}
+
+.exportList li{
+  margin:8px 0;
+  color:var(--ink-dark);
+}
+
+.actionGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:14px;
+}
+
+.tableWrap{
+  overflow:auto;
+  border-radius:18px;
+}
+
+.progressTable th{
+  background:rgba(43,124,255,.06);
+  color:var(--muted-dark);
+  position:sticky;
+  top:0;
+}
+
+.progressTable td{
+  color:var(--ink-dark);
+}
+
+.drillPreviewBox{
+  padding:16px;
+  background:rgba(248,250,255,.96);
+  border:1px solid rgba(13,23,46,.10);
+  border-radius:18px;
+  min-height:160px;
+  color:var(--ink-dark);
+  box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
+
+.drillPreviewBox *{
+  color:var(--ink-dark);
+}
+
+.drillPreviewBox .muted{
+  color:var(--muted-dark) !important;
+}
+
+@media (max-width: 979px){
+  .progressTopStats{
+    grid-template-columns:1fr;
+  }
+
+  .scoreGrid{
+    grid-template-columns:1fr;
+  }
+
+  .actionGrid{
+    grid-template-columns:1fr;
+  }
+
+  .progressHero{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">8</div>
+        <div class="t">
+          <b>Rekap Akhir</b>
+          <span>• Lihat progres • Export Excel (rekap + jawaban)</span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+  <div class="pill">
+    <span>Progress</span>
+    <b style="color:var(--ink)">8/8</b>
+  </div>
+
+  <div class="progressWrap"><div class="progressFill"></div></div>
+
+  <a
+    class="btn ghost"
+    href="h1.html"
+    onclick="localStorage.setItem('KI_GO_TO', 'landing')"
+    style="text-decoration:none;"
+  >
+    ⬅ Peta Eksplorasi
+  </a>
+
+  <button class="btn ghost" id="btnHelp">✨ Bantuan</button>
+</div>
+    </div>
+  </header>
+
+  <main>
+  <div class="stepNav">
+    <div class="stepChip active" id="chipStep1">1. Handout & Refleksi</div>
+    <div class="stepChip" id="chipStep2">2. Hasil Progres</div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- SLIDE 1 -->
+  <!-- ===================== -->
+  <section id="slide1" class="slidePage active">
+    <div class="glassCard" style="margin-bottom:16px">
+      <div class="tag">📘 Handout & Refleksi</div>
+      <h1>Pelajari Materi & Isi Refleksi</h1>
+      <p class="muted" style="margin:0">
+        Bacalah handout berikut untuk meninjau kembali materi kesetimbangan kimia,
+        lalu isi refleksi diri sebelum melihat hasil progres belajar.
+      </p>
+    </div>
+
+    <div class="grid cols-2" style="margin-bottom:18px">
+      <!-- HANDOUT -->
+      <div class="card solid formCard">
+  <div class="tag orange">📝 Refleksi Diri</div>
+        <p class="muted">
+          Handout ini memuat ringkasan tentang reaksi satu arah, reaksi dua arah,
+          kesetimbangan dinamis, serta kesetimbangan homogen dan heterogen.
+        </p>
+
+        <div class="frameBox">
+          <iframe
+            class="handoutFrame"
+            src="https://drive.google.com/file/d/1u0pEEqMY46QOs16q2I1j1DH92Dz3bxl7/preview"
+            allow="autoplay">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="card solid">
+  <div class="tag orange">📝 Refleksi Diri</div>
+  <p class="muted">
+    Isilah refleksi diri setelah mempelajari materi. Form ini tampil langsung
+    di halaman tanpa membuka tab baru.
+  </p>
+
+  <div class="frameBox">
+    <iframe
+      class="formFrame"
+      src="https://docs.google.com/forms/d/e/1FAIpQLScc28VVB16rg7f7MQe9skZOi37tYWk_LJe7nSbdUDFS1KKfbw/viewform?embedded=true"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0">
+      Memuat…
+    </iframe>
+  </div>
+</div>
+
+<div class="checkRow">
+  <input type="checkbox" id="confirmReflectionDone">
+  <label for="confirmReflectionDone">
+    Saya sudah membaca handout dan mengisi refleksi diri.
+  </label>
+</div>
+
+    <div class="row" style="justify-content:flex-end; margin-top:16px">
+      <button class="btn blue" id="btnToSlide2" disabled>Lanjut ke Hasil Progres ➜</button>
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- SLIDE 2 -->
+  <!-- ===================== -->
+  <section id="slide2" class="slidePage">
+  <div class="progressHero">
+    <div class="progressHeroLeft">
+      <div class="tag">📊 Rekap Akhir</div>
+      <h1>Hasil Progres Belajar</h1>
+      <p class="muted" style="margin:0">
+        Berikut ringkasan hasil belajar, progres halaman, dan nilai drill soal yang sudah dikerjakan.
+      </p>
+    </div>
+
+    <div class="progressHeroRight">
+      <button class="btn ghost" id="btnBackToSlide1">⬅ Kembali ke Refleksi</button>
+    </div>
+  </div>
+
+  <div class="progressTopStats">
+    <div class="statCard">
+      <div class="statIcon">👤</div>
+      <div>
+        <div class="statLabel">Nama Siswa</div>
+        <div class="statValue" id="uName">-</div>
+        <div class="statSub" id="uEmail">-</div>
+      </div>
+    </div>
+
+    <div class="statCard">
+      <div class="statIcon">📚</div>
+      <div>
+        <div class="statLabel">Progress Halaman</div>
+        <div class="statValue" id="uDone">0/8</div>
+        <div class="statSub">Berdasarkan aktivitas yang tersimpan</div>
+      </div>
+    </div>
+
+    <div class="statCard">
+      <div class="statIcon">🏁</div>
+      <div>
+        <div class="statLabel">Skor Drill Hal. 7</div>
+        <div class="statValue" id="uScore">-</div>
+        <div class="statSub" id="uTime">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid cols-2" style="align-items:start">
+    <!-- KIRI -->
+    <div class="progressPanel">
+      <div class="panelHead">
+        <div>
+          <div class="tag">🧾 Ringkasan Nilai</div>
+          <h2 style="margin:0">Capaian Tiap Bagian</h2>
+        </div>
+      </div>
+
+      <div class="scoreGrid">
+        <div class="scoreMini">
+          <div class="scoreMiniTop">
+            <span class="scoreMiniLabel">Sub Bab 1</span>
+            <span id="s1Badge" class="badge maybe">Belum</span>
+          </div>
+          <b id="s1Score" class="scoreMiniValue">-</b>
+          <div id="s1Note" class="scoreMiniNote">-</div>
+        </div>
+
+        <div class="scoreMini">
+          <div class="scoreMiniTop">
+            <span class="scoreMiniLabel">Sub Bab 2</span>
+            <span id="s2Badge" class="badge maybe">Belum</span>
+          </div>
+          <b id="s2Score" class="scoreMiniValue">-</b>
+          <div id="s2Note" class="scoreMiniNote">-</div>
+        </div>
+
+        <div class="scoreMini">
+          <div class="scoreMiniTop">
+            <span class="scoreMiniLabel">Sub Bab 3</span>
+            <span id="s3Badge" class="badge maybe">Belum</span>
+          </div>
+          <b id="s3Score" class="scoreMiniValue">-</b>
+          <div id="s3Note" class="scoreMiniNote">-</div>
+        </div>
+
+        <div class="scoreMini">
+          <div class="scoreMiniTop">
+            <span class="scoreMiniLabel">Sub Bab 4</span>
+            <span id="s4Badge" class="badge maybe">Belum</span>
+          </div>
+          <b id="s4Score" class="scoreMiniValue">-</b>
+          <div id="s4Note" class="scoreMiniNote">-</div>
+        </div>
+
+        <div class="scoreMini highlight">
+          <div class="scoreMiniTop">
+            <span class="scoreMiniLabel">Drill Halaman 7</span>
+            <span id="drillBadge" class="badge maybe">Belum</span>
+          </div>
+          <b id="drillScore" class="scoreMiniValue">-</b>
+          <div id="drillNote" class="scoreMiniNote">-</div>
+        </div>
+
+        <div class="scoreMini highlight">
+          <div class="scoreMiniTop">
+            <span class="scoreMiniLabel">Progress Pages</span>
+            <span id="pagesBadge" class="badge maybe">-</span>
+          </div>
+          <b id="pagesDone" class="scoreMiniValue">-</b>
+          <div id="pagesNote" class="scoreMiniNote">-</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panelHead">
+        <div>
+          <div class="tag">⬇ Export</div>
+          <h2 style="margin:0">Simpan Hasil</h2>
+        </div>
+      </div>
+
+      <ul class="exportList">
+        <li><b>Unduh Excel Rekap</b> untuk menyimpan data akun, progres, nilai, dan jawaban drill.</li>
+        <li><b>Salin ringkasan</b> untuk menyalin hasil singkat ke clipboard.</li>
+      </ul>
+
+      <div class="actionGrid">
+        <button class="btn primary" id="btnExport">⬇ Unduh Excel Rekap</button>
+        <button class="btn ghost" id="btnCopy">📋 Salin ringkasan</button>
+        <button class="btn ghost" id="btnBack">⬅ Kembali ke Hal. 7</button>
+        <button class="btn danger" id="btnLogout">🚪 Logout</button>
+      </div>
+
+      <p class="muted" style="margin:14px 0 0 0">
+        Catatan: tombol <b>Logout</b> hanya menghapus sesi login, bukan database hasil.
+      </p>
+    </div>
+
+    <!-- KANAN -->
+    <div class="progressPanel">
+      <div class="panelHead">
+        <div>
+          <div class="tag">🧾 Detail Progress</div>
+          <h2 style="margin:0">Status 8 Halaman</h2>
+        </div>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table progressTable" aria-label="tabel progress">
+          <thead>
+            <tr>
+              <th>Halaman</th>
+              <th>Status</th>
+              <th>Waktu</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="progressRows"></tbody>
+        </table>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panelHead">
+        <div>
+          <div class="tag">📦 Data Drill</div>
+          <h2 style="margin:0">Ringkasan Hasil Drill Halaman 7</h2>
+        </div>
+      </div>
+
+      <p class="muted" style="margin:0 0 10px 0">
+        Menampilkan data terakhir yang tersimpan anonim (<code>KI_Page7_LastResult</code>).
+      </p>
+
+      <div id="drillPreview" class="drillPreviewBox"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+  <!-- Toast -->
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <script>
+    const $ = (q)=>document.querySelector(q);
+    const $$ = (q)=>Array.from(document.querySelectorAll(q));
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Toast
+    function toast(type, title, message, ms=4200){
+      const wrap = $("#toastWrap");
+      const t = document.createElement("div");
+      t.className = `toast ${type||"info"}`;
+      t.innerHTML = `
+        <div class="icon">${type==="ok"?"✓":type==="bad"?"!":"i"}</div>
+        <div class="t">
+          <b>${escapeHtml(title)}</b>
+          <span>${escapeHtml(message)}</span>
+        </div>
+        <button class="x" aria-label="Tutup">✕</button>
+      `;
+      t.querySelector(".x").addEventListener("click", ()=> t.remove());
+      wrap.appendChild(t);
+      if(ms) setTimeout(()=>{ if(t.isConnected) t.remove(); }, ms);
+    }
+
+    function isoNice(iso){
+      if(!iso) return "-";
+      try{
+        const d = new Date(iso);
+        return d.toLocaleString("id-ID", { dateStyle:"medium", timeStyle:"short" });
+      }catch{ return iso; }
+    }
+  </script>
+
+  <!-- Shared DB helpers (samakan dengan halaman lain) -->
+  <script>
+    const DB_KEY = "KI_DB_v1";
+
+    function dbLoad(){
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users:{} }; }
+      catch { return { users:{} }; }
+    }
+    function dbSave(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function getCurrentUser(){
+      try { return JSON.parse(localStorage.getItem("KI_CURRENT_USER")); }
+      catch { return null; }
+    }
+
+    function ensureUserInDB(user){
+      const db = dbLoad();
+      if(!user || !user.email) return null;
+
+      if(!db.users[user.email]){
+        db.users[user.email] = {
+          name: user.name || "-",
+          email: user.email,
+          visits: [],
+          scores: { sub1:null, sub2:null, sub3:null, sub4:null },
+          notes:  { sub1:"",   sub2:"",   sub3:"",   sub4:""   },
+          answers: {},
+          progress: {}
+        };
+        dbSave(db);
+      } else {
+        db.users[user.email].name = user.name || db.users[user.email].name;
+        db.users[user.email].scores = db.users[user.email].scores || { sub1:null, sub2:null, sub3:null, sub4:null };
+        db.users[user.email].notes  = db.users[user.email].notes  || { sub1:"", sub2:"", sub3:"", sub4:"" };
+        db.users[user.email].answers = db.users[user.email].answers || {};
+        db.users[user.email].progress = db.users[user.email].progress || {};
+        dbSave(db);
+      }
+      return db;
+    }
+
+    function mustLogin(){
+      const user = getCurrentUser();
+      if(!user || !user.email){
+        alert("Kamu belum login. Kembali ke index.");
+        location.href = "h1.html";
+        return null;
+      }
+      ensureUserInDB(user);
+      return user;
+    }
+
+    function markProgress(email, pageKey, done=true){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].progress = db.users[email].progress || {};
+      db.users[email].progress[pageKey] = { done, at: new Date().toISOString() };
+      dbSave(db);
+    }
+  </script>
+
+  <script>
+    // NOTE: Disesuaikan dengan file yang kamu upload (hlm1-2, hlm3, hlm4, hlm5, hlm6, hlm7, page8)
+    const PAGE_KEYS = [
+      { key:"page1", label:"Halaman 1", file:"hlm1-2.html" },
+      { key:"page2", label:"Halaman 2", file:"hlm1-2.html" },
+      { key:"page3", label:"Halaman 3", file:"hlm3.html" },
+      { key:"page4", label:"Halaman 4", file:"hlm4.html" },
+      { key:"page5", label:"Halaman 5", file:"hlm5.html" },
+      { key:"page6", label:"Halaman 6", file:"hlm6.html" },
+      { key:"page7", label:"Halaman 7 (Drill)", file:"hlm7.html" },
+      { key:"page8", label:"Halaman 8 (Rekap)", file:"page8.html" }
+    ];
+
+    function badgeFor(done){
+      if(done === true) return { cls:"ok", text:"Selesai" };
+      if(done === false) return { cls:"no", text:"Belum" };
+      return { cls:"maybe", text:"-" };
+    }
+
+    function readAnonDrill(){
+      try{ return JSON.parse(localStorage.getItem("KI_Page7_LastResult") || "null"); }
+      catch{ return null; }
+    }
+
+    function computeDoneCount(progress){
+      let c = 0;
+      PAGE_KEYS.forEach(p=>{ if(progress?.[p.key]?.done) c++; });
+      return c;
+    }
+
+    function fillSubCard(n, score, note){
+      const sEl = $("#s"+n+"Score");
+      const bEl = $("#s"+n+"Badge");
+      const nEl = $("#s"+n+"Note");
+
+      const has = (score !== null && score !== undefined && score !== "");
+      sEl.textContent = has ? String(score) : "-";
+
+      if(has){
+        bEl.className = "badge ok";
+        bEl.textContent = "Ada nilai";
+        nEl.textContent = note ? String(note) : "Tersimpan di DB";
+      }else{
+        bEl.className = "badge no";
+        bEl.textContent = "Belum";
+        nEl.textContent = note ? String(note) : "Belum ada data";
+      }
+    }
+
+    function renderProgressTable(progress){
+      const tb = $("#progressRows");
+      tb.innerHTML = "";
+
+      PAGE_KEYS.forEach((p)=>{
+        const row = document.createElement("tr");
+        const pr = progress?.[p.key] || null;
+        const done = pr?.done;
+        const at = pr?.at || null;
+        const b = badgeFor(done);
+
+        row.innerHTML = `
+          <td style="font-weight:900">${escapeHtml(p.label)}</td>
+          <td><span class="badge ${b.cls}">${escapeHtml(b.text)}</span></td>
+          <td class="muted">${escapeHtml(isoNice(at))}</td>
+          <td>
+            <button class="btn ghost" style="padding:8px 10px;border-radius:12px;box-shadow:none" data-go="${escapeHtml(p.file)}">Buka</button>
+          </td>
+        `;
+        tb.appendChild(row);
+      });
+
+      $$('[data-go]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const f = btn.getAttribute('data-go');
+          if(f) location.href = f;
+        });
+      });
+    }
+
+    function renderDrillPreview(){
+      const box = $("#drillPreview");
+      const anon = readAnonDrill();
+      if(!anon){
+        box.innerHTML = `
+          <div class="tag red">❌ Tidak ada data</div>
+          <p class="muted" style="margin:0">Data drill terakhir belum tersimpan. Selesaikan Halaman 7 dulu.</p>
+        `;
+        $("#drillScore").textContent = "-";
+        $("#drillBadge").className = "badge no";
+        $("#drillBadge").textContent = "Belum";
+        $("#drillNote").textContent = "Belum ada data drill";
+        return;
+      }
+
+      const m = anon.meta || {};
+      const score = (m.Score ?? "-") + "/" + (m.Total ?? "-");
+      const pct = (m.Percent ?? "-") + "%";
+      const time = m.TimeFormatted ?? "-";
+      const ended = m.EndedAtISO ? isoNice(m.EndedAtISO) : "-";
+
+      $("#drillScore").textContent = score;
+      $("#drillBadge").className = "badge ok";
+      $("#drillBadge").textContent = "Ada";
+      $("#drillNote").textContent = `Skor ${pct} • ${time}`;
+
+      const wrong = (anon.details || []).filter(x => Number(x.IsCorrect) === 0).length;
+      const total = (anon.details || []).length;
+
+      box.innerHTML = `
+        <div class="row" style="justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="tag green">✅ Data ditemukan</div>
+            <div style="font-weight:900">Skor: <b>${escapeHtml(score)}</b> • ${escapeHtml(pct)}</div>
+            <div class="muted" style="margin-top:6px;font-weight:900">Waktu: <b>${escapeHtml(time)}</b> • Selesai: <b>${escapeHtml(ended)}</b></div>
+          </div>
+          <div class="pill">
+            <span>Salah</span>
+            <b style="color:var(--ink)">${wrong}/${total}</b>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="muted" style="font-weight:900">Ringkasan (5 soal pertama):</div>
+        <ol style="margin:8px 0 0 18px;padding:0">
+          ${(anon.details || []).slice(0,5).map(d=>{
+            const ok = Number(d.IsCorrect)===1;
+            return `<li class="muted" style="margin:6px 0">
+              <b>${ok ? "✅" : "❌"} #${escapeHtml(d.No)}</b> — ${escapeHtml(d.Topic || "-")}
+            </li>`;
+          }).join("")}
+        </ol>
+      `;
+    }
+
+    function buildRekapWorkbook(user, userRow, dbUser){
+      if(typeof XLSX === "undefined"){
+        toast("bad","Gagal export","Library XLSX tidak terbaca. Pastikan internet aktif (CDN).", 5200);
+        return null;
+      }
+
+      const wb = XLSX.utils.book_new();
+
+      // Sheet: Rekap
+      const wsRekap = XLSX.utils.json_to_sheet([userRow]);
+      XLSX.utils.book_append_sheet(wb, wsRekap, "Rekap");
+
+      // Sheet: Progress
+      const progressRows = PAGE_KEYS.map(p=>{
+        const pr = dbUser?.progress?.[p.key] || null;
+        return {
+          PageKey: p.key,
+          Page: p.label,
+          Done: pr?.done ? 1 : 0,
+          AtISO: pr?.at || ""
+        };
+      });
+      const wsProg = XLSX.utils.json_to_sheet(progressRows);
+      XLSX.utils.book_append_sheet(wb, wsProg, "Progress");
+
+      // Sheet: Scores (sub1..sub4)
+      const s = dbUser?.scores || {};
+      const n = dbUser?.notes || {};
+      const scoreRows = [
+        { Sub:"sub1", Score: s.sub1 ?? "", Note: n.sub1 ?? "" },
+        { Sub:"sub2", Score: s.sub2 ?? "", Note: n.sub2 ?? "" },
+        { Sub:"sub3", Score: s.sub3 ?? "", Note: n.sub3 ?? "" },
+        { Sub:"sub4", Score: s.sub4 ?? "", Note: n.sub4 ?? "" },
+      ];
+      const wsScores = XLSX.utils.json_to_sheet(scoreRows);
+      XLSX.utils.book_append_sheet(wb, wsScores, "Scores");
+
+      // Sheet: DrillSummary + DrillDetail (ambil dari anon, kalau ada)
+      const anon = readAnonDrill();
+      if(anon?.meta){
+        const wsDS = XLSX.utils.json_to_sheet([anon.meta]);
+        XLSX.utils.book_append_sheet(wb, wsDS, "Drill_Summary");
+      }
+      if(anon?.details?.length){
+        const wsDD = XLSX.utils.json_to_sheet(anon.details);
+        XLSX.utils.book_append_sheet(wb, wsDD, "Drill_Detail");
+      }
+
+      return wb;
+    }
+
+    function exportExcelAll(){
+      const user = mustLogin();
+      if(!user) return;
+
+      const db = dbLoad();
+      const du = db?.users?.[user.email] || {};
+
+      const doneCount = computeDoneCount(du.progress);
+      const anon = readAnonDrill();
+      const drillScore = anon?.meta ? `${anon.meta.Score}/${anon.meta.Total}` : "";
+
+      const userRow = {
+        Name: user.name || du.name || "-",
+        Email: user.email || "-",
+        DonePages: doneCount,
+        TotalPages: 8,
+        Sub1: du?.scores?.sub1 ?? "",
+        Sub2: du?.scores?.sub2 ?? "",
+        Sub3: du?.scores?.sub3 ?? "",
+        Sub4: du?.scores?.sub4 ?? "",
+        DrillScore: drillScore,
+        ExportedAtISO: new Date().toISOString()
+      };
+
+      const wb = buildRekapWorkbook(user, userRow, du);
+      if(!wb) return;
+
+      const safeName = (userRow.Name || "Siswa").replaceAll(/[^a-zA-Z0-9 _-]/g,"").trim().slice(0,40) || "Siswa";
+      const fname = `Rekap_Kesetimbangan_${safeName}.xlsx`;
+
+      XLSX.writeFile(wb, fname);
+      toast("ok","Excel dibuat","Rekap sudah diunduh.", 4200);
+    }
+
+    function copyRingkasan(){
+      const user = mustLogin();
+      if(!user) return;
+      const db = dbLoad();
+      const du = db?.users?.[user.email] || {};
+      const doneCount = computeDoneCount(du.progress);
+
+      const anon = readAnonDrill();
+      const drillLine = anon?.meta
+        ? `Drill(H7): ${anon.meta.Score}/${anon.meta.Total} (${anon.meta.Percent}%) • ${anon.meta.TimeFormatted}`
+        : `Drill(H7): -`;
+
+      const t =
+`REKAP KUIZ KIMIA (Kesetimbangan)
+Nama: ${user.name || du.name || "-"}
+Email: ${user.email || "-"}
+Progress: ${doneCount}/8 halaman
+Sub1: ${du?.scores?.sub1 ?? "-"} | Sub2: ${du?.scores?.sub2 ?? "-"} | Sub3: ${du?.scores?.sub3 ?? "-"} | Sub4: ${du?.scores?.sub4 ?? "-"}
+${drillLine}
+Waktu salin: ${new Date().toISOString()}`;
+
+      navigator.clipboard?.writeText(t).then(()=>{
+        toast("ok","Tersalin","Ringkasan tersalin ke clipboard.", 3200);
+      }).catch(()=>{
+        toast("bad","Gagal salin","Browser tidak mengizinkan clipboard.", 4200);
+      });
+    }
+
+    function renderAll(){
+      const user = mustLogin();
+      if(!user) return;
+
+      // mark this page as done
+      markProgress(user.email, "page8", true);
+
+      const db = dbLoad();
+      const du = db?.users?.[user.email] || {};
+
+      $("#uName").textContent = user.name || du.name || "-";
+      $("#uEmail").textContent = user.email || "-";
+
+      const doneCount = computeDoneCount(du.progress);
+      $("#uDone").textContent = `${doneCount}/8`;
+
+      $("#pagesDone").textContent = `${doneCount}/8`;
+      $("#pagesBadge").className = "badge " + (doneCount===8 ? "ok" : doneCount>=5 ? "maybe" : "no");
+      $("#pagesBadge").textContent = doneCount===8 ? "Lengkap" : (doneCount>=5 ? "Hampir" : "Belum");
+      $("#pagesNote").textContent = doneCount===8
+        ? "Semua halaman ditandai selesai."
+        : "Selesaikan halaman yang belum untuk melengkapi progress.";
+
+      // subs
+      fillSubCard(1, du?.scores?.sub1, du?.notes?.sub1);
+      fillSubCard(2, du?.scores?.sub2, du?.notes?.sub2);
+      fillSubCard(3, du?.scores?.sub3, du?.notes?.sub3);
+      fillSubCard(4, du?.scores?.sub4, du?.notes?.sub4);
+
+      // drill (left KPI)
+      const anon = readAnonDrill();
+      if(anon?.meta){
+        $("#uScore").textContent = `${anon.meta.Score}/${anon.meta.Total} (${anon.meta.Percent}%)`;
+        $("#uTime").textContent = `Waktu: ${anon.meta.TimeFormatted || "-"} • Selesai: ${isoNice(anon.meta.EndedAtISO)}`;
+      }else{
+        $("#uScore").textContent = "-";
+        $("#uTime").textContent = "Belum ada data drill dari Halaman 7.";
+      }
+
+      // table
+      renderProgressTable(du.progress);
+
+      // drill preview panel
+      renderDrillPreview();
+      
+        showSlide(1);
+      toast("ok","Halaman 8 siap","Kamu bisa export rekap atau cek progress.", 4200);
+    }
+
+    // Buttons
+    $("#btnHelp").addEventListener("click", ()=>{
+      toast("info","Bantuan",
+        "Halaman 8 menampilkan rekap akun, progres 8 halaman, skor sub1–sub4 (kalau tersimpan), dan hasil drill Halaman 7. Klik Unduh Excel untuk export rekap.",
+        6500
+      );
+    });
+
+    $("#btnExport").addEventListener("click", exportExcelAll);
+    $("#btnCopy").addEventListener("click", copyRingkasan);
+
+    $("#btnBack").addEventListener("click", ()=>{ location.href = "hlm7.html"; });
+
+    $("#btnLogout").addEventListener("click", ()=>{
+      localStorage.removeItem("KI_CURRENT_USER");
+      toast("ok","Logout","Sesi login dihapus. Kembali ke index.", 2500);
+      setTimeout(()=> location.href = "index.html", 700);
+    });
+
+    // init
+    
+    function showSlide(step){
+    const slide1 = $("#slide1");
+    const slide2 = $("#slide2");
+    const chip1 = $("#chipStep1");
+    const chip2 = $("#chipStep2");
+
+    slide1.classList.remove("active");
+    slide2.classList.remove("active");
+    chip1.classList.remove("active");
+    chip2.classList.remove("active");
+
+    if(step === 1){
+      slide1.classList.add("active");
+      chip1.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      slide2.classList.add("active");
+      chip2.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  $("#confirmReflectionDone")?.addEventListener("change", function(){
+    $("#btnToSlide2").disabled = !this.checked;
+  });
+
+  $("#btnToSlide2")?.addEventListener("click", ()=>{
+    localStorage.setItem("KI_PAGE8_REFLECTION_DONE", "1");
+    showSlide(2);
+    toast("ok", "Lanjut", "Sekarang kamu masuk ke halaman hasil progres.", 2600);
+  });
+
+  $("#btnBackToSlide1")?.addEventListener("click", ()=>{
+    showSlide(1);
+  });
+    renderAll();
+  </script>
+  <script>
+/* =====================================================
+   SIMPAN DATA SISWA SUB BAB 1 KE DASHBOARD GURU
+   Tidak mengubah layout halaman
+===================================================== */
+
+const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+/* GANTI BAGIAN INI SESUAI FILE HALAMAN */
+const DATA_HALAMAN_ID = "hlm8";
+const DATA_HALAMAN_JUDUL = "Halaman 8: Rekap Akhir";
+
+/* Ambil identitas siswa dari login utama */
+function getCurrentStudentData(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+    return {
+      nama: user.name || user.nama || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+/* Ambil semua jawaban dari input, textarea, select, radio, checkbox */
+function collectPageAnswers(){
+  const hasil = [];
+
+  document.querySelectorAll("input, textarea, select").forEach((el, index) => {
+    const type = (el.type || "").toLowerCase();
+    const label =
+      document.querySelector(`label[for="${el.id}"]`)?.innerText?.trim() ||
+      el.closest(".field-group")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".field")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".card")?.querySelector("h2, h3")?.innerText?.trim() ||
+      el.name ||
+      el.id ||
+      `Isian ${index + 1}`;
+
+    let value = "";
+
+    if(type === "radio"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dipilih";
+    }else if(type === "checkbox"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dicentang";
+    }else{
+      value = el.value?.trim?.() || "";
+      if(!value) return;
+    }
+
+    hasil.push({
+      label: label,
+      jawaban: value
+    });
+  });
+
+  return hasil;
+}
+
+/* Simpan data halaman ke database guru */
+function simpanDataSubBab1KeGuru(status = "tersimpan otomatis"){
+  const siswa = getCurrentStudentData();
+  const jawaban = collectPageAnswers();
+
+  if(!siswa.email || siswa.email === "-"){
+    return;
+  }
+
+  let db = {};
+  try{
+    db = JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+  }catch(e){
+    db = {};
+  }
+
+  if(!db[siswa.email]){
+    db[siswa.email] = {
+      identitas: siswa,
+      halaman: {},
+      waktuMulai: new Date().toLocaleString("id-ID")
+    };
+  }
+
+  db[siswa.email].identitas = siswa;
+  db[siswa.email].halaman[DATA_HALAMAN_ID] = {
+    judul: DATA_HALAMAN_JUDUL,
+    status: status,
+    jawaban: jawaban,
+    waktuSimpan: new Date().toLocaleString("id-ID")
+  };
+  db[siswa.email].waktuUpdateTerakhir = new Date().toLocaleString("id-ID");
+
+  localStorage.setItem(DATA_GURU_SUBBAB1_KEY, JSON.stringify(db));
+}
+
+/* Simpan otomatis ketika siswa mengetik/memilih jawaban */
+document.addEventListener("input", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+document.addEventListener("change", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+/* Simpan juga saat tombol apa pun diklik */
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button") || e.target.closest("a")){
+    simpanDataSubBab1KeGuru("tersimpan dari aksi siswa");
+  }
+});
+
+/* Simpan saat siswa meninggalkan halaman */
+window.addEventListener("beforeunload", () => {
+  simpanDataSubBab1KeGuru("tersimpan saat keluar halaman");
+});
+
+/* Simpan awal saat halaman dibuka */
+simpanDataSubBab1KeGuru("halaman dibuka");
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 1,
+    pageKey: "hlm8",
+    pageTitle: "Halaman 8 — Rekap Akhir Sub Bab 1"
+  });
+});
+</script>
+</body>
+</html>

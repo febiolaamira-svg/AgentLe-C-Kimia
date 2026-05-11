@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB23 — Verifikasi Kc dan Penguatan Kp</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 { left: -120px; top: 80px; background: #47e6ff; }
+    .blob.b2 { right: -140px; top: 140px; background: #6b7bff; animation-delay: -5s; }
+    .blob.b3 { left: 20%; bottom: -160px; background: #ff5fd6; animation-delay: -9s; }
+
+    @keyframes drift {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(60px,-40px) scale(1.08); }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted { color: var(--muted); }
+    .hero .muted { color: rgba(255,255,255,.74); }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+      .grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .stepBox {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.74);
+      margin-top: 12px;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly { display: none; }
+    .teacherOnly.show { display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 2</b>
+          <span>keys23.html • Verifikasi Kc dan Penguatan Kp</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb2.html">📊 Data Sub Bab 2</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban Sub Bab 2. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Ringkasan Jawaban Cepat</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Bagian</th>
+              <th>Kunci Jawaban</th>
+              <th>Catatan untuk Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Langkah 1</td>
+              <td><b>Kc = [NO₂]² / [N₂O₄]</b></td>
+              <td>Produk NO₂ berada di pembilang, reaktan N₂O₄ di penyebut.</td>
+            </tr>
+            <tr>
+              <td>Langkah 2</td>
+              <td>Koefisien NO₂ = 2, pangkat NO₂ = 2. Koefisien N₂O₄ = 1, pangkat N₂O₄ = 1.</td>
+              <td>Pangkat mengikuti koefisien reaksi setara.</td>
+            </tr>
+            <tr>
+              <td>Langkah 3</td>
+              <td>Kc = (0,0547)² / 0,643 ≈ <b>0,00465</b></td>
+              <td>Nilai ini sesuai dengan data fenomena awal.</td>
+            </tr>
+            <tr>
+              <td>Tabel Kc</td>
+              <td>Nilai Kc sekitar <b>0,134</b> untuk semua percobaan.</td>
+              <td>Nilai tidak harus sama persis, tetapi mendekati konstan.</td>
+            </tr>
+            <tr>
+              <td>Langkah 4</td>
+              <td><b>Nilai Kc tiap percobaan mendekati konstan.</b></td>
+              <td>Jangan pilih “sama persis”. Data eksperimen biasanya memiliki pembulatan.</td>
+            </tr>
+            <tr>
+              <td>Langkah 5</td>
+              <td><b>Kc berdasarkan konsentrasi, Kp berdasarkan tekanan parsial gas.</b></td>
+              <td>Ini inti perbedaan Kc dan Kp.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Langkah 1 — Identifikasi Bentuk Ekspresi Kc</h2>
+
+        <div class="answer">
+          <h3>Jawaban benar</h3>
+          <p>
+            Untuk reaksi:
+          </p>
+          <p>
+            <span class="formula">N₂O₄(g) ⇌ 2NO₂(g)</span>
+          </p>
+          <p>
+            bentuk ekspresi tetapan kesetimbangan berdasarkan konsentrasi adalah:
+          </p>
+          <p>
+            <span class="formula">K<sub>c</sub> = [NO₂]<sup>2</sup> / [N₂O₄]</span>
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Pembahasan</div>
+          <p>
+            NO₂ adalah produk, sehingga ditulis di pembilang. N₂O₄ adalah reaktan, sehingga ditulis di penyebut.
+            Karena koefisien NO₂ adalah 2, maka [NO₂] dipangkatkan 2. Koefisien N₂O₄ adalah 1, sehingga [N₂O₄]
+            berpangkat 1 dan biasanya tidak perlu ditulis pangkatnya.
+          </p>
+        </div>
+
+        <div class="wrong">
+          <h3>Kesalahan umum</h3>
+          <ul>
+            <li>Menulis Kc = [NO₂] / [N₂O₄], karena lupa pangkat 2.</li>
+            <li>Menulis Kc = [N₂O₄] / [NO₂]², karena posisi produk dan reaktan terbalik.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Langkah 2 — Makna Pangkat pada Rumus Kc</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Zat</th>
+              <th>Koefisien Reaksi</th>
+              <th>Pangkat dalam Kc</th>
+              <th>Alasan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>NO₂</td>
+              <td>2</td>
+              <td>2</td>
+              <td>Pangkat mengikuti koefisien NO₂, yaitu 2.</td>
+            </tr>
+            <tr>
+              <td>N₂O₄</td>
+              <td>1</td>
+              <td>1</td>
+              <td>Pangkat mengikuti koefisien N₂O₄, yaitu 1.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="answer">
+          <h3>Jawaban yang diharapkan</h3>
+          <p>
+            Koefisien NO₂ = <b>2</b>, sehingga pangkat NO₂ = <b>2</b>.
+            Koefisien N₂O₄ = <b>1</b>, sehingga pangkat N₂O₄ = <b>1</b>.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Langkah 3 — Substitusi Data ke Rumus Kc</h2>
+
+        <div class="answer">
+          <h3>Data percobaan awal</h3>
+          <p>
+            [NO₂] = 0,0547 M dan [N₂O₄] = 0,643 M.
+          </p>
+
+          <h3>Perhitungan</h3>
+          <p>
+            <span class="formula">K<sub>c</sub> = (0,0547)<sup>2</sup> / 0,643</span>
+          </p>
+          <p>
+            <span class="formula">K<sub>c</sub> = 0,00299209 / 0,643</span>
+          </p>
+          <p>
+            <span class="formula">K<sub>c</sub> ≈ 0,00465</span>
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Pembahasan</div>
+          <p>
+            Nilai [NO₂] harus dikuadratkan terlebih dahulu karena koefisien NO₂ pada reaksi adalah 2.
+            Setelah itu, hasil kuadrat [NO₂] dibagi dengan konsentrasi [N₂O₄].
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Tabel Kerja Kc</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>[NO₂] M</th>
+              <th>[N₂O₄] M</th>
+              <th>Substitusi</th>
+              <th>Nilai Kc</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>0,0172</td>
+              <td>0,00220</td>
+              <td>(0,0172)² / 0,00220</td>
+              <td><b>0,1345</b></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0,0310</td>
+              <td>0,00715</td>
+              <td>(0,0310)² / 0,00715</td>
+              <td><b>0,1344</b></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0,0451</td>
+              <td>0,01520</td>
+              <td>(0,0451)² / 0,01520</td>
+              <td><b>0,1338</b></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0,0500</td>
+              <td>0,01875</td>
+              <td>(0,0500)² / 0,01875</td>
+              <td><b>0,1333</b></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>0,0620</td>
+              <td>0,02883</td>
+              <td>(0,0620)² / 0,02883</td>
+              <td><b>0,1334</b></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warning">
+          <h3>Catatan penting untuk guru</h3>
+          <p>
+            Nilai pada tabel sekitar 0,133 sampai 0,135. Jadi kesimpulan yang benar adalah <b>mendekati konstan</b>,
+            bukan “sama persis”. Selisih kecil dapat terjadi karena pembulatan angka pada data.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Langkah 4 — Validasi Hipotesis</h2>
+
+        <div class="answer">
+          <h3>Pilihan yang benar</h3>
+          <p>
+            <span class="formula">Nilai Kc tiap percobaan mendekati konstan.</span>
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Pembahasan jelas</div>
+          <p>
+            Berdasarkan hasil perhitungan, nilai Kc dari setiap percobaan berada pada kisaran yang hampir sama,
+            yaitu sekitar 0,134. Nilainya tidak sama persis karena adanya pembulatan data, tetapi pola yang muncul
+            menunjukkan bahwa pada suhu yang sama, nilai Kc cenderung tetap. Hal ini mendukung konsep bahwa
+            Kc adalah tetapan kesetimbangan pada suhu tertentu.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>Contoh jawaban alasan siswa yang benar</h3>
+          <p>
+            Nilai Kc dari beberapa percobaan mendekati konstan, yaitu sekitar 0,134. Meskipun tidak sama persis,
+            perbedaannya kecil sehingga dapat disimpulkan bahwa pada suhu yang sama, perbandingan [NO₂]²/[N₂O₄]
+            bernilai hampir tetap. Hal ini membuktikan bahwa Kc merupakan tetapan kesetimbangan.
+          </p>
+        </div>
+
+        <div class="wrong">
+          <h3>Jawaban yang perlu diluruskan</h3>
+          <ul>
+            <li>“Nilai Kc semua percobaan sama persis” kurang tepat karena data tidak benar-benar identik.</li>
+            <li>“Nilai Kc tidak memiliki pola” salah karena hasil perhitungan jelas mendekati nilai yang sama.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Langkah 5 — Penguatan Konsep Kp</h2>
+
+        <div class="grid cols-2">
+          <div class="answer">
+            <h3>Kc</h3>
+            <p>
+              <span class="formula">K<sub>c</sub> = [NO₂]<sup>2</sup> / [N₂O₄]</span>
+            </p>
+            <p>
+              Kc digunakan jika data kesetimbangan dinyatakan dalam <b>konsentrasi molar</b>.
+            </p>
+          </div>
+
+          <div class="answer">
+            <h3>Kp</h3>
+            <p>
+              <span class="formula">K<sub>p</sub> = (P<sub>NO₂</sub>)<sup>2</sup> / P<sub>N₂O₄</sub></span>
+            </p>
+            <p>
+              Kp digunakan jika data kesetimbangan dinyatakan dalam <b>tekanan parsial gas</b>.
+            </p>
+          </div>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Hubungan Kc dan Kp</div>
+          <p>
+            Untuk reaksi gas, hubungan Kc dan Kp ditulis:
+          </p>
+          <p>
+            <span class="formula">K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></span>
+          </p>
+          <p>
+            Dengan Δn = jumlah koefisien gas produk − jumlah koefisien gas reaktan.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>Untuk reaksi N₂O₄(g) ⇌ 2NO₂(g)</h3>
+          <p>
+            Jumlah koefisien gas produk = 2.
+            Jumlah koefisien gas reaktan = 1.
+          </p>
+          <p>
+            <span class="formula">Δn = 2 − 1 = 1</span>
+          </p>
+          <p>
+            Maka:
+          </p>
+          <p>
+            <span class="formula">K<sub>p</sub> = K<sub>c</sub>(RT)<sup>1</sup></span>
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Cek Pemahaman Kc dan Kp</h2>
+
+        <div class="answer">
+          <h3>Pilihan yang benar</h3>
+          <p>
+            <span class="formula">Kc berdasarkan konsentrasi, sedangkan Kp berdasarkan tekanan parsial gas.</span>
+          </p>
+        </div>
+
+        <div class="wrong">
+          <h3>Pilihan yang salah</h3>
+          <ul>
+            <li><b>Kc dan Kp selalu memiliki nilai yang sama</b> → salah, karena nilainya dipengaruhi hubungan Kp = Kc(RT)<sup>Δn</sup>.</li>
+            <li><b>Kp digunakan untuk zat padat dan cair murni</b> → salah, karena Kp digunakan untuk tekanan parsial gas.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Standar Penilaian Guru</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Siswa menulis Kc dengan benar, memahami pangkat dari koefisien, menghitung Kc mendekati 0,134,
+              memilih bahwa Kc mendekati konstan, dan membedakan Kc dengan Kp secara tepat.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Siswa dapat menghitung sebagian besar nilai Kc dan memahami bahwa nilainya hampir tetap,
+              tetapi masih kurang jelas dalam menjelaskan hubungan Kc dan Kp.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Siswa masih terbalik menulis rumus Kc, tidak menguadratkan NO₂, atau memilih bahwa nilai Kc tidak memiliki pola.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB23</h2>
+
+        <div class="answer">
+          <p>
+            Untuk reaksi <b>N₂O₄(g) ⇌ 2NO₂(g)</b>, bentuk Kc yang benar adalah
+            <b>K<sub>c</sub> = [NO₂]<sup>2</sup> / [N₂O₄]</b>.
+            Hasil perhitungan pada beberapa percobaan menunjukkan nilai Kc sekitar <b>0,134</b>,
+            sehingga dapat disimpulkan bahwa nilai Kc <b>mendekati konstan</b> pada suhu tertentu.
+            Kc digunakan untuk konsentrasi, sedangkan Kp digunakan untuk tekanan parsial gas.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keys22.html">⬅ Kunci SB22</a>
+          <div>
+            <a class="btn blue" href="datasb2.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys24.html">Lanjut Kunci SB24 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

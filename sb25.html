@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kuis Bab 2 • Kc dan Kp</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --red:#ff6b8a;
+      --yellow:#ffe082;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.50), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px; color:var(--text);}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1080px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.05;
+      font-size:clamp(30px,4.2vw,52px);
+      font-weight:950;
+      letter-spacing:-.03em;
+      color:var(--text);
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:900px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em; color:var(--text);}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .identity-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    @media (max-width:780px){.identity-grid{grid-template-columns:1fr;}}
+    .field{display:grid; gap:6px;}
+    .label{
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.82);
+      font-weight:850;
+    }
+    .input{
+      width:100%;
+      border-radius:14px;
+      padding:12px 13px;
+      color:#111;
+      background:#fff;
+      border:2px solid rgba(124,77,255,.35);
+      outline:none;
+      font-weight:700;
+    }
+    .input:focus{box-shadow:0 0 0 4px rgba(124,77,255,.18);}
+
+    .quiz-form{display:grid; gap:14px;}
+
+    /* HANYA KOTAK SOAL YANG PUTIH */
+    .question{
+      padding:16px;
+      border-radius:22px;
+      background:#ffffff;
+      border:2px solid rgba(124,77,255,.28);
+      box-shadow:0 14px 36px rgba(0,0,0,.20), 0 0 0 5px rgba(124,77,255,.07);
+      margin-top:14px;
+    }
+    .question-head{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:10px;
+    }
+    .q-num{
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      font-weight:950;
+      color:#ffffff;
+      background:linear-gradient(135deg, rgba(255,79,216,.95), rgba(124,77,255,.85));
+      box-shadow:0 10px 28px rgba(255,79,216,.18);
+    }
+    .q-title{
+      margin:0;
+      line-height:1.65;
+      font-weight:850;
+      color:#111827;
+    }
+    .equation{
+      margin:10px 0;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#f8fafc;
+      border:1px solid #d8e0ec;
+      color:#111827;
+      font-weight:900;
+      text-align:center;
+      line-height:1.6;
+    }
+    .options{display:grid; gap:10px; margin-top:12px;}
+    .option{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:11px 12px;
+      border-radius:16px;
+      border:1px solid #d8e0ec;
+      background:#ffffff;
+      color:#111827;
+      cursor:pointer;
+      transition:transform .12s ease, border-color .12s ease, background .12s ease;
+      line-height:1.55;
+      font-weight:650;
+    }
+    .option:hover{transform:translateY(-1px); border-color:#a78bfa; background:#f5f3ff;}
+    .option input{margin-top:5px; accent-color:#7c4dff;}
+    .option.correct{border-color:#16a34a; background:#dcfce7;}
+    .option.wrong{border-color:#dc2626; background:#fee2e2;}
+
+    .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; justify-content:flex-end;}
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:12px 16px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38)); box-shadow:0 12px 38px rgba(255,79,216,.13);}
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10);}
+    button:disabled{opacity:.55; cursor:not-allowed; transform:none;}
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      padding:16px;
+      border-radius:20px;
+      background:#fff;
+      color:#171717;
+      border:2px solid rgba(124,77,255,.34);
+      box-shadow:0 14px 46px rgba(0,0,0,.28), 0 0 0 6px rgba(124,77,255,.08);
+      line-height:1.7;
+    }
+    .result-box.show{display:block;}
+    .result-box strong{color:#6f24d9;}
+    .note-box{
+      margin-top:12px;
+      padding:13px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,224,130,.28);
+      background:rgba(255,224,130,.07);
+      color:rgba(255,255,255,.78);
+      line-height:1.65;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <div class="brand-title">Kuis Bab 2</div>
+        <div class="brand-sub">Tetapan Kesetimbangan Kc dan Kp</div>
+      </div>
+    </div>
+    <a class="btn" href="h1.html">⬅ Kembali</a>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Evaluate • Kuis Interaktif</span></div>
+
+      <section class="hero">
+        <h1 class="title">🧪 Kuis Interaktif <span class="accent">Kc dan Kp</span></h1>
+        <p class="subtitle">
+          Jawablah semua soal pilihan ganda berikut. Setelah menekan tombol <b>Cek Nilai</b>, sistem akan menampilkan skor.
+          Setelah itu, tekan <b>Next</b> agar hasil kuis terkirim melalui email.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>👤 Identitas Peserta Didik</h2>
+          <div class="identity-grid">
+            <div class="field">
+              <label class="label" for="namaSiswa">Nama Lengkap</label>
+              <input class="input" id="namaSiswa" name="namaSiswa" type="text" placeholder="Tulis nama lengkap" required>
+            </div>
+            <div class="field">
+              <label class="label" for="kelasSiswa">Kelas</label>
+              <input class="input" id="kelasSiswa" name="kelasSiswa" type="text" placeholder="Contoh: XI IPA 1" required>
+            </div>
+            <div class="field">
+              <label class="label" for="kelompokSiswa">Kelompok</label>
+              <input class="input" id="kelompokSiswa" name="kelompokSiswa" type="text" placeholder="Contoh: Kelompok 1" required>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <form
+        id="quizForm"
+        class="quiz-form"
+        action="https://formsubmit.co/EMAIL_GURU@gmail.com"
+        method="POST">
+
+        <input type="hidden" name="_subject" value="Hasil Kuis Bab 2 - Kc dan Kp">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="Nama" id="emailNama">
+        <input type="hidden" name="Kelas" id="emailKelas">
+        <input type="hidden" name="Kelompok" id="emailKelompok">
+        <input type="hidden" name="Skor" id="emailSkor">
+        <input type="hidden" name="Nilai" id="emailNilai">
+        <input type="hidden" name="Detail Jawaban" id="emailDetail">
+
+        <section class="card">
+          <div class="card-inner">
+            <h2>📘 SOAL BAB 2</h2>
+
+            <div class="question" data-answer="C">
+              <div class="question-head">
+                <div class="q-num">1</div>
+                <p class="q-title">Tetapan kesetimbangan dapat dinyatakan dalam dua bentuk, yaitu Kc dan Kp. Perbedaan utama antara Kc dan Kp terletak pada ....</p>
+              </div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q1" value="A" required> A. Jenis reaksi yang berlangsung cepat atau lambat</label>
+                <label class="option"><input type="radio" name="q1" value="B"> B. Zat yang bertindak sebagai katalis dalam reaksi</label>
+                <label class="option"><input type="radio" name="q1" value="C"> C. Dasar perhitungan yang digunakan, yaitu konsentrasi atau tekanan parsial</label>
+                <label class="option"><input type="radio" name="q1" value="D"> D. Warna zat sebelum dan sesudah reaksi</label>
+                <label class="option"><input type="radio" name="q1" value="E"> E. Jumlah zat yang digunakan pada awal reaksi</label>
+              </div>
+            </div>
+
+            <div class="question" data-answer="E">
+              <div class="question-head">
+                <div class="q-num">2</div>
+                <p class="q-title">Peruraian soda kue atau natrium bikarbonat berlangsung menurut reaksi berikut. Tetapan kesetimbangan Kc yang benar untuk reaksi tersebut adalah ....</p>
+              </div>
+              <div class="equation">2NaHCO₃(s) ⇌ Na₂CO₃(s) + CO₂(g) + H₂O(l)</div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q2" value="A" required> A. Kc = [Na₂CO₃][CO₂][H₂O] / [NaHCO₃]²</label>
+                <label class="option"><input type="radio" name="q2" value="B"> B. Kc = [CO₂][H₂O] / [NaHCO₃]²</label>
+                <label class="option"><input type="radio" name="q2" value="C"> C. Kc = [Na₂CO₃][CO₂] / [NaHCO₃]²</label>
+                <label class="option"><input type="radio" name="q2" value="D"> D. Kc = [CO₂][H₂O]</label>
+                <label class="option"><input type="radio" name="q2" value="E"> E. Kc = [CO₂]</label>
+              </div>
+            </div>
+
+            <div class="question" data-answer="E">
+              <div class="question-head">
+                <div class="q-num">3</div>
+                <p class="q-title">Pada reaksi kesetimbangan berikut, hubungan antara Kp dan Kc yang benar adalah ....</p>
+              </div>
+              <div class="equation">PCl₃(g) + Cl₂(g) ⇌ PCl₅(g)</div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q3" value="A" required> A. Kp = 3Kc</label>
+                <label class="option"><input type="radio" name="q3" value="B"> B. Kp = Kc(RT)</label>
+                <label class="option"><input type="radio" name="q3" value="C"> C. Kp = Kc(RT)²</label>
+                <label class="option"><input type="radio" name="q3" value="D"> D. Kp = (Kc)⁻¹(RT)</label>
+                <label class="option"><input type="radio" name="q3" value="E"> E. Kp = Kc(RT)⁻¹</label>
+              </div>
+            </div>
+
+            <div class="question" data-answer="A">
+              <div class="question-head">
+                <div class="q-num">4</div>
+                <p class="q-title">Di dalam ruang tertutup dipanaskan NH₄Cl padat hingga terurai membentuk kesetimbangan berikut. Apabila pada saat setimbang tekanan total ruangan adalah 2 atm, maka nilai Kp untuk kesetimbangan tersebut adalah ....</p>
+              </div>
+              <div class="equation">NH₄Cl(s) ⇌ NH₃(g) + HCl(g)</div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q4" value="A" required> A. 1</label>
+                <label class="option"><input type="radio" name="q4" value="B"> B. 2</label>
+                <label class="option"><input type="radio" name="q4" value="C"> C. 4</label>
+                <label class="option"><input type="radio" name="q4" value="D"> D. 8</label>
+                <label class="option"><input type="radio" name="q4" value="E"> E. 10</label>
+              </div>
+            </div>
+
+            <div class="question" data-answer="C">
+              <div class="question-head">
+                <div class="q-num">5</div>
+                <p class="q-title">Suatu reaksi A(g) + 2B(g) ⇌ 2C(g) mencapai kesetimbangan dengan tekanan total 2 atm. Jika pada kesetimbangan jumlah mol A : B : C = 2 : 1 : 2, maka harga Kp adalah ....</p>
+              </div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q5" value="A" required> A. 1</label>
+                <label class="option"><input type="radio" name="q5" value="B"> B. 4</label>
+                <label class="option"><input type="radio" name="q5" value="C"> C. 5</label>
+                <label class="option"><input type="radio" name="q5" value="D"> D. 8</label>
+                <label class="option"><input type="radio" name="q5" value="E"> E. 9</label>
+              </div>
+            </div>
+
+            <div class="question" data-answer="D">
+              <div class="question-head">
+                <div class="q-num">6</div>
+                <p class="q-title">Dalam bejana bervolume 2 L terdapat kesetimbangan reaksi berikut. Pada keadaan setimbang terdapat 2 mol N₂, 4 mol H₂, dan 8 mol NH₃. Harga tetapan kesetimbangan reaksi tersebut adalah ....</p>
+              </div>
+              <div class="equation">N₂(g) + 3H₂(g) ⇌ 2NH₃(g)</div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q6" value="A" required> A. 0,03</label>
+                <label class="option"><input type="radio" name="q6" value="B"> B. 0,5</label>
+                <label class="option"><input type="radio" name="q6" value="C"> C. 1</label>
+                <label class="option"><input type="radio" name="q6" value="D"> D. 2</label>
+                <label class="option"><input type="radio" name="q6" value="E"> E. 8</label>
+              </div>
+            </div>
+
+            <div class="question" data-answer="B">
+              <div class="question-head">
+                <div class="q-num">7</div>
+                <p class="q-title">K₁ dan K₂ adalah tetapan kesetimbangan dari reaksi-reaksi berikut. Tetapan kesetimbangan untuk reaksi target adalah ....</p>
+              </div>
+              <div class="equation">
+                2NO(g) ⇌ N₂(g) + O₂(g) &nbsp;&nbsp; K₁<br>
+                N₂O(g) ⇌ N₂(g) + 1/2O₂(g) &nbsp;&nbsp; K₂<br><br>
+                Reaksi target: N₂O(g) + 1/2O₂(g) ⇌ 2NO(g)
+              </div>
+              <div class="options">
+                <label class="option"><input type="radio" name="q7" value="A" required> A. K₁/K₂</label>
+                <label class="option"><input type="radio" name="q7" value="B"> B. K₂/K₁</label>
+                <label class="option"><input type="radio" name="q7" value="C"> C. K₂/K₁²</label>
+                <label class="option"><input type="radio" name="q7" value="D"> D. K₁ × K₂</label>
+                <label class="option"><input type="radio" name="q7" value="E"> E. K₁² × K₂</label>
+              </div>
+            </div>
+
+            <div id="resultBox" class="result-box"></div>
+
+            <div class="actions">
+              <button class="btn" type="button" onclick="resetQuiz()">Reset</button>
+              <button class="btn-primary" type="button" onclick="cekNilai()">Cek Nilai</button>
+              <a
+  class="btn-primary"
+  id="submitBtn"
+  href="sb26.html"
+  style="opacity:.55; pointer-events:none;"
+>
+  Next
+</a>
+            </div>
+          </div>
+        </section>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    const kunci = {
+      q1:"C",
+      q2:"E",
+      q3:"E",
+      q4:"A",
+      q5:"C",
+      q6:"D",
+      q7:"B"
+    };
+
+    const pembahasan = {
+      q1:"Kc berdasarkan konsentrasi, sedangkan Kp berdasarkan tekanan parsial gas.",
+      q2:"Zat padat dan cair murni tidak masuk dalam rumus Kc, sehingga hanya CO₂(g) yang ditulis.",
+      q3:"Δn = 1 - 2 = -1, sehingga Kp = Kc(RT)⁻¹.",
+      q4:"Tekanan total 2 atm dibagi sama untuk NH₃ dan HCl, sehingga masing-masing 1 atm. Kp = 1 × 1 = 1.",
+      q5:"Perbandingan mol A:B:C = 2:1:2, tekanan total 2 atm. PA=0,8; PB=0,4; PC=0,8. Kp = PC²/(PA×PB²)=5.",
+      q6:"[N₂]=1 M, [H₂]=2 M, [NH₃]=4 M. Kc = [NH₃]²/([N₂][H₂]³)=16/8=2.",
+      q7:"Reaksi target diperoleh dari K₂ ditambah kebalikan K₁, sehingga K = K₂ × 1/K₁ = K₂/K₁."
+    };
+
+    let sudahDinilai = false;
+
+    function getIdentitasValid(){
+      const nama = document.getElementById("namaSiswa").value.trim();
+      const kelas = document.getElementById("kelasSiswa").value.trim();
+      const kelompok = document.getElementById("kelompokSiswa").value.trim();
+
+      if(!nama || !kelas || !kelompok){
+        alert("Lengkapi nama, kelas, dan kelompok terlebih dahulu.");
+        return false;
+      }
+      return true;
+    }
+
+    function cekNilai(){
+      if(!getIdentitasValid()) return;
+
+      const form = document.getElementById("quizForm");
+      if(!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+
+      let skor = 0;
+      let detail = [];
+
+      document.querySelectorAll(".option").forEach((opt) => {
+        opt.classList.remove("correct", "wrong");
+      });
+
+      Object.keys(kunci).forEach((name, index) => {
+        const jawabanBenar = kunci[name];
+        const selected = document.querySelector(`input[name="${name}"]:checked`);
+        const selectedValue = selected ? selected.value : "-";
+
+        const semuaOpsi = document.querySelectorAll(`input[name="${name}"]`);
+        semuaOpsi.forEach((input) => {
+          const label = input.closest(".option");
+          if(input.value === jawabanBenar){
+            label.classList.add("correct");
+          }
+          if(input.checked && input.value !== jawabanBenar){
+            label.classList.add("wrong");
+          }
+        });
+
+        if(selectedValue === jawabanBenar){
+          skor++;
+        }
+
+        detail.push(
+          `Soal ${index + 1}: Jawaban siswa ${selectedValue}, kunci ${jawabanBenar}. ${selectedValue === jawabanBenar ? "Benar" : "Salah"}. ${pembahasan[name]}`
+        );
+      });
+
+      const total = Object.keys(kunci).length;
+      const nilai = Math.round((skor / total) * 100);
+      const resultBox = document.getElementById("resultBox");
+
+      const detailObj = Object.keys(kunci).map((name, index) => {
+  const selected = document.querySelector(`input[name="${name}"]:checked`);
+  const selectedValue = selected ? selected.value : "-";
+  const jawabanBenar = kunci[name];
+
+  return {
+    nomor: index + 1,
+    jawabanSiswa: selectedValue,
+    kunciJawaban: jawabanBenar,
+    benar: selectedValue === jawabanBenar,
+    pembahasan: pembahasan[name]
+  };
+});
+
+simpanKeDataSB2({
+  halaman: "sb25",
+  judul: "Kuis Interaktif Kc dan Kp",
+  nama: document.getElementById("namaSiswa").value.trim(),
+  kelas: document.getElementById("kelasSiswa").value.trim(),
+  kelompok: document.getElementById("kelompokSiswa").value.trim(),
+  skor: nilai,
+  status: "kuis dinilai",
+  ringkasan: `Skor ${skor} dari ${total}. Nilai ${nilai}.`,
+  jawaban: {
+    skorBenar: skor,
+    totalSoal: total,
+    nilai: nilai,
+    detailJawaban: detailObj
+  },
+  kunci: kunci,
+  pembahasan: pembahasan
+});
+      resultBox.innerHTML = `
+        <h3>Hasil Kuis</h3>
+        <p><strong>Skor:</strong> ${skor} dari ${total}</p>
+        <p><strong>Nilai:</strong> ${nilai}</p>
+        <p>Periksa warna hijau untuk jawaban benar dan warna merah untuk jawaban yang perlu diperbaiki.</p>
+        <p>Setelah yakin, klik <strong>Kirim Hasil ke Guru</strong>.</p>
+      `;
+      resultBox.classList.add("show");
+
+      document.getElementById("emailNama").value = document.getElementById("namaSiswa").value.trim();
+      document.getElementById("emailKelas").value = document.getElementById("kelasSiswa").value.trim();
+      document.getElementById("emailKelompok").value = document.getElementById("kelompokSiswa").value.trim();
+      document.getElementById("emailSkor").value = `${skor} dari ${total}`;
+      document.getElementById("emailNilai").value = nilai;
+      document.getElementById("emailDetail").value = detail.join("\n\n");
+
+      const submitBtn = document.getElementById("submitBtn");
+submitBtn.style.opacity = "1";
+submitBtn.style.pointerEvents = "auto";
+      sudahDinilai = true;
+
+      resultBox.scrollIntoView({behavior:"smooth", block:"center"});
+    }
+
+    function resetQuiz(){
+      document.getElementById("quizForm").reset();
+      document.querySelectorAll(".option").forEach((opt) => opt.classList.remove("correct", "wrong"));
+      document.getElementById("resultBox").classList.remove("show");
+      document.getElementById("resultBox").innerHTML = "";
+      const submitBtn = document.getElementById("submitBtn");
+submitBtn.style.opacity = ".55";
+submitBtn.style.pointerEvents = "none";
+      sudahDinilai = false;
+    }
+
+    document.getElementById("quizForm").addEventListener("submit", function(e){
+      if(!sudahDinilai){
+        e.preventDefault();
+        alert("Klik tombol Cek Nilai terlebih dahulu sebelum mengirim hasil ke guru.");
+        return;
+      }
+
+      if(!getIdentitasValid()){
+        e.preventDefault();
+        return;
+      }
+    });
+  </script>
+  <script>
+const SB2_STORAGE_KEY = "dataAdminGuruSB2";
+
+function ambilIdentitasSB2(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB2(payload){
+  const identitas = ambilIdentitasSB2(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB2_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB2_STORAGE_KEY, JSON.stringify(dataLama));
+
+  return dataBaru;
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 2,
+    pageKey: "sb25",
+    pageTitle: "Sub Bab 2 — Kuis Kc dan Kp"
+  });
+});
+</script>
+</body>
+</html>

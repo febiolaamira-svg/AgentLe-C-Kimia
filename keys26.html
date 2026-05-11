@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB26 — Refleksi Sub Bab 2</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 2</b>
+          <span>keys26.html • Refleksi Kc dan Kp</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb2.html">📊 Data Sub Bab 2</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan panduan penilaian refleksi Sub Bab 2. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Kunci Konsep yang Harus Muncul dalam Refleksi</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Konsep</th>
+              <th>Kunci Jawaban Valid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Pengertian Kc</td>
+              <td>Kc adalah tetapan kesetimbangan yang dinyatakan berdasarkan konsentrasi zat pada keadaan setimbang.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Rumus umum Kc</td>
+              <td>Produk di pembilang, reaktan di penyebut, dan pangkat mengikuti koefisien reaksi setara.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Pengertian Kp</td>
+              <td>Kp adalah tetapan kesetimbangan yang dinyatakan berdasarkan tekanan parsial gas.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Perbedaan Kc dan Kp</td>
+              <td>Kc menggunakan konsentrasi molar, sedangkan Kp menggunakan tekanan parsial gas.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Hubungan Kc dan Kp</td>
+              <td><b>K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></b></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Makna Δn</td>
+              <td>Δn adalah jumlah koefisien gas produk dikurangi jumlah koefisien gas reaktan.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Zat yang tidak masuk Kc</td>
+              <td>Padat murni dan cair murni tidak dimasukkan ke rumus Kc karena konsentrasinya dianggap tetap.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Refleksi Siswa yang Sangat Baik</h2>
+
+        <div class="answer">
+          <h3>Contoh jawaban ideal</h3>
+          <p>
+            Setelah mempelajari Sub Bab 2, saya memahami bahwa Kc adalah tetapan kesetimbangan yang dihitung
+            berdasarkan konsentrasi zat pada keadaan setimbang. Dalam menulis rumus Kc, produk diletakkan di pembilang,
+            reaktan di penyebut, dan pangkat setiap zat mengikuti koefisien reaksi.
+          </p>
+          <p>
+            Saya juga memahami bahwa Kp digunakan untuk reaksi gas karena Kp dihitung berdasarkan tekanan parsial gas.
+            Perbedaan utama antara Kc dan Kp adalah Kc menggunakan konsentrasi, sedangkan Kp menggunakan tekanan parsial.
+            Hubungan keduanya ditulis sebagai Kp = Kc(RT)<sup>Δn</sup>, dengan Δn merupakan selisih jumlah koefisien gas produk dan reaktan.
+          </p>
+          <p>
+            Bagian yang masih perlu saya latih adalah menghitung nilai Kp dari tekanan parsial dan menentukan Δn dengan benar.
+            Strategi saya berikutnya adalah lebih teliti membaca fase zat dan koefisien reaksi sebelum menulis rumus Kc atau Kp.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Refleksi Cukup</h2>
+
+        <div class="warning">
+          <h3>Contoh jawaban cukup</h3>
+          <p>
+            Saya sudah memahami bahwa Kc berhubungan dengan konsentrasi dan Kp berhubungan dengan tekanan gas.
+            Saya juga tahu bahwa rumus Kc harus memakai produk dan reaktan. Namun saya masih bingung saat menghitung hubungan Kp dan Kc.
+          </p>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Penilaian guru</div>
+          <p>
+            Jawaban ini sudah menunjukkan pemahaman dasar, tetapi belum lengkap karena belum menjelaskan rumus umum,
+            pangkat koefisien, Δn, dan contoh penerapannya.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Refleksi yang Perlu Diperbaiki</h2>
+
+        <div class="wrong">
+          <h3>Contoh jawaban kurang kuat</h3>
+          <p>
+            Saya sudah paham materi Kc dan Kp. Materinya mudah dan saya senang belajar.
+          </p>
+        </div>
+
+        <div class="warning">
+          <h3>Arahan perbaikan</h3>
+          <p>
+            Refleksi tersebut belum cukup karena tidak menyebut konsep kimia. Guru dapat meminta siswa menambahkan
+            penjelasan tentang pengertian Kc, Kp, perbedaan keduanya, atau bagian mana yang masih sulit.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rubrik Penilaian Refleksi</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Siswa menjelaskan Kc, Kp, perbedaan keduanya, hubungan Kp = Kc(RT)<sup>Δn</sup>,
+              serta menyebut bagian yang sudah dipahami dan strategi memperbaiki kesulitan.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Siswa menyebut perbedaan Kc dan Kp, tetapi penjelasan tentang rumus, Δn,
+              atau contoh penerapan masih kurang lengkap.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Siswa hanya menulis perasaan umum tanpa menyebut konsep Kc, Kp, hubungan keduanya,
+              atau kesulitan belajar yang spesifik.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Panduan Koreksi Google Form</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Pertanyaan Refleksi</th>
+              <th>Jawaban yang Diharapkan</th>
+              <th>Catatan Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Apa yang kamu pahami tentang Kc?</td>
+              <td>Kc berdasarkan konsentrasi zat pada keadaan setimbang.</td>
+              <td>Lebih baik jika siswa menyebut produk, reaktan, dan pangkat koefisien.</td>
+            </tr>
+            <tr>
+              <td>Apa yang kamu pahami tentang Kp?</td>
+              <td>Kp berdasarkan tekanan parsial gas.</td>
+              <td>Pastikan siswa tidak menyebut Kp untuk zat padat atau cair murni.</td>
+            </tr>
+            <tr>
+              <td>Apa perbedaan Kc dan Kp?</td>
+              <td>Kc memakai konsentrasi, Kp memakai tekanan parsial gas.</td>
+              <td>Jawaban ini adalah inti pembeda yang wajib muncul.</td>
+            </tr>
+            <tr>
+              <td>Apa hubungan Kc dan Kp?</td>
+              <td>Kp = Kc(RT)<sup>Δn</sup></td>
+              <td>Nilai Δn harus dihitung dari koefisien gas produk dikurangi reaktan.</td>
+            </tr>
+            <tr>
+              <td>Bagian mana yang masih sulit?</td>
+              <td>Siswa menyebut kesulitan spesifik, misalnya Δn, tekanan parsial, atau zat yang masuk Kc.</td>
+              <td>Jawaban jujur dan spesifik lebih baik daripada hanya menulis “tidak ada”.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB26</h2>
+
+        <div class="answer">
+          <p>
+            Refleksi Sub Bab 2 dianggap baik jika siswa mampu menjelaskan bahwa Kc berdasarkan konsentrasi,
+            Kp berdasarkan tekanan parsial gas, dan hubungan keduanya adalah
+            <b>K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></b>.
+            Siswa juga perlu mampu menyebut kesulitan belajar secara spesifik serta strategi untuk memperbaikinya.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keys25.html">⬅ Kunci SB25</a>
+          <div>
+            <a class="btn blue" href="datasb2.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="h1.html">Kembali ke Peta Eksplorasi ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

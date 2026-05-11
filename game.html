@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 4 • Game Analisis Penerapan Kesetimbangan</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1120px,100%); display:grid; gap:18px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{margin:12px 0 0; max-width:980px; color:var(--muted); line-height:1.75; font-size:15px;}
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .board-card{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.30);
+      border-radius:26px;
+      padding:22px;
+      box-shadow:var(--shadow2);
+      display:grid;
+      gap:18px;
+    }
+    .board-title{text-align:center; color:#111827; margin:0; font-size:clamp(26px,3vw,38px);}
+    .board-intro{
+      text-align:center;
+      color:#374151;
+      max-width:900px;
+      margin:0 auto;
+      font-size:16px;
+      line-height:1.7;
+      font-weight:650;
+    }
+
+    .case-grid{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:14px;
+      align-items:stretch;
+    }
+    @media(max-width:760px){.case-grid{grid-template-columns:1fr;}}
+
+    .case-card{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:12px;
+      padding:16px;
+      border-radius:20px;
+      background:#f9fafb;
+      border:2px solid #c7d2fe;
+      min-height:160px;
+    }
+    .case-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background:linear-gradient(135deg,#ff4fd8,#7c4dff);
+      font-weight:950;
+      font-size:18px;
+      box-shadow:0 10px 22px rgba(124,77,255,.18);
+    }
+    .case-card b{display:block; color:#312e81; font-size:17px; margin-bottom:6px;}
+    .case-card span{color:#374151; font-weight:700; line-height:1.6;}
+
+    .match-game{
+      margin-top:16px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(255,79,216,.35);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 14px 36px rgba(15,23,42,.15);
+    }
+    .match-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;}
+    .match-head h3{color:#111827; margin:0;}
+    .match-head p{color:#374151; margin:6px 0 0; line-height:1.6; font-weight:650; max-width:760px;}
+    .match-score{padding:10px 14px; border-radius:999px; background:linear-gradient(135deg,#ff4fd8,#7c4dff); color:#ffffff; font-weight:950; box-shadow:0 10px 24px rgba(124,77,255,.25);}
+
+    .match-board{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;}
+    @media(max-width:820px){.match-board{grid-template-columns:1fr;}}
+    .match-column{display:grid; gap:10px; align-content:start;}
+    .match-column h4{margin:0 0 2px; color:#312e81; font-size:15px; text-transform:uppercase; letter-spacing:.06em;}
+    .match-item{width:100%; border:2px solid #c7d2fe; border-radius:18px; background:#f9fafb; color:#111827; padding:14px; text-align:left; font-family:inherit; font-weight:850; line-height:1.62; cursor:pointer; transition:.15s ease;}
+    .match-item:hover{transform:translateY(-1px); background:#ffffff; border-color:#7c4dff;}
+    .match-item.selected{background:#eef2ff; border-color:#7c4dff; box-shadow:0 0 0 5px rgba(124,77,255,.12);}
+    .match-item.correct{background:#ecfdf5; border-color:#86efac; color:#166534;}
+    .match-item.wrong{background:#fff7ed; border-color:#fdba74; color:#9a3412;}
+    .match-result{display:none; margin-top:12px; padding:12px 14px; border-radius:16px; font-weight:850; line-height:1.6;}
+    .match-result.show{display:block;}
+    .match-result.good{background:#ecfdf5; border:1px solid #86efac; color:#166534;}
+    .match-result.warn{background:#fff7ed; border:1px solid #fdba74; color:#9a3412;}
+    .match-result.done{background:#eef2ff; border:1px solid #c7d2fe; color:#312e81;}
+    .footer-actions{display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A4</div>
+      <div>
+        <div class="brand-title">Sub Bab 4</div>
+        <div class="brand-sub">Game Penguatan Setelah Kesimpulan</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="subbab4-kesimpulan.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#game">Mulai Game</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Penguatan Konsep • Analisis Kasus</span></div>
+
+      <section class="hero">
+        <h1 class="title">🎮 Game <span class="accent">Detektif Kesetimbangan</span></h1>
+        <p class="subtitle">
+          Bukan sekadar mencocokkan kata kunci. Bacalah kasusnya, tentukan perubahan yang terjadi, lalu cocokkan dengan analisis konsep yang paling tepat.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <div class="board-card">
+            <h2 class="board-title">Petunjuk Kasus</h2>
+            <p class="board-intro">
+              Empat fenomena berikut sama-sama berkaitan dengan kesetimbangan kimia, tetapi gangguan dan respons sistemnya berbeda. Gunakan pemahaman tentang konsentrasi, tekanan, dan pergeseran kesetimbangan untuk memilih pasangan analisis yang benar.
+            </p>
+
+            <div class="case-grid">
+              <div class="case-card">
+                <div class="case-icon">🥤</div>
+                <div>
+                  <b>Kasus 1: Botol Soda Dibuka</b>
+                  <span>Botol minuman berkarbonasi awalnya tertutup rapat. Setelah tutup dibuka, muncul gelembung dan suara mendesis.</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-icon">🩸</div>
+                <div>
+                  <b>Kasus 2: Oksigen di Jaringan Tubuh</b>
+                  <span>Hemoglobin membawa O₂ dari paru-paru. Saat sampai di jaringan tubuh, O₂ dilepaskan untuk digunakan sel.</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-icon">🪨</div>
+                <div>
+                  <b>Kasus 3: Tetesan Air di Gua</b>
+                  <span>Air yang mengandung ion bikarbonat menetes di gua. Sebagian CO₂ lepas ke udara, lalu endapan CaCO₃ terbentuk perlahan.</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-icon">🌱</div>
+                <div>
+                  <b>Kasus 4: Asam pada Kompos</b>
+                  <span>Pada pengomposan, asam asetat dapat melepaskan H⁺. Namun ion H⁺ dan CH₃COO⁻ juga dapat bergabung kembali membentuk CH₃COOH.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="game">
+        <div class="card-inner">
+          <h2>🧩 Cocokkan Kasus dengan Analisis Konsep</h2>
+          <p class="muted">
+            Klik satu kasus di kolom kiri, lalu pilih analisis yang paling tepat di kolom kanan. Jawaban benar harus memuat hubungan antara gangguan dan respons sistem kesetimbangan.
+          </p>
+
+          <div class="match-game">
+            <div class="match-head">
+              <div>
+                <h3>Tantangan Analisis</h3>
+                <p>Setiap pasangan menuntut alasan konsep, bukan hanya mengenali nama fenomena.</p>
+              </div>
+              <div class="match-score" id="skorMatch">Skor: 0/4</div>
+            </div>
+
+            <div class="match-board">
+              <div class="match-column">
+                <h4>Kartu Kasus</h4>
+                <button class="match-item faktor" type="button" data-id="soda" onclick="pilihFaktor(this)">
+                  🥤 Botol soda dibuka dan CO₂ keluar sebagai gelembung.
+                </button>
+                <button class="match-item faktor" type="button" data-id="hemoglobin" onclick="pilihFaktor(this)">
+                  🩸 Hemoglobin melepaskan O₂ saat mencapai jaringan tubuh.
+                </button>
+                <button class="match-item faktor" type="button" data-id="stalaktit" onclick="pilihFaktor(this)">
+                  🪨 CO₂ lepas dari tetesan air gua dan CaCO₃ mengendap.
+                </button>
+                <button class="match-item faktor" type="button" data-id="kompos" onclick="pilihFaktor(this)">
+                  🌱 CH₃COOH pada kompos melepaskan H⁺ dan dapat terbentuk kembali.
+                </button>
+              </div>
+
+              <div class="match-column">
+                <h4>Kartu Analisis</h4>
+                <button class="match-item jawaban" type="button" data-id="stalaktit" onclick="pilihJawaban(this)">
+                  Berkurangnya CO₂ mengganggu sistem karbonat-bikarbonat, sehingga kesetimbangan bergeser ke arah pembentukan kembali CaCO₃(s).
+                </button>
+                <button class="match-item jawaban" type="button" data-id="kompos" onclick="pilihJawaban(this)">
+                  Sistem menunjukkan kesetimbangan asam-basa: CH₃COOH dapat terionisasi menjadi CH₃COO⁻ dan H⁺, tetapi ion-ionnya juga dapat bergabung kembali.
+                </button>
+                <button class="match-item jawaban" type="button" data-id="soda" onclick="pilihJawaban(this)">
+                  Penurunan tekanan gas CO₂ di atas larutan membuat CO₂ terlarut berkurang; sistem bergeser sehingga CO₂ keluar dari larutan.
+                </button>
+                <button class="match-item jawaban" type="button" data-id="hemoglobin" onclick="pilihJawaban(this)">
+                  Di jaringan tubuh, kadar O₂ lebih rendah sehingga kesetimbangan oksihemoglobin bergeser ke arah pelepasan O₂.
+                </button>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+              <button class="btn-primary" type="button" onclick="ulangGameMatch()">Ulangi Game</button>
+            </div>
+
+            <div id="hasilMatch" class="match-result"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="subbab4-kesimpulan.html">⬅ Kembali ke Kesimpulan</a>
+        <a class="btn-primary" href="sb46.html" onclick="return cekSebelumLanjut()">Luaran Pembelajaran ➜</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+const SB4_STORAGE_KEY = "dataAdminGuruSB4";
+
+function ambilIdentitasSB4(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem("kelompokSubBab4") || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB4(payload){
+  const identitas = ambilIdentitasSB4(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB4_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB4_STORAGE_KEY, JSON.stringify(dataLama));
+
+  return dataBaru;
+}
+</script>
+
+  <script>
+    let faktorTerpilih = null;
+    let skorMatch = 0;
+    const totalMatch = 4;
+    let pasanganBenar = new Set();
+
+    function pilihFaktor(button){
+      if(button.classList.contains('correct')) return;
+      document.querySelectorAll('.faktor').forEach((item) => item.classList.remove('selected'));
+      button.classList.add('selected');
+      faktorTerpilih = button;
+      tampilkanPesanMatch('Pilih kartu analisis yang paling tepat di kolom kanan.', 'done');
+    }
+
+    function pilihJawaban(button){
+      if(!faktorTerpilih){
+        tampilkanPesanMatch('Pilih kartu kasus di kolom kiri terlebih dahulu.', 'warn');
+        return;
+      }
+      if(button.classList.contains('correct')) return;
+
+      const idFaktor = faktorTerpilih.dataset.id;
+      const idJawaban = button.dataset.id;
+
+      if(idFaktor === idJawaban){
+        faktorTerpilih.classList.remove('selected');
+        faktorTerpilih.classList.add('correct');
+        button.classList.add('correct');
+        pasanganBenar.add(idFaktor);
+        skorMatch = pasanganBenar.size;
+        document.getElementById('skorMatch').innerHTML = `Skor: ${skorMatch}/${totalMatch}`;
+        faktorTerpilih = null;
+
+        if(skorMatch === totalMatch){
+          const dataGame = {
+  skor: skorMatch,
+  total: totalMatch,
+  nilai: Math.round((skorMatch / totalMatch) * 100),
+  waktuSimpan: new Date().toLocaleString("id-ID"),
+  pasanganBenar: Array.from(pasanganBenar)
+};
+
+localStorage.setItem("gameKesimpulanSubBab4", JSON.stringify(dataGame));
+
+simpanKeDataSB4({
+  halaman: "game",
+  judul: "Game Detektif Kesetimbangan",
+  skor: dataGame.nilai,
+  status: "game selesai",
+  ringkasan: `Game selesai dengan skor ${skorMatch}/${totalMatch}.`,
+  jawaban: dataGame,
+  kunci: {
+    soda: "Penurunan tekanan CO₂ membuat CO₂ keluar dari larutan.",
+    hemoglobin: "Kadar O₂ rendah di jaringan menggeser kesetimbangan ke arah pelepasan O₂.",
+    stalaktit: "Berkurangnya CO₂ mendorong pembentukan CaCO₃.",
+    kompos: "CH₃COOH membentuk kesetimbangan asam-basa dengan CH₃COO⁻ dan H⁺."
+  }
+});
+          tampilkanPesanMatch('🎉 Hebat! Semua kasus berhasil dianalisis dengan tepat. Kamu dapat lanjut ke halaman luaran pembelajaran.', 'done');
+        }else{
+          tampilkanPesanMatch('✅ Tepat! Analisis tersebut sesuai dengan gangguan dan respons sistem kesetimbangan.', 'good');
+        }
+      }else{
+        button.classList.add('wrong');
+        tampilkanPesanMatch('❌ Belum tepat. Periksa kembali gangguan yang terjadi pada kasus, lalu pilih respons sistem yang paling sesuai.', 'warn');
+        setTimeout(() => button.classList.remove('wrong'), 900);
+      }
+    }
+
+    function tampilkanPesanMatch(pesan, tipe){
+      const hasil = document.getElementById('hasilMatch');
+      hasil.className = `match-result show ${tipe}`;
+      hasil.innerHTML = pesan;
+    }
+
+    function ulangGameMatch(){
+      faktorTerpilih = null;
+      skorMatch = 0;
+      pasanganBenar.clear();
+      document.getElementById('skorMatch').innerHTML = `Skor: 0/${totalMatch}`;
+      document.querySelectorAll('.match-item').forEach((item) => item.classList.remove('selected', 'correct', 'wrong'));
+      localStorage.removeItem('gameKesimpulanSubBab4');
+      tampilkanPesanMatch('Game diulang. Cocokkan kembali setiap kasus dengan analisis yang tepat.', 'done');
+    }
+
+    function cekSebelumLanjut(){
+      if(!localStorage.getItem('kesimpulanSubBab4')){
+        return confirm('Kesimpulan akhir belum disimpan. Tetap lanjut ke luaran pembelajaran?');
+      }
+
+      if(!localStorage.getItem('gameKesimpulanSubBab4')){
+        return confirm('Game analisis belum diselesaikan. Tetap lanjut ke luaran pembelajaran?');
+      }
+
+      return true;
+    }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 4,
+    pageKey: "game",
+    pageTitle: "Sub Bab 4 — Game Detektif Kesetimbangan"
+  });
+});
+</script>
+</body>
+</html>

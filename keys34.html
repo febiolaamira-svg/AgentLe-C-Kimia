@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB34 — Menyajikan Hasil Karya</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .grid.cols-4 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 3</b>
+          <span>keys34.html • Menyajikan Hasil Karya</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb3.html">📊 Data Sub Bab 3</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan panduan penilaian SB34. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Kunci Tabel Ringkas Hasil Analisis</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Sistem / Perlakuan</th>
+              <th>Warna Awal</th>
+              <th>Warna Akhir</th>
+              <th>Arah Pergeseran</th>
+              <th>Alasan Ilmiah yang Benar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><b>Kobalt klorida + HCl</b></td>
+              <td>Merah muda / ungu campuran</td>
+              <td>Biru / lebih biru</td>
+              <td><b>Ke kanan</b></td>
+              <td>HCl menambah ion Cl<sup>-</sup>. Sistem mengurangi penambahan Cl<sup>-</sup> dengan bergeser ke kanan membentuk lebih banyak CoCl₄<sup>2-</sup> yang berwarna biru.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><b>Kobalt klorida + AgNO₃</b></td>
+              <td>Biru / ungu campuran</td>
+              <td>Merah muda / lebih merah muda</td>
+              <td><b>Ke kiri</b></td>
+              <td>Ag<sup>+</sup> dari AgNO₃ mengikat Cl<sup>-</sup> membentuk endapan AgCl(s). Karena Cl<sup>-</sup> bebas berkurang, sistem bergeser ke kiri.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><b>Kobalt klorida + perubahan suhu</b></td>
+              <td>Bergantung suhu awal</td>
+              <td>Pemanasan: biru. Pendinginan: merah muda.</td>
+              <td>Pemanasan ke kanan. Pendinginan ke kiri.</td>
+              <td>Pembentukan CoCl₄<sup>2-</sup> berwarna biru bersifat endoterm. Pemanasan menggeser ke kanan, sedangkan pendinginan menggeser ke kiri.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><b>Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺</b></td>
+              <td>Kuning pucat / jingga muda / merah muda lemah</td>
+              <td>Merah darah jika Fe³⁺ atau SCN⁻ ditambah; lebih pucat jika salah satu dikurangi.</td>
+              <td>Penambahan Fe³⁺ atau SCN⁻: ke kanan. Pengurangan Fe³⁺/SCN⁻: ke kiri.</td>
+              <td>FeSCN²⁺ berwarna merah darah. Jika Fe³⁺ atau SCN⁻ ditambah, sistem bergeser ke kanan membentuk lebih banyak FeSCN²⁺.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warning">
+          <h3>Catatan Guru</h3>
+          <p>
+            Warna awal siswa boleh berbeda, tergantung kondisi awal simulasi atau video. Yang paling penting adalah
+            arah pergeseran dan alasan ilmiahnya benar.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Sistem Kobalt Klorida</h2>
+
+        <div class="answer">
+          <h3>Persamaan reaksi</h3>
+          <p>
+            <span class="formula">Co(H₂O)₆<sup>2+</sup> + 4Cl<sup>-</sup> ⇌ CoCl₄<sup>2-</sup> + 6H₂O</span>
+          </p>
+          <ul>
+            <li>Spesies <b>Co(H₂O)₆<sup>2+</sup></b> berwarna merah muda.</li>
+            <li>Spesies <b>CoCl₄<sup>2-</sup></b> berwarna biru.</li>
+            <li>Jika sistem bergeser ke kanan, warna menjadi lebih biru.</li>
+            <li>Jika sistem bergeser ke kiri, warna menjadi lebih merah muda.</li>
+          </ul>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Pembahasan Singkat</div>
+          <p>
+            HCl menambah Cl<sup>-</sup> sehingga sistem bergeser ke kanan untuk mengonsumsi Cl<sup>-</sup>.
+            AgNO₃ mengurangi Cl<sup>-</sup> bebas karena membentuk AgCl(s), sehingga sistem bergeser ke kiri.
+            Pemanasan menggeser ke kanan karena pembentukan kompleks biru bersifat endoterm.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Sistem FeCl₃ + KSCN</h2>
+
+        <div class="answer">
+          <h3>Persamaan reaksi</h3>
+          <p>
+            <span class="formula">Fe<sup>3+</sup> + SCN<sup>-</sup> ⇌ FeSCN<sup>2+</sup></span>
+          </p>
+          <ul>
+            <li><b>FeSCN<sup>2+</sup></b> berwarna merah darah.</li>
+            <li>Penambahan Fe<sup>3+</sup> membuat sistem bergeser ke kanan.</li>
+            <li>Penambahan SCN<sup>-</sup> membuat sistem bergeser ke kanan.</li>
+            <li>Pengurangan Fe<sup>3+</sup> atau SCN<sup>-</sup> membuat sistem bergeser ke kiri.</li>
+            <li>Jika bergeser ke kanan, warna merah darah semakin pekat.</li>
+            <li>Jika bergeser ke kiri, warna merah memudar.</li>
+          </ul>
+        </div>
+
+        <div class="concept">
+          <div class="tag">Hubungan dengan Sistem Kobalt</div>
+          <p>
+            Kedua sistem sama-sama menunjukkan Asas Le Chatelier. Ketika konsentrasi reaktan ditambah,
+            sistem bergeser ke arah produk. Ketika salah satu komponen dikurangi, sistem bergeser untuk mengganti
+            komponen yang berkurang.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Isi Infografis Mini</h2>
+
+        <p class="muted">
+          Infografis siswa tidak harus sama persis, tetapi harus memuat komponen penting berikut.
+        </p>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Komponen Infografis</th>
+              <th>Isi yang Benar</th>
+              <th>Catatan Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Judul</td>
+              <td>Contoh: Pergeseran Kesetimbangan pada Sistem Kobalt Klorida dan FeSCN²⁺.</td>
+              <td>Judul harus sesuai dengan topik Le Chatelier.</td>
+            </tr>
+            <tr>
+              <td>Reaksi kobalt klorida</td>
+              <td>Co(H₂O)₆²⁺ + 4Cl⁻ ⇌ CoCl₄²⁻ + 6H₂O.</td>
+              <td>Warna merah muda dan biru sebaiknya dicantumkan.</td>
+            </tr>
+            <tr>
+              <td>Perlakuan HCl</td>
+              <td>HCl menambah Cl⁻, bergeser ke kanan, warna menjadi biru.</td>
+              <td>Alasan harus menyebut ion Cl⁻.</td>
+            </tr>
+            <tr>
+              <td>Perlakuan AgNO₃</td>
+              <td>AgNO₃ mengikat Cl⁻ sebagai AgCl(s), bergeser ke kiri, warna menjadi merah muda.</td>
+              <td>Alasan harus menyebut pengurangan Cl⁻ bebas.</td>
+            </tr>
+            <tr>
+              <td>Perubahan suhu</td>
+              <td>Pemanasan menggeser ke kanan/biru; pendinginan ke kiri/merah muda.</td>
+              <td>Kesimpulan: reaksi ke kanan bersifat endoterm.</td>
+            </tr>
+            <tr>
+              <td>Penguatan FeSCN²⁺</td>
+              <td>Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺; penambahan Fe³⁺/SCN⁻ menggeser ke kanan dan warna merah semakin pekat.</td>
+              <td>Digunakan sebagai perbandingan dengan sistem kobalt.</td>
+            </tr>
+            <tr>
+              <td>Kesimpulan</td>
+              <td>Sistem setimbang bergeser untuk mengurangi gangguan yang diberikan.</td>
+              <td>Harus mengarah pada Asas Le Chatelier.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Isi Infografis yang Sangat Baik</h2>
+
+        <div class="answer">
+          <h3>Contoh jawaban ideal</h3>
+          <p>
+            Pada sistem kobalt klorida,
+            <b>Co(H₂O)₆²⁺ + 4Cl⁻ ⇌ CoCl₄²⁻ + 6H₂O</b>,
+            spesies Co(H₂O)₆²⁺ berwarna merah muda, sedangkan CoCl₄²⁻ berwarna biru.
+            Penambahan HCl menambah ion Cl⁻ sehingga sistem bergeser ke kanan dan warna menjadi lebih biru.
+            Penambahan AgNO₃ mengurangi ion Cl⁻ bebas karena terbentuk AgCl(s), sehingga sistem bergeser ke kiri dan warna menjadi merah muda.
+          </p>
+          <p>
+            Pada perubahan suhu, pemanasan membuat warna menjadi lebih biru. Hal ini menunjukkan bahwa pembentukan CoCl₄²⁻
+            ke arah kanan bersifat endoterm. Pendinginan menggeser sistem ke kiri sehingga warna kembali merah muda.
+          </p>
+          <p>
+            Pada sistem Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺, penambahan Fe³⁺ atau SCN⁻ menggeser sistem ke kanan sehingga warna merah darah semakin pekat.
+            Kedua sistem menunjukkan bahwa menurut Asas Le Chatelier, sistem kesetimbangan akan bergeser untuk mengurangi gangguan yang diberikan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Komentar Padlet yang Baik</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Komentar 1</div>
+            <p>
+              Infografis kelompok kalian sudah jelas karena menuliskan HCl menambah Cl⁻ sehingga warna menjadi biru.
+              Akan lebih lengkap jika ditambahkan persamaan reaksi kobalt klorida.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Komentar 2</div>
+            <p>
+              Penjelasan tentang AgNO₃ sudah tepat karena Ag⁺ mengikat Cl⁻ membentuk AgCl.
+              Hal ini sesuai dengan pergeseran ke kiri.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Komentar 3</div>
+            <p>
+              Perbandingan dengan FeSCN²⁺ sudah baik. Penambahan Fe³⁺ atau SCN⁻ memang menggeser sistem ke kanan dan memperkuat warna merah.
+            </p>
+          </div>
+        </div>
+
+        <div class="warning">
+          <h3>Komentar yang kurang kuat</h3>
+          <p>
+            Komentar seperti “bagus”, “keren”, atau “setuju” tanpa alasan kimia belum cukup.
+            Komentar sebaiknya menyebut konsep, arah pergeseran, warna, atau alasan berdasarkan Le Chatelier.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rubrik Penilaian SB34</h2>
+
+        <div class="grid cols-4">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Tabel lengkap, arah pergeseran benar, alasan ilmiah jelas, infografis memuat kobalt dan FeSCN²⁺,
+              serta komentar Padlet berbasis konsep kimia.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Baik</div>
+            <p>
+              Sebagian besar komponen lengkap. Ada sedikit kekurangan pada detail alasan atau penguatan FeSCN²⁺,
+              tetapi konsep utama sudah benar.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Tabel dan infografis ada, tetapi alasan masih singkat atau belum menghubungkan secara jelas antara gangguan,
+              arah pergeseran, dan perubahan warna.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Arah pergeseran masih tertukar, alasan tidak sesuai, infografis kurang lengkap,
+              atau komentar Padlet tidak berkaitan dengan konsep kimia.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB34</h2>
+
+        <div class="answer">
+          <p>
+            Kunci utama SB34 adalah menyajikan hasil penyelidikan secara jelas. Pada sistem kobalt klorida,
+            HCl menggeser kesetimbangan ke kanan dan warna menjadi biru, AgNO₃ menggeser ke kiri dan warna menjadi merah muda,
+            pemanasan menggeser ke kanan, sedangkan pendinginan menggeser ke kiri. Pada sistem Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺,
+            penambahan Fe³⁺ atau SCN⁻ menggeser ke kanan sehingga warna merah darah semakin pekat.
+            Semua pembahasan harus dikaitkan dengan Asas Le Chatelier.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keys33.html">⬅ Kunci SB33</a>
+          <div>
+            <a class="btn blue" href="datasb3.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys35.html">Lanjut Kunci SB35 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

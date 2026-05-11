@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci Sub Bab 2 — Fenomena Awal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.84);
+      --card2: rgba(255, 255, 255, 0.94);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.80);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .choice {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      margin-top: 10px;
+    }
+
+    .choice.correct {
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.10);
+    }
+
+    .choice.incorrect {
+      border-color: rgba(239,68,68,.22);
+      background: rgba(239,68,68,.08);
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 2</b>
+          <span>keys21.html • Fenomena Awal Data Eksperimen</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb2.html">📊 Data Sub Bab 2</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci jawaban Sub Bab 2. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Konsep Utama Halaman SB21</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">1. Data Setimbang</div>
+            <p>
+              Walaupun konsentrasi awal berbeda-beda, pada keadaan setimbang terdapat pola perbandingan
+              konsentrasi yang cenderung tetap.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">2. Tetapan Kc</div>
+            <p>
+              Untuk reaksi berbasis konsentrasi, tetapan kesetimbangan ditulis sebagai <b>Kc</b>.
+              Konsentrasi produk dan reaktan dipangkatkan sesuai koefisien reaksi.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">3. Reaksi</div>
+            <p>
+              Reaksi yang diamati adalah:
+              <br>
+              <span class="formula">N₂O₄(g) ⇌ 2NO₂(g)</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Data Eksperimen</h2>
+        <p class="muted">
+          Tabel pada halaman siswa menunjukkan bahwa nilai <b>[NO₂] / [N₂O₄]</b> berubah-ubah,
+          sedangkan nilai <b>[NO₂]² / [N₂O₄]</b> hampir tetap.
+        </p>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Data yang Dibandingkan</th>
+              <th>Pola pada Tabel</th>
+              <th>Makna</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>[NO₂] / [N₂O₄]</b></td>
+              <td>Nilainya tidak tetap, misalnya sekitar 0,0851; 0,102; 0,0967; 0,0880; 0,227.</td>
+              <td>Bukan bentuk tetapan kesetimbangan yang sesuai untuk reaksi ini.</td>
+            </tr>
+            <tr>
+              <td><b>[NO₂]² / [N₂O₄]</b></td>
+              <td>Nilainya cenderung konstan, sekitar 4,60 × 10⁻³ sampai 4,66 × 10⁻³.</td>
+              <td>Inilah bentuk tetapan kesetimbangan <b>Kc</b> untuk reaksi N₂O₄(g) ⇌ 2NO₂(g).</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="answer">
+          <h3>Kesimpulan dari tabel</h3>
+          <p>
+            Bentuk perbandingan yang benar adalah <b>[NO₂]² / [N₂O₄]</b>, karena nilainya paling konstan
+            pada beberapa percobaan berbeda. Nilai yang hampir tetap ini menunjukkan adanya tetapan kesetimbangan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rumus Kc yang Benar</h2>
+
+        <div class="answer">
+          <h3>Untuk reaksi:</h3>
+          <p>
+            <span class="formula">N₂O₄(g) ⇌ 2NO₂(g)</span>
+          </p>
+
+          <h3>Bentuk Kc:</h3>
+          <p>
+            <span class="formula">Kc = [NO₂]² / [N₂O₄]</span>
+          </p>
+
+          <p>
+            Pangkat <b>2</b> pada [NO₂] berasal dari koefisien reaksi NO₂, yaitu 2.
+            Konsentrasi N₂O₄ berpangkat 1 karena koefisiennya 1.
+          </p>
+        </div>
+
+        <div class="warning">
+          <h3>Catatan penting</h3>
+          <p>
+            Jangan memilih <b>[NO₂] / [N₂O₄]</b> sebagai tetapan kesetimbangan, karena rumus Kc harus mengikuti
+            koefisien reaksi. Karena produk NO₂ memiliki koefisien 2, konsentrasi NO₂ harus dikuadratkan.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Jawaban Form SB21</h2>
+
+        <div class="card">
+          <h3>1. Observasi Data</h3>
+          <p class="muted">
+            Pertanyaan: Apa yang kamu amati dari konsentrasi awal dan konsentrasi setimbang pada tabel?
+          </p>
+
+          <div class="answer">
+            <h3>Contoh jawaban benar</h3>
+            <p>
+              Konsentrasi awal pada setiap percobaan berbeda-beda, tetapi setelah mencapai keadaan setimbang
+              terdapat pola tertentu. Nilai [NO₂] / [N₂O₄] tidak konstan, sedangkan nilai [NO₂]² / [N₂O₄]
+              cenderung hampir sama, yaitu sekitar 4,6 × 10⁻³. Hal ini menunjukkan bahwa pada keadaan setimbang
+              ada perbandingan konsentrasi yang tetap.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Kriteria benar</div>
+            <ul>
+              <li>Menyebut konsentrasi awal berbeda-beda.</li>
+              <li>Menyebut konsentrasi setimbang membentuk pola tertentu.</li>
+              <li>Menyadari bahwa [NO₂]² / [N₂O₄] lebih konstan daripada [NO₂] / [N₂O₄].</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>2. Pilihan Tetapan Kesetimbangan</h3>
+          <p class="muted">
+            Pertanyaan: Manakah persamaan yang merupakan persamaan dari tetapan kesetimbangan?
+          </p>
+
+          <div class="choice incorrect">
+            <h3>❌ A. [NO₂] / [N₂O₄]</h3>
+            <p>
+              Pilihan ini kurang tepat karena tidak memperhatikan koefisien NO₂ pada persamaan reaksi.
+              Nilainya pada tabel juga tidak konstan.
+            </p>
+          </div>
+
+          <div class="choice correct">
+            <h3>✅ B. [NO₂]² / [N₂O₄]</h3>
+            <p>
+              Ini jawaban yang benar. Untuk reaksi N₂O₄(g) ⇌ 2NO₂(g), konsentrasi NO₂ harus dipangkatkan 2
+              karena koefisien NO₂ adalah 2. Nilainya juga cenderung konstan pada tabel.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>3. Analisis Data — Perbedaan Kc dan Kp</h3>
+          <p class="muted">
+            Pertanyaan: Apakah yang membedakan Kc dan Kp?
+          </p>
+
+          <div class="answer">
+            <h3>Contoh jawaban benar</h3>
+            <p>
+              Kc adalah tetapan kesetimbangan yang dinyatakan berdasarkan konsentrasi zat dalam satuan molaritas,
+              sedangkan Kp adalah tetapan kesetimbangan yang dinyatakan berdasarkan tekanan parsial gas.
+              Kc biasanya digunakan ketika data yang tersedia berupa konsentrasi, sedangkan Kp digunakan
+              untuk reaksi gas jika data yang tersedia berupa tekanan parsial.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Kriteria benar</div>
+            <ul>
+              <li>Kc berdasarkan konsentrasi.</li>
+              <li>Kp berdasarkan tekanan parsial gas.</li>
+              <li>Siswa mampu mengaitkan Kc dengan data tabel yang berupa konsentrasi.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4. Hipotesis Awal</h3>
+          <p class="muted">
+            Pertanyaan: Mengapa nilai [NO₂]² / [N₂O₄] cenderung konstan?
+          </p>
+
+          <div class="answer">
+            <h3>Contoh jawaban benar</h3>
+            <p>
+              Nilai [NO₂]² / [N₂O₄] cenderung konstan karena pada suhu yang sama, sistem kesetimbangan memiliki
+              perbandingan tertentu antara konsentrasi produk dan reaktan. Perbandingan tersebut mengikuti koefisien
+              reaksi, sehingga untuk reaksi N₂O₄(g) ⇌ 2NO₂(g), bentuk yang tetap adalah [NO₂]² / [N₂O₄].
+            </p>
+          </div>
+
+          <div class="warning">
+            <h3>Catatan pembahasan</h3>
+            <p>
+              Nilai K dapat sedikit berbeda karena pembulatan data eksperimen, tetapi secara umum tetap berada
+              di sekitar nilai yang sama, yaitu kira-kira 4,6 × 10⁻³ pada suhu 25°C.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>5. Kesimpulan Sementara</h3>
+          <p class="muted">
+            Pertanyaan: Tuliskan kesimpulan awal tentang bentuk Kc untuk reaksi N₂O₄(g) ⇌ 2NO₂(g).
+          </p>
+
+          <div class="answer">
+            <h3>Contoh jawaban benar</h3>
+            <p>
+              Bentuk Kc untuk reaksi N₂O₄(g) ⇌ 2NO₂(g) adalah Kc = [NO₂]² / [N₂O₄].
+              Bentuk ini diperoleh karena NO₂ adalah produk dengan koefisien 2, sehingga konsentrasinya dipangkatkan 2,
+              sedangkan N₂O₄ adalah reaktan dengan koefisien 1. Berdasarkan tabel, nilai [NO₂]² / [N₂O₄]
+              cenderung konstan sehingga sesuai sebagai tetapan kesetimbangan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Kunci SB21</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Bagian</th>
+              <th>Kunci Utama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Observasi Data</td>
+              <td>Nilai [NO₂]² / [N₂O₄] cenderung konstan, sedangkan [NO₂] / [N₂O₄] tidak konstan.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Pilihan Tetapan</td>
+              <td><b>B. [NO₂]² / [N₂O₄]</b></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Kc dan Kp</td>
+              <td>Kc berdasarkan konsentrasi, Kp berdasarkan tekanan parsial gas.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Hipotesis</td>
+              <td>Nilai konstan muncul karena pada suhu tetap sistem memiliki perbandingan kesetimbangan tertentu.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Kesimpulan</td>
+              <td><b>Kc = [NO₂]² / [N₂O₄]</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Pembahasan Valid Konsep Kc</h2>
+
+        <div class="answer">
+          <h3>Aturan umum Kc</h3>
+          <p>
+            Untuk reaksi umum:
+          </p>
+          <p>
+            <span class="formula">aA + bB ⇌ cC + dD</span>
+          </p>
+          <p>
+            bentuk tetapan kesetimbangannya adalah:
+          </p>
+          <p>
+            <span class="formula">Kc = [C]ᶜ[D]ᵈ / [A]ᵃ[B]ᵇ</span>
+          </p>
+          <p>
+            Artinya, konsentrasi produk diletakkan di pembilang dan konsentrasi reaktan diletakkan di penyebut.
+            Masing-masing konsentrasi dipangkatkan sesuai koefisien reaksi setara.
+          </p>
+        </div>
+
+        <div class="answer">
+          <h3>Penerapan pada N₂O₄(g) ⇌ 2NO₂(g)</h3>
+          <p>
+            Produknya adalah NO₂ dengan koefisien 2, sedangkan reaktannya adalah N₂O₄ dengan koefisien 1.
+            Oleh karena itu:
+          </p>
+          <p>
+            <span class="formula">Kc = [NO₂]² / [N₂O₄]</span>
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Standar Penilaian Jawaban Siswa</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Sangat Baik</div>
+            <p>
+              Siswa menyebut pola data, memilih rumus Kc yang benar, menjelaskan alasan koefisien 2,
+              dan membedakan Kc dengan Kp secara tepat.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Cukup</div>
+            <p>
+              Siswa memilih jawaban B dan memahami bahwa nilainya konstan, tetapi penjelasan tentang koefisien
+              atau perbedaan Kc-Kp masih kurang lengkap.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Perlu Bimbingan</div>
+            <p>
+              Siswa memilih [NO₂] / [N₂O₄], tidak menjelaskan pola data, atau belum memahami bahwa pangkat
+              pada rumus Kc berasal dari koefisien reaksi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="h1.html">⬅ Kembali ke Peta</a>
+          <div>
+            <a class="btn blue" href="datasb2.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys22.html">Lanjut Kunci SB22 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kunci SB24 — Menyajikan Hasil Karya</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0b1220;
+      --muted: #5b6b86;
+      --card: rgba(255, 255, 255, 0.86);
+      --card2: rgba(255, 255, 255, 0.95);
+      --line: rgba(13, 23, 46, 0.12);
+      --primary: #2b7cff;
+      --primary2: #00c2ff;
+      --accent: #ff7a00;
+      --accent2: #ff4fd8;
+      --green: #16a34a;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --shadow: 0 18px 50px rgba(0,0,0,.14);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+        radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+        linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      border-radius: 999px;
+      filter: blur(30px);
+      opacity: .35;
+      z-index: -1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .blob.b1 {
+      left: -120px;
+      top: 80px;
+      background: #47e6ff;
+    }
+
+    .blob.b2 {
+      right: -140px;
+      top: 140px;
+      background: #6b7bff;
+      animation-delay: -5s;
+    }
+
+    .blob.b3 {
+      left: 20%;
+      bottom: -160px;
+      background: #ff5fd6;
+      animation-delay: -9s;
+    }
+
+    @keyframes drift {
+      0%,100% {
+        transform: translate(0,0) scale(1);
+      }
+      50% {
+        transform: translate(60px,-40px) scale(1.08);
+      }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.58);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: 0 10px 25px rgba(0,0,0,.14);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+    }
+
+    .brand b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card.solid {
+      background: var(--card2);
+    }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(900px 450px at 20% 20%, rgba(255, 79, 216, .24), transparent 60%),
+        radial-gradient(900px 450px at 80% 70%, rgba(43, 124, 255, .22), transparent 60%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hero .muted {
+      color: rgba(255,255,255,.74);
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 980px) {
+      .grid.cols-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .concept {
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      padding: 14px;
+    }
+
+    .concept .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(43,124,255,.10);
+      color: #1b4bb2;
+      border: 1px solid rgba(43,124,255,.15);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: rgba(34, 197, 94, 0.10);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      border-left: 6px solid var(--green);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.10);
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      border-left: 6px solid var(--yellow);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.18);
+      border-left: 6px solid var(--red);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+    }
+
+    .formula {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.14);
+      font-weight: 900;
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .tableMini {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(13,23,46,.12);
+    }
+
+    .tableMini th,
+    .tableMini td {
+      font-size: 14px;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(13,23,46,.10);
+      vertical-align: top;
+    }
+
+    .tableMini th {
+      background: rgba(43,124,255,.08);
+      font-weight: 900;
+    }
+
+    .tableMini tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .rubrik {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.74);
+    }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255,255,255,.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+      border: 0;
+    }
+
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+      border: 0;
+    }
+
+    .locked {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(239,68,68,.22);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .teacherOnly {
+      display: none;
+    }
+
+    .teacherOnly.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🔑</div>
+        <div>
+          <b>Kunci Jawaban Sub Bab 2</b>
+          <span>keys24.html • Menyajikan Hasil Karya</span>
+        </div>
+      </div>
+
+      <div class="btnRow" style="margin:0">
+        <a class="btn" href="h1.html">⬅ Peta Eksplorasi</a>
+        <a class="btn blue" href="datasb2.html">📊 Data Sub Bab 2</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="lockedBox" class="locked">
+      <h2>Akses khusus guru</h2>
+      <p>Halaman ini berisi kunci dan rubrik Sub Bab 2. Silakan login sebagai guru terlebih dahulu melalui halaman utama.</p>
+      <a class="btn primary" href="h1.html">Login Guru</a>
+    </div>
+
+    <div id="teacherContent" class="teacherOnly">
+
+      <section class="card solid">
+        <h2>Kunci Isi Laporan Mini</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Komponen Laporan</th>
+              <th>Kunci Jawaban / Isi yang Benar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Nama kelompok dan anggota</td>
+              <td>Memuat nomor/nama kelompok serta nama seluruh anggota kelompok.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Reaksi kesetimbangan</td>
+              <td><b>N₂O₄(g) ⇌ 2NO₂(g)</b></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Rumus Kc</td>
+              <td><b>K<sub>c</sub> = [NO₂]<sup>2</sup> / [N₂O₄]</b></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Hasil nilai Kc</td>
+              <td>Nilai Kc dari data investigasi berada sekitar <b>0,133 sampai 0,135</b>.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Analisis pola Kc</td>
+              <td>Nilai Kc <b>mendekati konstan</b>, tidak harus sama persis karena ada pembulatan data.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Pengertian Kp</td>
+              <td>Kp adalah tetapan kesetimbangan berdasarkan tekanan parsial gas.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Perbedaan Kc dan Kp</td>
+              <td>Kc berdasarkan konsentrasi molar, sedangkan Kp berdasarkan tekanan parsial gas.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Hubungan Kc dan Kp</td>
+              <td><b>K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></b></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Kesimpulan</td>
+              <td>Kc untuk reaksi N₂O₄(g) ⇌ 2NO₂(g) adalah [NO₂]²/[N₂O₄], nilainya mendekati konstan pada suhu tetap, dan Kp digunakan jika data berupa tekanan parsial gas.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Laporan Mini yang Benar</h2>
+
+        <div class="answer">
+          <h3>Contoh jawaban ideal</h3>
+          <p>
+            Kelompok kami membahas reaksi kesetimbangan <b>N₂O₄(g) ⇌ 2NO₂(g)</b>.
+            Berdasarkan hukum aksi massa, rumus tetapan kesetimbangan berdasarkan konsentrasi untuk reaksi tersebut adalah
+            <b>K<sub>c</sub> = [NO₂]<sup>2</sup> / [N₂O₄]</b>.
+            Pangkat 2 pada [NO₂] berasal dari koefisien NO₂ pada persamaan reaksi.
+          </p>
+          <p>
+            Dari hasil perhitungan beberapa data percobaan, nilai Kc berada di sekitar <b>0,133 sampai 0,135</b>.
+            Nilainya tidak sama persis, tetapi mendekati konstan. Hal ini menunjukkan bahwa pada suhu yang sama,
+            perbandingan konsentrasi produk dan reaktan pada keadaan setimbang memiliki nilai hampir tetap.
+          </p>
+          <p>
+            Kc berbeda dengan Kp. Kc menggunakan konsentrasi molar, sedangkan Kp menggunakan tekanan parsial gas.
+            Hubungan antara Kc dan Kp untuk reaksi gas adalah
+            <b>K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></b>.
+            Untuk reaksi N₂O₄(g) ⇌ 2NO₂(g), nilai Δn = 2 − 1 = 1, sehingga hubungan keduanya menjadi
+            <b>K<sub>p</sub> = K<sub>c</sub>(RT)</b>.
+          </p>
+          <p>
+            Kesimpulannya, tetapan kesetimbangan menunjukkan pola yang tetap pada suhu tertentu.
+            Kc digunakan ketika data berupa konsentrasi, sedangkan Kp digunakan ketika data berupa tekanan parsial gas.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Kunci Checklist Sebelum Lanjut</h2>
+
+        <table class="tableMini">
+          <thead>
+            <tr>
+              <th>Checklist Siswa</th>
+              <th>Arti Jika Dicentang</th>
+              <th>Validasi Guru</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Laporan memuat reaksi kesetimbangan dan rumus Kc.</td>
+              <td>Siswa menulis reaksi dan rumus Kc.</td>
+              <td>Harus ada <b>N₂O₄(g) ⇌ 2NO₂(g)</b> dan <b>Kc = [NO₂]²/[N₂O₄]</b>.</td>
+            </tr>
+            <tr>
+              <td>Laporan memuat ringkasan nilai Kc.</td>
+              <td>Siswa menyajikan hasil perhitungan.</td>
+              <td>Nilai harus berada sekitar <b>0,133–0,135</b> dari tabel investigasi.</td>
+            </tr>
+            <tr>
+              <td>Kelompok menuliskan analisis pola nilai Kc.</td>
+              <td>Siswa menjelaskan bahwa nilai Kc memiliki pola.</td>
+              <td>Jawaban paling tepat: <b>mendekati konstan</b>.</td>
+            </tr>
+            <tr>
+              <td>Kelompok mengunggah laporan ke Padlet.</td>
+              <td>Siswa menyajikan hasil karya.</td>
+              <td>Guru mengecek unggahan berada di kolom kelompok yang sesuai.</td>
+            </tr>
+            <tr>
+              <td>Kelompok memberi komentar atau pertanyaan.</td>
+              <td>Siswa melakukan diskusi antarkelompok.</td>
+              <td>Komentar harus berkaitan dengan Kc, Kp, data, rumus, atau kesimpulan kelompok lain.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card solid">
+        <h2>Contoh Komentar yang Benar di Padlet</h2>
+
+        <div class="grid cols-3">
+          <div class="concept">
+            <div class="tag">Komentar 1</div>
+            <p>
+              Laporan kelompok kalian sudah jelas karena menuliskan rumus Kc = [NO₂]²/[N₂O₄].
+              Akan lebih lengkap jika ditambahkan alasan mengapa NO₂ dipangkatkan 2.
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Komentar 2</div>
+            <p>
+              Hasil nilai Kc kelompok kalian mendekati konstan. Apakah perbedaan kecil antar nilai disebabkan oleh pembulatan data?
+            </p>
+          </div>
+
+          <div class="concept">
+            <div class="tag">Komentar 3</div>
+            <p>
+              Penjelasan tentang Kp sudah baik. Kp memang digunakan untuk tekanan parsial gas, sedangkan Kc untuk konsentrasi.
+            </p>
+          </div>
+        </div>
+
+        <div class="warning">
+          <h3>Komentar yang kurang tepat</h3>
+          <p>
+            Komentar seperti “bagus”, “setuju”, atau “mantap” tanpa alasan kimia belum cukup kuat.
+            Komentar sebaiknya menyebut konsep, data, rumus, atau pertanyaan yang berkaitan dengan Kc dan Kp.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Rubrik Penilaian SB24</h2>
+
+        <div class="grid cols-3">
+          <div class="rubrik">
+            <h3>Sangat Baik</h3>
+            <p>
+              Laporan lengkap, rumus Kc dan Kp benar, analisis nilai Kc jelas, kesimpulan sesuai,
+              unggahan Padlet rapi, dan komentar antarkelompok bersifat membangun serta berbasis konsep kimia.
+            </p>
+          </div>
+
+          <div class="rubrik">
+            <h3>Cukup</h3>
+            <p>
+              Laporan memuat sebagian besar komponen penting, tetapi pembahasan Kp, hubungan Kc dan Kp,
+              atau alasan nilai Kc mendekati konstan masih kurang lengkap.
+            </p>
+          </div>
+
+          <div class="rubrik">
+            <h3>Perlu Bimbingan</h3>
+            <p>
+              Laporan belum memuat rumus Kc dengan benar, tidak menampilkan hasil nilai Kc,
+              belum menjelaskan perbedaan Kc dan Kp, atau komentar Padlet tidak berkaitan dengan konsep.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <h2>Ringkasan Akhir SB24</h2>
+
+        <div class="answer">
+          <p>
+            Pada SB24, siswa dianggap berhasil jika laporan mini memuat reaksi
+            <b>N₂O₄(g) ⇌ 2NO₂(g)</b>, rumus <b>K<sub>c</sub> = [NO₂]<sup>2</sup>/[N₂O₄]</b>,
+            hasil nilai Kc yang mendekati konstan, perbedaan Kc dan Kp,
+            hubungan <b>K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup></b>, serta kesimpulan yang benar.
+            Siswa juga perlu mengunggah laporan ke Padlet dan memberi komentar yang membangun kepada kelompok lain.
+          </p>
+        </div>
+      </section>
+
+      <section class="card solid">
+        <div class="btnRow">
+          <a class="btn" href="keys23.html">⬅ Kunci SB23</a>
+          <div>
+            <a class="btn blue" href="datasb2.html">📊 Lihat Data Siswa</a>
+            <a class="btn primary" href="keys25.html">Lanjut Kunci SB25 ➜</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function cekGuru() {
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+      } catch (error) {
+        user = {};
+      }
+
+      const isGuru =
+        user.role === "creator" ||
+        user.role === "guru" ||
+        user.email === "appbeechem@gmail.com";
+
+      const lockedBox = document.getElementById("lockedBox");
+      const teacherContent = document.getElementById("teacherContent");
+
+      if (isGuru) {
+        teacherContent.classList.add("show");
+        lockedBox.style.display = "none";
+      } else {
+        teacherContent.classList.remove("show");
+        lockedBox.style.display = "block";
+      }
+    }
+
+    cekGuru();
+  </script>
+</body>
+</html>

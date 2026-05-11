@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kesetimbangan Dinamis (Hal. 3) — Hipotesis</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+  --bg1: #b8f7ff;
+  --bg2: #b0b6ff;
+  --bg3: #ffd8f0;
+
+  --ink: #0b1220;
+  --muted: #5b6b86;
+
+  --card: rgba(255, 255, 255, 0.78);
+  --card2: rgba(255, 255, 255, 0.92);
+  --line: rgba(13, 23, 46, 0.12);
+
+  --primary: #2b7cff;
+  --primary2: #00c2ff;
+  --accent: #ff7a00;
+  --accent2: #ff4fd8;
+
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+  --shadow2: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  --radius: 18px;
+  --radius2: 14px;
+}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+    radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+    linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+  overflow-x: hidden;
+}
+
+    .blob{
+      position:fixed;
+      width:380px; height:380px;
+      border-radius:999px;
+      filter: blur(30px);
+      opacity:.35;
+      z-index:-1;
+      animation: drift 16s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b1 {
+  left: -120px;
+  top: 80px;
+  background: #47e6ff;
+}
+.blob.b2 {
+  right: -140px;
+  top: 140px;
+  background: #6b7bff;
+  animation-delay: -5s;
+}
+.blob.b3 {
+  left: 20%;
+  bottom: -160px;
+  background: #ff5fd6;
+  animation-delay: -9s;
+}
+    @keyframes drift{
+      0%,100%{transform: translate(0,0) scale(1)}
+      50%{transform: translate(60px,-40px) scale(1.08)}
+    }
+
+    header{
+      position:sticky; top:0;
+      z-index:20;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.55);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar{
+      max-width:1150px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width: 240px;}
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow: var(--shadow2);
+      display:grid; place-items:center;
+      color:white; font-weight:800;
+    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1;}
+    .brand .t b{font-size:14px}
+    .brand .t span{font-size:12px; color:var(--muted)}
+    .rightbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+
+    .progressWrap{
+      width:220px; height:10px;
+      border-radius:999px;
+      background: rgba(13,23,46,.10);
+      overflow:hidden;
+      border:1px solid rgba(13,23,46,.10);
+    }
+    .progressFill{
+  height:100%;
+  width:37.5%;
+  background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+  border-radius:999px;
+  transition: width .5s ease;
+}
+
+    main{max-width:1150px; margin:0 auto; padding:18px;}
+    .grid{display:grid; gap:16px}
+    @media (min-width: 980px){
+      .grid.cols-3{grid-template-columns: 1fr 1fr 1fr}
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card.solid{background: var(--card2)}
+
+    h1{margin:0 0 4px 0; font-size:22px; letter-spacing:.2px}
+    h2{margin:0 0 10px 0; font-size:15px}
+    h3{margin:0 0 8px 0; font-size:13px}
+    p,li,label{font-size:13px; line-height:1.5}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background: var(--line); margin:14px 0}
+
+    .btn{
+      border:0;
+      border-radius: 14px;
+      padding:12px 14px;
+      font-weight:700;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+    }
+    .btn:active{transform: scale(.98)}
+    .btn.primary {
+  color: white;
+  background: linear-gradient(135deg, var(--accent), #ff9f40);
+}
+.btn.blue {
+  color: white;
+  background: linear-gradient(135deg, var(--primary2), var(--primary));
+}
+    .btn.ghost{
+      color: var(--ink);
+      background: rgba(255,255,255,.7);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+    .btn:disabled{opacity:.55; cursor:not-allowed; box-shadow:none}
+
+    .concept{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(13,23,46,.10);
+      background: rgba(255,255,255,.70);
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .concept::after{
+  content:"";
+  position:absolute; inset:-40% -40% auto auto;
+  width:200px; height:200px;
+  background: radial-gradient(circle at 30% 30%, rgba(43,124,255,.35), transparent 60%);
+  transform: rotate(18deg);
+  pointer-events:none;
+}
+    .concept .tag{
+  display:inline-flex; gap:8px; align-items:center;
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(43,124,255,.10);
+  color: #1b4bb2;
+  border:1px solid rgba(43,124,255,.15);
+  font-weight:700;
+  margin-bottom:8px;
+}
+    .radioList{display:grid; gap:10px; margin-top:10px}
+    .radioItem{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.72);
+      transition: box-shadow .2s ease, transform .08s ease;
+    }
+    .radioItem:hover{box-shadow: 0 10px 22px rgba(0,0,0,.08)}
+    .radioItem input{margin-top:3px; transform: scale(1.1)}
+    textarea{
+      width:100%;
+      border-radius: var(--radius2);
+      border:1px solid rgba(13,23,46,.14);
+      background: rgba(255,255,255,.75);
+      padding:12px;
+      min-height:70px;
+      font-family: inherit;
+      font-size:13px;
+      outline:none;
+    }
+    textarea:focus{
+  border-color: rgba(43,124,255,.35);
+  box-shadow: 0 0 0 4px rgba(43,124,255,.12);
+}
+
+    .toastWrap{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      z-index: 60;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      width:min(420px, calc(100vw - 36px));
+      border-radius: 16px;
+      padding:12px 12px;
+      background: rgba(255,255,255,.85);
+      border:1px solid rgba(13,23,46,.12);
+      box-shadow: var(--shadow);
+      display:flex; gap:10px;
+      align-items:flex-start;
+      animation: pop .18s ease-out;
+    }
+    @keyframes pop{from{transform: translateY(10px); opacity:.2} to{transform: translateY(0); opacity:1}}
+    .toast .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      font-weight:900;
+      color:white;
+      flex:0 0 auto;
+    }
+    .toast.ok .icon{background: linear-gradient(135deg, #22c55e, #16a34a)}
+    .toast.bad .icon{background: linear-gradient(135deg, #ef4444, #b91c1c)}
+    .toast.info .icon{background: linear-gradient(135deg, var(--primary2), var(--primary))}
+    .toast .t{flex:1}
+    .toast .t b{display:block; font-size:13px}
+    .toast .t span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .toast .x{
+      background: transparent;
+      border:0;
+      cursor:pointer;
+      padding:6px 8px;
+      border-radius:10px;
+      color: var(--muted);
+    }
+
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background: rgba(13,23,46,.45);
+      backdrop-filter: blur(8px);
+      display:none;
+      z-index:80;
+      padding:18px;
+    }
+    .modalBackdrop.show{display:grid; place-items:center}
+    .modal{
+      width: min(820px, 100%);
+      border-radius: 20px;
+      background: rgba(255,255,255,.92);
+      border:1px solid rgba(13,23,46,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      background: linear-gradient(135deg, rgba(43,124,255,.10), rgba(255,79,216,.10));
+      border-bottom:1px solid rgba(13,23,46,.10);
+    }
+    .modalHead b{font-size:14px}
+    .modalBody{padding:16px}
+    .modalActions{
+      padding:12px 16px;
+      border-top:1px solid rgba(13,23,46,.10);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      background: rgba(255,255,255,.70);
+    }
+    .iconBtn{
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.7);
+      border-radius: 12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:800;
+      color:var(--muted);
+    }
+
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(13,23,46,.12);
+      background: rgba(255,255,255,.70);
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">⚗️</div>
+        <div class="t">
+          <b>Kesetimbangan Dinamis</b>
+          <span id="crumb">Halaman 3 • Bekal Konsep & Hipotesis</span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div class="pill">
+          <span>Progress</span>
+          <b id="stepTxt" style="color:var(--ink)">3/8</b>
+        </div>
+        <div class="progressWrap" aria-label="progress bar">
+          <div class="progressFill" id="progressFill"></div>
+        </div>
+        <button class="btn ghost" id="btnHelp" title="Bantuan & cara pakai">✨ Bantuan</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE 3 ONLY -->
+    <section id="page3" class="show">
+      <div class="card solid">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h1>Halaman 3 — Merumuskan Hipotesis</h1>
+            <p class="muted" style="margin:0">
+             Berdasarkan hasil pengamatan pada Halaman 1 dan rumusan masalah pada Halaman 2, pilih hipotesis yang paling sesuai lalu tulis alasan logismu.
+            </p>
+          </div>
+          <div class="row">
+            <button class="btn blue" id="btnExamples">📌 Lihat Contoh</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid cols-3" style="margin-top:16px">
+        <div class="card">
+          <div class="concept">
+            <div class="tag">🧭 Bekal 1 — Arah Reaksi</div>
+            <ul style="margin:0 0 6px 18px; padding:0">
+              <li><b>Reaksi satu arah (→)</b>: reaktan → produk, <b>sulit kembali</b>.</li>
+              <li>Biasanya jika produk <b>endapan padat</b> atau <b>gas keluar</b>.</li>
+              <li><b>Reaksi dua arah (⇌)</b>: maju & balik, bisa setimbang di <b>wadah tertutup</b>.</li>
+            </ul>
+          </div>
+          <div class="divider"></div>
+        </div>
+
+        <div class="card">
+          <div class="concept">
+            <div class="tag">🔄 Bekal 2 — Kesetimbangan Dinamis</div>
+            <ul style="margin:0 0 6px 18px; padding:0">
+              <li><b>Makro</b>: konsentrasi tampak <b>konstan</b>.</li>
+              <li><b>Mikro</b>: reaksi tetap berjalan.</li>
+              <li>Setimbang: <b>v<sub>maju</sub> = v<sub>balik</sub></b>.</li>
+            </ul>
+          </div>
+          <div class="divider"></div>
+        </div>
+
+        <div class="card">
+          <div class="concept">
+            <div class="tag">🧪 Bekal 3 — Homogen vs Heterogen</div>
+            <ul style="margin:0 0 6px 18px; padding:0">
+              <li><b>Homogen</b>: semua zat <b>satu fase</b>.</li>
+              <li><b>Heterogen</b>: lebih dari satu fase (mis. <b>(s)</b> dan <b>(aq)</b>).</li>
+            </ul>
+          </div>
+          <div class="divider"></div>
+        </div>
+      </div>
+
+      <div class="card solid" style="margin-top:16px">
+  <h2>✍️ Formulasi Hipotesis</h2>
+  <p class="muted" style="margin-top:-6px">
+    Hipotesis = dugaan sementara yang masuk akal berdasarkan konsep. Nanti akan diuji di Halaman 4.
+  </p>
+
+  <!-- H1 -->
+  <div class="card" style="margin-top:14px; box-shadow:none; background:rgba(255,255,255,.6); border:1px solid rgba(13,23,46,.10)">
+    <h3>Hipotesis 1 — Arah reaksi pembentukan endapan AgCl</h3>
+    <div class="radioList">
+      <label class="radioItem">
+        <input type="radio" name="h1" value="satuarah">
+        <div>
+          <b>Reaksi cenderung berlangsung satu arah</b>
+          <div class="muted">Produk berupa endapan terpisah dari larutan sehingga sulit kembali seperti semula.</div>
+        </div>
+      </label>
+      <label class="radioItem">
+        <input type="radio" name="h1" value="duaarah">
+        <div>
+          <b>Reaksi cenderung berlangsung dua arah</b>
+          <div class="muted">Produk dapat kembali membentuk reaktan dalam kondisi yang sama.</div>
+        </div>
+      </label>
+    </div>
+    <div style="margin-top:10px">
+      <label><b>Alasan saya:</b></label>
+      <textarea id="h1Reason" placeholder="Contoh: Karena terbentuk endapan AgCl yang memisah dari larutan ..."></textarea>
+    </div>
+  </div>
+
+  <!-- H2 -->
+  <div class="card" style="margin-top:14px; box-shadow:none; background:rgba(255,255,255,.6); border:1px solid rgba(13,23,46,.10)">
+    <h3>Hipotesis 2 — Perubahan warna larutan Co²⁺</h3>
+    <div class="radioList">
+      <label class="radioItem">
+        <input type="radio" name="h2" value="tidakbalik">
+        <div>
+          <b>Perubahan warna hanya terjadi satu kali dan tidak dapat kembali</b>
+          <div class="muted">Setelah berubah, warna larutan tetap dan tidak kembali seperti semula.</div>
+        </div>
+      </label>
+      <label class="radioItem">
+        <input type="radio" name="h2" value="bolakbalik">
+        <div>
+          <b>Perubahan warna dapat terjadi bolak-balik</b>
+          <div class="muted">Warna larutan dapat berubah kembali ketika kondisi sistem diubah.</div>
+        </div>
+      </label>
+    </div>
+    <div style="margin-top:10px">
+      <label><b>Alasan saya:</b></label>
+      <textarea id="h2Reason" placeholder="Contoh: Karena setelah ditambah HCl warna berubah, lalu setelah ditambah air warna dapat kembali ..."></textarea>
+    </div>
+  </div>
+
+  <!-- H3 -->
+  <div class="card" style="margin-top:14px; box-shadow:none; background:rgba(255,255,255,.6); border:1px solid rgba(13,23,46,.10)">
+    <h3>Hipotesis 3 — Kondisi agar reaksi dapat mencapai kesetimbangan</h3>
+    <div class="radioList">
+      <label class="radioItem">
+        <input type="radio" name="h3" value="tertutup">
+        <div>
+          <b>Reaksi dapat mencapai kesetimbangan jika berlangsung dalam sistem tertutup</b>
+          <div class="muted">Zat-zat tetap berada dalam sistem sehingga reaksi maju dan balik dapat terus berlangsung.</div>
+        </div>
+      </label>
+      <label class="radioItem">
+        <input type="radio" name="h3" value="terbuka">
+        <div>
+          <b>Reaksi dapat mencapai kesetimbangan meskipun sistem terbuka</b>
+          <div class="muted">Kesetimbangan tetap dapat terbentuk walaupun ada zat yang keluar dari sistem.</div>
+        </div>
+      </label>
+    </div>
+    <div style="margin-top:10px">
+      <label><b>Alasan saya:</b></label>
+      <textarea id="h3Reason" placeholder="Contoh: Karena agar reaksi maju dan balik tetap terjadi, zat-zat tidak boleh keluar dari sistem ..."></textarea>
+    </div>
+  </div>
+
+  <div class="row" style="justify-content:space-between; margin-top:14px">
+    <div class="row">
+      <button class="btn ghost" id="btnAutoFill">⚡ Isi contoh otomatis</button>
+      <button class="btn ghost" id="btnSaveOnly">💾 Simpan saja</button>
+    </div>
+    <button class="btn primary" id="btnGoSim">Simpan & Lanjut ke Halaman 4 ➜</button>
+  </div>
+
+  <p class="muted" style="margin:10px 0 0 0">
+    Setelah hipotesis tersimpan, jawabanmu akan ditampilkan kembali di Halaman 4.
+  </p>
+</div>
+    </section>
+  </main>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Modal">
+    <div class="modal" role="document">
+      <div class="modalHead">
+        <b id="modalTitle">Modal</b>
+        <button class="iconBtn" id="modalClose" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalActions" id="modalActions">
+        <button class="btn ghost" id="modalSecondary">Tutup</button>
+        <button class="btn blue" id="modalPrimary" style="display:none">Oke</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /***********************
+     * Utilities
+     ************************/
+    const $ = (q) => document.querySelector(q);
+    const $$ = (q) => Array.from(document.querySelectorAll(q));
+
+    function getRadio(name){
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : "";
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /***********************
+     * Toasts
+     ************************/
+    function toast(type, title, message, ms=4500){
+      const wrap = $("#toastWrap");
+      const t = document.createElement("div");
+      t.className = `toast ${type}`;
+      t.innerHTML = `
+        <div class="icon">${type==="ok"?"✓":type==="bad"?"!":"i"}</div>
+        <div class="t">
+          <b>${escapeHtml(title)}</b>
+          <span>${escapeHtml(message)}</span>
+        </div>
+        <button class="x" aria-label="Tutup">✕</button>
+      `;
+      t.querySelector(".x").addEventListener("click", ()=> t.remove());
+      wrap.appendChild(t);
+      if(ms){
+        setTimeout(()=>{ if(t.isConnected) t.remove(); }, ms);
+      }
+    }
+
+    /***********************
+     * Modal
+     ************************/
+    const modal = {
+      open({title, bodyHTML, primaryText=null, onPrimary=null}){
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = bodyHTML;
+        $("#modalBackdrop").classList.add("show");
+
+        const mp = $("#modalPrimary");
+        const ms = $("#modalSecondary");
+
+        if(primaryText){
+          mp.style.display = "";
+          mp.textContent = primaryText;
+          mp.onclick = () => { if(onPrimary) onPrimary(); modal.close(); };
+        } else {
+          mp.style.display = "none";
+          mp.onclick = null;
+        }
+        ms.onclick = () => modal.close();
+      },
+      close(){
+        $("#modalBackdrop").classList.remove("show");
+        $("#modalBody").innerHTML = "";
+      }
+    };
+    $("#modalClose").addEventListener("click", ()=> modal.close());
+    $("#modalBackdrop").addEventListener("click", (e)=>{ if(e.target.id==="modalBackdrop") modal.close(); });
+    window.addEventListener("keydown", (e)=>{ if(e.key==="Escape") modal.close(); });
+
+    /***********************
+     * Local DB (same as your system)
+     ************************/
+    const DB_KEY = "KI_DB_v1";
+
+    function dbLoad(){
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users:{} }; }
+      catch { return { users:{} }; }
+    }
+    function dbSave(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function getCurrentUser(){
+      try { return JSON.parse(localStorage.getItem("KI_CURRENT_USER")); }
+      catch { return null; }
+    }
+
+    function ensureUserInDB(user){
+      const db = dbLoad();
+      if(!user || !user.email) return null;
+
+      if(!db.users[user.email]){
+        db.users[user.email] = {
+          name: user.name || "-",
+          email: user.email,
+          visits: [],
+          scores: { sub1:null, sub2:null, sub3:null, sub4:null },
+          notes:  { sub1:"",   sub2:"",   sub3:"",   sub4:""   },
+          answers: {},
+          progress: {}
+        };
+        dbSave(db);
+      } else {
+        db.users[user.email].name = user.name || db.users[user.email].name;
+        dbSave(db);
+      }
+      return db;
+    }
+
+    function mustLogin(){
+      const user = getCurrentUser();
+      if(!user || !user.email){
+        alert("Kamu belum login. Kembali ke index.");
+        location.href = "index.html";
+        return null;
+      }
+      ensureUserInDB(user);
+      return user;
+    }
+
+    function saveAnswer(email, key, data){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].answers = db.users[email].answers || {};
+      db.users[email].answers[key] = { data, at: new Date().toISOString() };
+      dbSave(db);
+    }
+
+    function loadAnswer(email, key){
+      const db = dbLoad();
+      return db.users?.[email]?.answers?.[key]?.data || null;
+    }
+
+    function markProgress(email, pageKey, done=true){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].progress = db.users[email].progress || {};
+      db.users[email].progress[pageKey] = { done, at: new Date().toISOString() };
+      dbSave(db);
+    }
+
+    const user = mustLogin();
+
+    /***********************
+     * Hypotheses logic
+     ************************/
+    function validateHypotheses(){
+  const h1 = getRadio("h1");
+  const h2 = getRadio("h2");
+  const h3 = getRadio("h3");
+
+  const r1 = $("#h1Reason").value.trim();
+  const r2 = $("#h2Reason").value.trim();
+  const r3 = $("#h3Reason").value.trim();
+
+  const ok = h1 && h2 && h3 && r1.length >= 10 && r2.length >= 10 && r3.length >= 10;
+  return { ok, h1, h2, h3, r1, r2, r3 };
+}
+    function saveHypotheses(){
+  const v = validateHypotheses();
+  if(!v.ok){
+    toast("bad","Belum lengkap","Pilih semua hipotesis dan isi alasan untuk setiap hipotesis.");
+    return null;
+  }
+     const data = {
+    h1: v.h1,
+    h2: v.h2,
+    h3: v.h3,
+    r1: v.r1,
+    r2: v.r2,
+    r3: v.r3,
+    savedAt: new Date().toISOString()
+  };
+
+      saveAnswer(user.email, "page3", data);
+  markProgress(user.email, "page3", true);
+
+  localStorage.setItem("KI_Hypotheses", JSON.stringify(data));
+
+  toast("ok","Hipotesis tersimpan","Jawaban hipotesis berhasil disimpan.");
+  return data;
+}
+
+   $("#btnAutoFill").addEventListener("click", ()=>{
+  document.querySelector('input[name="h1"][value="satuarah"]').checked = true;
+  document.querySelector('input[name="h2"][value="bolakbalik"]').checked = true;
+  document.querySelector('input[name="h3"][value="tertutup"]').checked = true;
+
+  $("#h1Reason").value = "Karena terbentuk endapan AgCl yang memisah dari larutan, maka reaksi cenderung berlangsung satu arah.";
+  $("#h2Reason").value = "Karena warna larutan berubah setelah ditambahkan HCl dan kembali setelah ditambahkan air, maka perubahan dapat berlangsung bolak-balik.";
+  $("#h3Reason").value = "Karena kesetimbangan memerlukan reaksi maju dan balik tetap berlangsung, maka sistem harus tertutup.";
+
+  toast("info","Contoh terisi","Kamu boleh mengedit jawaban sesuai pemahamanmu.");
+});
+
+    $("#btnSaveOnly").addEventListener("click", ()=>{
+  const d = saveHypotheses();
+  if(!d) return;
+
+
+      modal.open({
+    title: "Tersimpan ✅",
+    bodyHTML: `
+      <p><b>Ringkasan hipotesis kamu:</b></p>
+      <ul>
+        <li><b>H1:</b> ${d.h1 === "satuarah" ? "Reaksi cenderung berlangsung satu arah" : "Reaksi cenderung berlangsung dua arah"}</li>
+        <li><b>H2:</b> ${d.h2 === "bolakbalik" ? "Perubahan warna dapat terjadi bolak-balik" : "Perubahan warna hanya terjadi satu kali"}</li>
+        <li><b>H3:</b> ${d.h3 === "tertutup" ? "Kesetimbangan terjadi dalam sistem tertutup" : "Kesetimbangan dapat terjadi dalam sistem terbuka"}</li>
+      </ul>
+    `
+  });
+});
+
+    $("#btnGoSim").addEventListener("click", ()=>{
+  const d = saveHypotheses();
+  if(!d) return;
+  window.location.href = "hlm4.html";
+});
+
+    /***********************
+     * Concept modals + help
+     ************************/
+    $$("[data-open]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-open");
+        if(id==="modalArah"){
+          modal.open({
+            title:"Arah Reaksi — Penjelasan",
+            bodyHTML: `
+              <p><b>Reaksi satu arah (→)</b> cenderung terjadi jika produk “terkunci” atau “keluar” dari sistem.</p>
+              <ul>
+                <li><b>Endapan (s)</b>: produk jadi padatan terpisah, sulit kembali.</li>
+                <li><b>Gas lepas</b>: produk keluar dari larutan/sistem.</li>
+              </ul>
+              <p><b>Reaksi dua arah (⇌)</b> bisa maju dan balik, terutama dalam <b>wadah tertutup</b>.</p>
+            `
+          });
+        }
+        if(id==="modalDinamis"){
+          modal.open({
+            title:"Kesetimbangan Dinamis — Penjelasan",
+            bodyHTML: `
+              <p>Kesetimbangan disebut <b>dinamis</b> karena:</p>
+              <ul>
+                <li><b>Makro</b> tampak stabil (konsentrasi konstan).</li>
+                <li><b>Mikro</b> reaksi tetap berlangsung dua arah.</li>
+              </ul>
+              <p>Pada setimbang: <b>v_maju = v_balik</b>.</p>
+            `
+          });
+        }
+        if(id==="modalFase"){
+          modal.open({
+            title:"Homogen vs Heterogen — Penjelasan",
+            bodyHTML: `
+              <p><b>Homogen</b> = semua zat pada fase yang sama (mis. semua gas).</p>
+              <p><b>Heterogen</b> = lebih dari satu fase (mis. <b>padat (s)</b> + <b>larutan (aq)</b>).</p>
+              <p class="muted">Contoh: AgCl(s).</p>
+            `
+          });
+        }
+      });
+    });
+
+    $("#btnExamples").addEventListener("click", ()=>{
+      modal.open({
+        title:"Contoh Singkat",
+        bodyHTML: `
+          <div class="row" style="gap:12px">
+            <div class="concept" style="flex:1">
+              <div class="tag">Satu arah (→)</div>
+              <p style="margin:0"><b>AgNO₃(aq) + NaCl(aq) → AgCl(s) + NaNO₃(aq)</b></p>
+              <p class="muted" style="margin:8px 0 0 0">Produk AgCl(s) mengendap (terpisah), reaksi balik sulit.</p>
+            </div>
+            <div class="concept" style="flex:1">
+              <div class="tag">Dua arah (⇌)</div>
+              <p style="margin:0"><b>CO(g) + H₂O(g) ⇌ CO₂(g) + H₂(g)</b></p>
+              <p class="muted" style="margin:8px 0 0 0">Maju & balik terjadi dalam wadah tertutup.</p>
+            </div>
+          </div>
+        `
+      });
+    });
+
+    $("#btnTips").addEventListener("click", ()=>{
+      modal.open({
+        title:"Tips Cepat",
+        bodyHTML: `
+          <ol>
+            <li>Jika melihat <b>(s)</b> bersama <b>(aq)</b> → biasanya <b>heterogen</b>.</li>
+            <li>Setimbang dinamis: <b>stabil di makro</b>, tetapi <b>aktif di mikro</b>.</li>
+          </ol>
+        `
+      });
+    });
+
+    $("#btnHelp").addEventListener("click", ()=>{
+      modal.open({
+        title:"Bantuan",
+        bodyHTML: `
+          <p><b>Yang kamu lakukan di Halaman 3:</b></p>
+          <ol>
+            <li>Baca bekal konsep.</li>
+            <li>Pilih hipotesis (H1–H3).</li>
+            <li>Tulis alasan berbasis konsep.</li>
+            <li>Simpan → lanjut uji di Halaman 4.</li>
+          </ol>
+          <p class="muted">Tip: gunakan tombol “Lihat Contoh” kalau masih bingung.</p>
+        `
+      });
+    });
+
+    /***********************
+     * Auto-load saved answers
+     ************************/
+    const saved = loadAnswer(user.email, "page3");
+    if(saved){
+      document.querySelector(`input[name="h1"][value="${saved.h1}"]`)?.click();
+      document.querySelector(`input[name="h2"][value="${saved.h2}"]`)?.click();
+      document.querySelector(`input[name="h3"][value="${saved.h3}"]`)?.click();
+      $("#h1Reason").value = saved.r1 || "";
+      $("#h2Reason").value = saved.r2 || "";
+      $("#h3Reason").value = saved.r3 || "";
+      toast("info","Data sebelumnya dimuat","Hipotesis kamu yang terakhir tersimpan sudah ditampilkan.", 5200);
+    } else {
+      setTimeout(()=> toast("info","Mulai dari Bekal Konsep","Klik “Buka Penjelasan” atau “Lihat Contoh” kalau butuh bantuan.", 5200), 700);
+    }
+  </script>
+  <script>
+/* =====================================================
+   SIMPAN DATA SISWA SUB BAB 1 KE DASHBOARD GURU
+   Tidak mengubah layout halaman
+===================================================== */
+
+const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+/* GANTI BAGIAN INI SESUAI FILE HALAMAN */
+const DATA_HALAMAN_ID = "hlm3";
+const DATA_HALAMAN_JUDUL = "Halaman 3: Merumuskan Hipotesis";
+
+/* Ambil identitas siswa dari login utama */
+function getCurrentStudentData(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+    return {
+      nama: user.name || user.nama || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+/* Ambil semua jawaban dari input, textarea, select, radio, checkbox */
+function collectPageAnswers(){
+  const hasil = [];
+
+  document.querySelectorAll("input, textarea, select").forEach((el, index) => {
+    const type = (el.type || "").toLowerCase();
+    const label =
+      document.querySelector(`label[for="${el.id}"]`)?.innerText?.trim() ||
+      el.closest(".field-group")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".field")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".card")?.querySelector("h2, h3")?.innerText?.trim() ||
+      el.name ||
+      el.id ||
+      `Isian ${index + 1}`;
+
+    let value = "";
+
+    if(type === "radio"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dipilih";
+    }else if(type === "checkbox"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dicentang";
+    }else{
+      value = el.value?.trim?.() || "";
+      if(!value) return;
+    }
+
+    hasil.push({
+      label: label,
+      jawaban: value
+    });
+  });
+
+  return hasil;
+}
+
+/* Simpan data halaman ke database guru */
+function simpanDataSubBab1KeGuru(status = "tersimpan otomatis"){
+  const siswa = getCurrentStudentData();
+  const jawaban = collectPageAnswers();
+
+  if(!siswa.email || siswa.email === "-"){
+    return;
+  }
+
+  let db = {};
+  try{
+    db = JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+  }catch(e){
+    db = {};
+  }
+
+  if(!db[siswa.email]){
+    db[siswa.email] = {
+      identitas: siswa,
+      halaman: {},
+      waktuMulai: new Date().toLocaleString("id-ID")
+    };
+  }
+
+  db[siswa.email].identitas = siswa;
+  db[siswa.email].halaman[DATA_HALAMAN_ID] = {
+    judul: DATA_HALAMAN_JUDUL,
+    status: status,
+    jawaban: jawaban,
+    waktuSimpan: new Date().toLocaleString("id-ID")
+  };
+  db[siswa.email].waktuUpdateTerakhir = new Date().toLocaleString("id-ID");
+
+  localStorage.setItem(DATA_GURU_SUBBAB1_KEY, JSON.stringify(db));
+}
+
+/* Simpan otomatis ketika siswa mengetik/memilih jawaban */
+document.addEventListener("input", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+document.addEventListener("change", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+/* Simpan juga saat tombol apa pun diklik */
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button") || e.target.closest("a")){
+    simpanDataSubBab1KeGuru("tersimpan dari aksi siswa");
+  }
+});
+
+/* Simpan saat siswa meninggalkan halaman */
+window.addEventListener("beforeunload", () => {
+  simpanDataSubBab1KeGuru("tersimpan saat keluar halaman");
+});
+
+/* Simpan awal saat halaman dibuka */
+simpanDataSubBab1KeGuru("halaman dibuka");
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 1,
+    pageKey: "hlm3",
+    pageTitle: "Halaman 3 — Merumuskan Hipotesis"
+  });
+});
+</script>
+</body>
+</html>

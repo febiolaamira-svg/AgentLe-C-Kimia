@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 4 • Mengomunikasikan Hasil</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1120px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:980px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .saved-box,.white-box{
+      background:#ffffff;
+      color:#111827;
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .saved-box{border:2px solid rgba(102,242,165,.35);}
+    .white-box{border:2px solid rgba(124,77,255,.32);}
+    .saved-box h3{color:#15803d;}
+    .white-box h3{color:#111827;}
+    .saved-box p,.white-box p{margin:8px 0 0; color:#374151; font-weight:650;}
+    .empty-note{color:#7c2d12; background:#fff7ed; border:1px solid #fdba74; padding:12px; border-radius:16px; font-weight:800;}
+
+    .case-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.case-grid{grid-template-columns:1fr;}}
+
+    .formula-box{
+      margin-top:12px;
+      padding:16px;
+      border-radius:18px;
+      background:#f6f3ff;
+      color:#312e81;
+      border:2px dashed rgba(124,77,255,.35);
+      text-align:center;
+      font-size:clamp(18px,2.5vw,27px);
+      font-weight:950;
+      line-height:1.7;
+    }
+
+    .prompt-list{
+      margin:12px 0 0 20px;
+      padding:0;
+      color:#374151;
+      font-weight:700;
+      line-height:1.8;
+    }
+
+    .product-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    @media(max-width:900px){.product-grid{grid-template-columns:1fr;}}
+    .product-card{
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.25);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:var(--shadow2);
+      line-height:1.6;
+      display:grid;
+      gap:8px;
+      align-content:start;
+    }
+    .product-card .icon{font-size:28px;}
+    .product-card b{display:block; color:#312e81; font-size:17px;}
+    .product-card p{margin:0; color:#374151; font-weight:650;}
+
+    .form-box{
+      display:grid;
+      gap:16px;
+      margin-top:14px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.28);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 14px 36px rgba(15,23,42,.15);
+    }
+    .field-group{display:grid; gap:8px;}
+    .field-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#312e81;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .field-label span{
+      width:24px;
+      height:24px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color:#ffffff;
+      background:linear-gradient(135deg, #ff4fd8, #7c4dff);
+      font-size:12px;
+      font-weight:950;
+    }
+    .select-box,.textarea-box,.input-line{
+      width:100%;
+      border-radius:18px;
+      padding:14px 15px;
+      border:2px solid #c7d2fe;
+      background:#f9fafb;
+      color:#111827;
+      font-family:inherit;
+      font-weight:700;
+      outline:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+    }
+    .textarea-box{min-height:140px; resize:vertical; line-height:1.65;}
+    .select-box:focus,.textarea-box:focus,.input-line:focus{border-color:#7c4dff; background:#ffffff; box-shadow:0 0 0 5px rgba(124,77,255,.15);}
+    .field-help{margin:0; color:#4b5563; font-size:13px; line-height:1.55; font-weight:650;}
+
+    .checklist{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+    @media(max-width:780px){.checklist{grid-template-columns:1fr;}}
+    .check-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(45,108,255,.20);
+      border-radius:18px;
+      padding:13px;
+      line-height:1.6;
+      font-weight:750;
+      box-shadow:var(--shadow2);
+    }
+    .check-item input{margin-top:4px; transform:scale(1.15); accent-color:#7c4dff;}
+
+    .feedback{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(102,242,165,.28);
+      background:rgba(102,242,165,.10);
+      color:#d8ffe8;
+      line-height:1.6;
+      font-weight:850;
+    }
+    .footer-actions{display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">A4</div>
+      <div>
+        <div class="brand-title">Sub Bab 4</div>
+        <div class="brand-sub">Mengomunikasikan Hasil / Luaran Pembelajaran</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="subbab4-kesimpulan.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#artikel">Rancang Artikel</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>Inkuiri Terbimbing • Mengomunikasikan Hasil</span></div>
+
+      <section class="hero">
+        <h1 class="title">📝 Luaran Pembelajaran <span class="accent">Artikel Kelompok</span></h1>
+        <p class="subtitle">
+          Pada tahap ini, peserta didik mengomunikasikan hasil pemahaman melalui artikel ilmiah populer. Artikel mengaitkan proses Haber sebagai contoh industri dengan kasus lain dalam kehidupan sehari-hari, yaitu kesetimbangan asam-basa pada proses pengomposan.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Kesimpulan dari Halaman Sebelumnya</h2>
+          <p class="muted">Gunakan kesimpulan proses Haber sebagai pengantar sebelum mengembangkan artikel pada kasus pengomposan.</p>
+          <div id="kesimpulanTersimpan" class="saved-box" style="margin-top:14px;">
+            <h3>Memuat kesimpulan...</h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>🌱 Kasus Aplikasi: Kesetimbangan dalam Proses Pengomposan</h2>
+          <p class="muted">
+            Bacalah informasi berikut sebagai dasar pengembangan artikel kelompok.
+          </p>
+
+          <div class="case-grid">
+            <div class="white-box">
+              <h3>Informasi Kasus</h3>
+              <p>
+                Dalam proses pengomposan, bahan organik seperti daun kering, sisa makanan, dan limbah organik sekolah diuraikan oleh mikroorganisme menjadi senyawa yang lebih sederhana. Selama proses ini dapat terbentuk gas karbon dioksida (CO₂), air (H₂O), dan senyawa organik lain.
+              </p>
+              <p>
+                Salah satu contoh kesetimbangan yang dapat dikaji adalah kesetimbangan asam-basa dari asam asetat. Asam asetat dapat terbentuk selama penguraian bahan organik, kemudian melepaskan ion H⁺ ke lingkungan dan dapat kembali bergabung membentuk CH₃COOH.
+              </p>
+              <div class="formula-box">
+                CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq)
+              </div>
+              <p>
+                Reaksi dua arah tersebut menunjukkan bahwa sistem pengomposan dapat dikaitkan dengan konsep kesetimbangan kimia, terutama kesetimbangan asam-basa.
+              </p>
+            </div>
+
+            <div class="white-box">
+              <h3>Pertanyaan Diskusi Kelompok</h3>
+              <ol class="prompt-list">
+                <li>Apakah reaksi CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq) termasuk kesetimbangan kimia? Jelaskan alasannya.</li>
+                <li>Apa arti reaksi dua arah dalam konteks proses pengomposan?</li>
+                <li>Bagaimana proses ini berkontribusi terhadap keberlangsungan sistem pengolahan sampah organik di sekolah?</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📄 Ketentuan Artikel Kelompok</h2>
+          <p class="muted">
+            Artikel dibuat sebagai luaran pembelajaran untuk menunjukkan kemampuan peserta didik mengomunikasikan penerapan konsep kesetimbangan kimia.
+          </p>
+
+          <div class="product-grid">
+            <div class="product-card">
+              <div class="icon">👥</div>
+              <b>Kelompok</b>
+              <p>Artikel dikerjakan secara berkelompok, terdiri atas 4–5 peserta didik.</p>
+            </div>
+            <div class="product-card">
+              <div class="icon">🧪</div>
+              <b>Isi Konsep</b>
+              <p>Artikel memuat proses Haber dan kasus pengomposan sebagai contoh aplikasi kesetimbangan.</p>
+            </div>
+            <div class="product-card">
+              <div class="icon">📚</div>
+              <b>Struktur</b>
+              <p>Artikel memuat judul, pendahuluan, pembahasan, kesimpulan, dan daftar pustaka.</p>
+            </div>
+          </div>
+
+          <div class="white-box" style="margin-top:14px;">
+            <h3>Ketentuan Penulisan</h3>
+            <ol class="prompt-list">
+              <li>Panjang artikel sekitar 500–800 kata.</li>
+              <li>Memuat penjelasan proses Haber sebagai contoh aplikasi kesetimbangan dalam industri.</li>
+              <li>Memuat pembahasan kasus pengomposan sebagai contoh aplikasi kesetimbangan dalam kehidupan/sekolah.</li>
+              <li>Menjelaskan reaksi CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq) sebagai reaksi dua arah.</li>
+              <li>Menggunakan bahasa ilmiah, komunikatif, dan mudah dipahami.</li>
+              <li>Menambahkan gambar, diagram, atau ilustrasi yang relevan.</li>
+              <li>Mencantumkan sumber rujukan pada daftar pustaka.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="artikel">
+        <div class="card-inner">
+          <h2>✍️ Rancangan Artikel Kelompok</h2>
+          <p class="muted">
+            Isi rancangan berikut sebelum menyusun artikel akhir. Rancangan ini membantu kelompok menyusun artikel secara runtut dan sesuai konsep.
+          </p>
+
+          <div class="form-box">
+            <div class="field-group">
+              <label class="field-label" for="namaKelompok"><span>1</span> Nama Kelompok / Anggota</label>
+              <input id="namaKelompok" class="input-line" type="text" placeholder="Contoh: Kelompok 1 - Aulia, Bima, Citra, Deni">
+              <p class="field-help">Tuliskan nama kelompok dan anggota.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="judulArtikel"><span>2</span> Judul Artikel</label>
+              <input id="judulArtikel" class="input-line" type="text" placeholder="Contoh: Peranan Kesetimbangan Kimia pada Proses Haber dan Pengomposan di Sekolah">
+              <p class="field-help">Buat judul yang jelas, singkat, dan sesuai isi artikel.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="gagasanUtama"><span>3</span> Gagasan Utama Artikel</label>
+              <textarea id="gagasanUtama" class="textarea-box" placeholder="Tuliskan gagasan utama artikel, misalnya hubungan prinsip kesetimbangan kimia dengan proses Haber dan pengomposan."></textarea>
+              <p class="field-help">Bagian ini menjadi arah utama pembahasan artikel.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="poinHaber"><span>4</span> Poin Pembahasan Proses Haber</label>
+              <textarea id="poinHaber" class="textarea-box" placeholder="Tuliskan poin penting tentang proses Haber, misalnya tekanan, suhu, katalis, dan penerapan prinsip Le Chatelier."></textarea>
+              <p class="field-help">Gunakan kesimpulan dari halaman sebelumnya sebagai dasar.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="poinKompos"><span>5</span> Poin Pembahasan Pengomposan</label>
+              <textarea id="poinKompos" class="textarea-box" placeholder="Tuliskan jawaban diskusi tentang reaksi dua arah CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq) dan kaitannya dengan pengolahan sampah organik di sekolah."></textarea>
+              <p class="field-help">Jelaskan alasan reaksi tersebut dapat dikaitkan dengan kesetimbangan kimia.</p>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="linkArtikel"><span>6</span> Link Artikel / File Karya</label>
+              <input id="linkArtikel" class="input-line" type="url" placeholder="Tempelkan link Google Docs/Canva/PDF artikel kelompok di sini">
+              <p class="field-help">Pastikan link dapat dibuka oleh guru.</p>
+            </div>
+          </div>
+
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" id="cekStruktur"> Artikel memuat judul, pendahuluan, pembahasan, kesimpulan, dan daftar pustaka.</label>
+            <label class="check-item"><input type="checkbox" id="cekHaber"> Artikel memuat proses Haber sebagai contoh industri.</label>
+            <label class="check-item"><input type="checkbox" id="cekKompos"> Artikel memuat pengomposan sebagai contoh kehidupan/sekolah.</label>
+            <label class="check-item"><input type="checkbox" id="cekReaksi"> Artikel mencantumkan reaksi CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq).</label>
+            <label class="check-item"><input type="checkbox" id="cekBahasa"> Bahasa artikel ilmiah, komunikatif, dan mudah dipahami.</label>
+            <label class="check-item"><input type="checkbox" id="cekSumber"> Artikel mencantumkan sumber rujukan.</label>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <button class="btn-primary" type="button" onclick="simpanArtikel()">Simpan Rancangan Artikel</button>
+            <button class="btn" type="button" onclick="hapusArtikel()">Hapus</button>
+          </div>
+          <div id="feedbackArtikel" class="feedback"></div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="subbab4-kesimpulan.html">⬅ Kembali ke Kesimpulan</a>
+        <a class="btn-primary" href="sb47.html" onclick="return cekSebelumLanjut()">Lanjut ke Refleksi ➜</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+const SB4_STORAGE_KEY = "dataAdminGuruSB4";
+
+function getUserKeySB4(){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  const email =
+    user.email ||
+    user.uid ||
+    user.name ||
+    user.nama ||
+    "tanpa-user";
+
+  return String(email)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function storageKeySB4(namaKey){
+  return namaKey + "_" + getUserKeySB4();
+}
+
+function ambilIdentitasSB4(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem(storageKeySB4("kelompokSubBab4")) || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB4(payload){
+  const identitas = ambilIdentitasSB4(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  // Simpan lokal per akun siswa agar tidak saling tertukar di browser yang sama.
+  const keyDataGuruLokal = storageKeySB4(SB4_STORAGE_KEY);
+  const dataLama = JSON.parse(localStorage.getItem(keyDataGuruLokal)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(keyDataGuruLokal, JSON.stringify(dataLama));
+
+  // Simpan online ke Firebase agar tetap terbaca di datasb4.html guru.
+  if (typeof AppDB !== "undefined" && AppDB.saveAnswer) {
+    AppDB.saveAnswer({
+      subBab: 4,
+      pageKey: payload.halaman || "sb4",
+      pageTitle: payload.judul || "Sub Bab 4",
+      answers: {
+        ...(payload.jawaban || {}),
+        _localUser: {
+          nama: identitas.nama,
+          kelas: identitas.kelas,
+          kelompok: identitas.kelompok,
+          email: identitas.email
+        }
+      },
+      score: payload.skor ?? null,
+      status: payload.status || "tersimpan"
+    }).catch((error) => {
+      console.error("Gagal menyimpan Sub Bab 4 ke Firebase:", error);
+    });
+  }
+
+  return dataBaru;
+}
+</script>
+
+  <script>
+    function tampilkanKesimpulan(){
+      const box = document.getElementById('kesimpulanTersimpan');
+     const dataTersimpan = localStorage.getItem(storageKeySB4('kesimpulanSubBab4'));
+
+      if(!dataTersimpan){
+        box.innerHTML = `
+          <h3>Belum ada kesimpulan</h3>
+          <div class="empty-note">
+            Kesimpulan dari halaman sebelumnya belum ditemukan. Peserta didik dapat tetap menyusun artikel, atau kembali ke halaman kesimpulan untuk menyimpan kesimpulan akhir.
+          </div>
+        `;
+        return;
+      }
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        box.innerHTML = `
+          <h3>Kesimpulan tersimpan</h3>
+          <p><b>Jawaban terhadap pertanyaan penyelidikan:</b><br>${data.jawaban || '-'}</p>
+          <p><b>Kesimpulan akhir proses Haber:</b><br>${data.kesimpulan || '-'}</p>
+          <p><b>Contoh aplikasi yang dipilih:</b><br>${data.contoh || '-'}</p>
+        `;
+      }catch(e){
+        localStorage.removeItem(storageKeySB4('kesimpulanSubBab4'));
+        tampilkanKesimpulan();
+      }
+    }
+
+    function simpanArtikel(){
+      const nama = document.getElementById('namaKelompok').value.trim();
+      const judul = document.getElementById('judulArtikel').value.trim();
+      const gagasan = document.getElementById('gagasanUtama').value.trim();
+      const haber = document.getElementById('poinHaber').value.trim();
+      const kompos = document.getElementById('poinKompos').value.trim();
+      const link = document.getElementById('linkArtikel').value.trim();
+      const checklist = ['cekStruktur','cekHaber','cekKompos','cekReaksi','cekBahasa','cekSumber'].map((id) => document.getElementById(id).checked);
+      const fb = document.getElementById('feedbackArtikel');
+
+      if(!nama || !judul || !gagasan || !haber || !kompos || !link){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Lengkapi identitas, judul, gagasan utama, poin Haber, poin pengomposan, dan link artikel terlebih dahulu.';
+        return;
+      }
+
+      if(checklist.includes(false)){
+        fb.style.display = 'block';
+        fb.style.borderColor = 'rgba(255,224,130,.35)';
+        fb.style.background = 'rgba(255,224,130,.10)';
+        fb.style.color = '#fff2bd';
+        fb.innerHTML = 'Centang semua kelengkapan artikel sebelum menyimpan.';
+        return;
+      }
+
+      const data = {
+        nama,
+        judul,
+        gagasan,
+        haber,
+        kompos,
+        link,
+        checklist,
+        waktuSimpan:new Date().toLocaleString('id-ID')
+      };
+
+      localStorage.setItem(storageKeySB4('artikelSubBab4'), JSON.stringify(data));
+      simpanKeDataSB4({
+  halaman: "sb46",
+  judul: "Luaran Pembelajaran Artikel Kelompok",
+  kelompok: data.nama,
+  skor: 100,
+  status: "rancangan artikel disimpan",
+  ringkasan: "Identitas kelompok, judul artikel, gagasan utama, poin Haber, poin pengomposan, link, dan checklist artikel sudah disimpan.",
+  jawaban: data,
+  kunci: {
+    struktur: "Artikel memuat judul, pendahuluan, pembahasan, kesimpulan, dan daftar pustaka.",
+    konsep: "Artikel mengaitkan proses Haber dan pengomposan sebagai aplikasi kesetimbangan kimia."
+  }
+});
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(102,242,165,.28)';
+      fb.style.background = 'rgba(102,242,165,.10)';
+      fb.style.color = '#d8ffe8';
+      fb.innerHTML = '✅ Rancangan artikel berhasil disimpan. Lanjutkan ke refleksi pembelajaran.';
+    }
+
+    function muatArtikel(){
+      const dataTersimpan = localStorage.getItem(storageKeySB4('artikelSubBab4'));
+      if(!dataTersimpan) return;
+
+      try{
+        const data = JSON.parse(dataTersimpan);
+        document.getElementById('namaKelompok').value = data.nama || '';
+        document.getElementById('judulArtikel').value = data.judul || '';
+        document.getElementById('gagasanUtama').value = data.gagasan || '';
+        document.getElementById('poinHaber').value = data.haber || '';
+        document.getElementById('poinKompos').value = data.kompos || '';
+        document.getElementById('linkArtikel').value = data.link || '';
+        if(Array.isArray(data.checklist)){
+          ['cekStruktur','cekHaber','cekKompos','cekReaksi','cekBahasa','cekSumber'].forEach((id, index) => {
+            document.getElementById(id).checked = Boolean(data.checklist[index]);
+          });
+        }
+      }catch(e){
+        localStorage.removeItem(storageKeySB4('artikelSubBab4'));
+      }
+    }
+
+    function hapusArtikel(){
+      document.getElementById('namaKelompok').value = '';
+      document.getElementById('judulArtikel').value = '';
+      document.getElementById('gagasanUtama').value = '';
+      document.getElementById('poinHaber').value = '';
+      document.getElementById('poinKompos').value = '';
+      document.getElementById('linkArtikel').value = '';
+      ['cekStruktur','cekHaber','cekKompos','cekReaksi','cekBahasa','cekSumber'].forEach((id) => document.getElementById(id).checked = false);
+      localStorage.removeItem(storageKeySB4('artikelSubBab4'));
+
+      const fb = document.getElementById('feedbackArtikel');
+      fb.style.display = 'block';
+      fb.style.borderColor = 'rgba(255,224,130,.35)';
+      fb.style.background = 'rgba(255,224,130,.10)';
+      fb.style.color = '#fff2bd';
+      fb.innerHTML = 'Rancangan artikel sudah dihapus.';
+    }
+
+    function cekSebelumLanjut(){
+      if(!localStorage.getItem(storageKeySB4('artikelSubBab4'))){
+        return confirm('Rancangan artikel belum disimpan. Tetap lanjut ke refleksi?');
+      }
+      return true;
+    }
+
+    tampilkanKesimpulan();
+    muatArtikel();
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 4,
+    pageKey: "sb46",
+    pageTitle: "Sub Bab 4 — Mengomunikasikan Hasil Artikel Kelompok"
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kesetimbangan Dinamis (Hal. 4) — Menguji Hipotesis</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+  --bg1: #b8f7ff;
+  --bg2: #b0b6ff;
+  --bg3: #ffd8f0;
+
+  --ink: #0b1220;
+  --muted: #5b6b86;
+
+  --card: rgba(255, 255, 255, 0.78);
+  --card2: rgba(255, 255, 255, 0.92);
+  --line: rgba(13, 23, 46, 0.12);
+
+  --primary: #2b7cff;
+  --primary2: #00c2ff;
+  --accent: #ff7a00;
+  --accent2: #ff4fd8;
+
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+  --shadow2: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  --radius: 18px;
+  --radius2: 14px;
+}
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 15% 15%, rgba(255, 62, 198, 0.40), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(122, 70, 255, 0.45), transparent 60%),
+    radial-gradient(900px 650px at 60% 90%, rgba(52, 140, 255, 0.28), transparent 60%),
+    linear-gradient(180deg, #07061a, #0b0620 45%, #07061a);
+  overflow-x: hidden;
+}
+
+    .blob{
+      position:fixed;
+      width:380px; height:380px;
+      border-radius:999px;
+      filter:blur(30px);
+      opacity:.35;
+      z-index:-1;
+      animation:drift 16s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b1 {
+  left: -120px;
+  top: 80px;
+  background: #47e6ff;
+}
+.blob.b2 {
+  right: -140px;
+  top: 140px;
+  background: #6b7bff;
+  animation-delay: -5s;
+}
+.blob.b3 {
+  left: 20%;
+  bottom: -160px;
+  background: #ff5fd6;
+  animation-delay: -9s;
+}
+    @keyframes drift{
+      0%,100%{transform:translate(0,0) scale(1)}
+      50%{transform:translate(60px,-40px) scale(1.08)}
+    }
+
+    header{
+      position:sticky; top:0;
+      z-index:20;
+      backdrop-filter:blur(14px);
+      background:rgba(255,255,255,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1150px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; min-width:240px;}
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background:linear-gradient(135deg, var(--primary), var(--accent2));
+      box-shadow:var(--shadow2);
+      display:grid; place-items:center;
+      color:white; font-weight:800;
+    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1;}
+    .brand .t b{font-size:14px}
+    .brand .t span{font-size:12px; color:var(--muted)}
+    .rightbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.65);
+      box-shadow:0 8px 18px rgba(0,0,0,.06);
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .progressWrap{
+      width:220px; height:10px;
+      border-radius:999px;
+      background:rgba(13,23,46,.10);
+      overflow:hidden;
+      border:1px solid rgba(13,23,46,.10);
+    }
+    .progressFill{
+  height:100%;
+  width:50%;
+  background: linear-gradient(90deg, var(--primary2), var(--primary), var(--accent2));
+  border-radius:999px;
+  transition:width .5s ease;
+}
+
+    main{max-width:1150px; margin:0 auto; padding:18px;}
+    .grid{display:grid; gap:16px}
+    .two-col{grid-template-columns:1.15fr .85fr}
+    .one-col{grid-template-columns:1fr}
+    @media (max-width: 980px){
+      .two-col{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .card.solid{background:var(--card2)}
+
+    h1{margin:0 0 4px 0; font-size:22px; letter-spacing:.2px}
+    h2{margin:0 0 10px 0; font-size:16px}
+    h3{margin:0 0 8px 0; font-size:14px}
+    p,li,label{font-size:13px; line-height:1.55}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background:var(--line); margin:14px 0}
+
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow:0 10px 25px rgba(0,0,0,.10);
+    }
+    .btn:active{transform:scale(.98)}
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #ff9f40);
+    }
+    .btn.blue {
+      color: white;
+      background: linear-gradient(135deg, var(--primary2), var(--primary));
+    }
+    .btn.ghost{
+      color:var(--ink);
+      background:rgba(255,255,255,.7);
+      border:1px solid var(--line);
+      box-shadow:0 8px 18px rgba(0,0,0,.06);
+    }
+
+    .videoWrap{
+      position:relative;
+      width:100%;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.55);
+      box-shadow:var(--shadow2);
+      aspect-ratio:16 / 9;
+    }
+    .videoWrap iframe{
+      width:100%;
+      height:100%;
+      border:0;
+    }
+
+    .concept{
+      border-radius:var(--radius2);
+      border:1px solid rgba(13,23,46,.10);
+      background:rgba(255,255,255,.70);
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .concept::after{
+  content:"";
+  position:absolute; inset:-40% -40% auto auto;
+  width:200px; height:200px;
+  background: radial-gradient(circle at 30% 30%, rgba(43,124,255,.35), transparent 60%);
+  transform: rotate(18deg);
+  pointer-events:none;
+}
+    .concept .tag{
+  display:inline-flex; gap:8px; align-items:center;
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(43,124,255,.10);
+  color: #1b4bb2;
+  border:1px solid rgba(43,124,255,.15);
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+    .radioList{display:grid; gap:10px; margin-top:10px}
+    .radioItem{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px;
+      border-radius:var(--radius2);
+      border:1px solid rgba(13,23,46,.12);
+      background:rgba(255,255,255,.72);
+      transition:box-shadow .2s ease, transform .08s ease;
+    }
+    .radioItem:hover{box-shadow:0 10px 22px rgba(0,0,0,.08)}
+    .radioItem input{margin-top:3px; transform:scale(1.1)}
+
+    textarea{
+      width:100%;
+      border-radius:var(--radius2);
+      border:1px solid rgba(13,23,46,.14);
+      background:rgba(255,255,255,.75);
+      padding:12px;
+      min-height:90px;
+      font-family:inherit;
+      font-size:13px;
+      outline:none;
+      resize:vertical;
+    }
+    textarea:focus{
+  border-color: rgba(43, 124, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(43, 124, 255, 0.12);
+}
+
+    .inputShort{
+      width:100%;
+      border-radius:var(--radius2);
+      border:1px solid rgba(13,23,46,.14);
+      background:rgba(255,255,255,.75);
+      padding:12px;
+      min-height:46px;
+      font-family:inherit;
+      font-size:13px;
+      outline:none;
+    }
+    .inputShort:focus{
+  border-color: rgba(43, 124, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(43, 124, 255, 0.12);
+}
+
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(13,23,46,.12);
+      background:rgba(255,255,255,.70);
+      color:var(--muted);
+    }
+
+    .toastWrap{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      z-index:60;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      width:min(420px, calc(100vw - 36px));
+      border-radius:16px;
+      padding:12px 12px;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(13,23,46,.12);
+      box-shadow:var(--shadow);
+      display:flex; gap:10px;
+      align-items:flex-start;
+      animation:pop .18s ease-out;
+    }
+    @keyframes pop{from{transform:translateY(10px); opacity:.2} to{transform:translateY(0); opacity:1}}
+    .toast .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      font-weight:900; color:white;
+      flex:0 0 auto;
+    }
+    .toast.ok .icon{background:linear-gradient(135deg, #22c55e, #16a34a)}
+    .toast.bad .icon{background:linear-gradient(135deg, #ef4444, #b91c1c)}
+    .toast.info .icon{background:linear-gradient(135deg, var(--primary2), var(--primary))}
+    .toast .t{flex:1}
+    .toast .t b{display:block; font-size:13px}
+    .toast .t span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
+    .toast .x{
+      background:transparent;
+      border:0;
+      cursor:pointer;
+      padding:6px 8px;
+      border-radius:10px;
+      color:var(--muted);
+    }
+
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background:rgba(13,23,46,.45);
+      backdrop-filter:blur(8px);
+      display:none;
+      z-index:80;
+      padding:18px;
+    }
+    .modalBackdrop.show{display:grid; place-items:center}
+    .modal{
+      width:min(820px, 100%);
+      border-radius:20px;
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(13,23,46,.14);
+      box-shadow:0 22px 70px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .modalHead{
+  padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  background: linear-gradient(135deg, rgba(43, 124, 255, 0.1), rgba(255, 79, 216, 0.1));
+  border-bottom:1px solid rgba(13,23,46,.10);
+}
+    .modalHead b{font-size:14px}
+    .modalBody{padding:16px}
+    .modalActions{
+      padding:12px 16px;
+      border-top:1px solid rgba(13,23,46,.10);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      background:rgba(255,255,255,.72);
+    }
+    .iconBtn{
+      border:1px solid rgba(13,23,46,.12);
+      background:rgba(255,255,255,.7);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:800;
+      color:var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">🧪</div>
+        <div class="t">
+          <b>Kesetimbangan Dinamis</b>
+          <span>Halaman 4 • Menguji Hipotesis</span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div class="pill">
+          <span>Progress</span>
+          <b style="color:var(--ink)">4/8</b>
+        </div>
+        <div class="progressWrap" aria-label="progress bar">
+          <div class="progressFill"></div>
+        </div>
+        <button class="btn ghost" id="btnHelp">✨ Bantuan</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="card solid">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <h1>Halaman 4 — Menguji Hipotesis</h1>
+            <p class="muted" style="margin:0">
+              Amati video percobaan berikut, lalu bandingkan hasil pengamatanmu dengan hipotesis yang telah kamu buat pada Halaman 3.
+            </p>
+          </div>
+          <div class="row">
+            <button class="btn blue" id="btnShowHypothesis">📌 Lihat Hipotesis Saya</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid two-col" style="margin-top:16px">
+        <div class="card solid">
+          <h2>🎥 Video Percobaan</h2>
+          <p class="muted" style="margin-top:-4px">
+            Amati perubahan warna larutan sebelum dan sesudah perlakuan.
+          </p>
+
+          <div class="videoWrap">
+            <!-- Ganti VIDEO_ID dengan video YouTube yang kamu pilih -->
+            <iframe
+              src="https://www.youtube.com/embed/GcEIpo1DoCk"
+              title="Video Percobaan Kesetimbangan Co2+"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="concept">
+            <div class="tag">🔍 Fokus Pengamatan</div>
+            <ul style="margin:0 0 0 18px; padding:0">
+              <li>Warna awal larutan</li>
+              <li>Perubahan warna setelah penambahan HCl</li>
+              <li>Perubahan warna setelah penambahan air</li>
+              <li>Apakah perubahan dapat kembali seperti semula</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📝 Ringkasan Pengamatan</h2>
+          <p class="muted" style="margin-top:-4px">
+            Isi pengamatan singkatmu sebelum menjawab analisis.
+          </p>
+
+          <label><b>1. Warna awal larutan</b></label>
+          <input class="inputShort" id="obs1" placeholder="Contoh: pink" />
+
+          <div style="height:10px"></div>
+
+          <label><b>2. Warna setelah ditambahkan HCl</b></label>
+          <input class="inputShort" id="obs2" placeholder="Contoh: berubah menjadi biru" />
+
+          <div style="height:10px"></div>
+
+          <label><b>3. Warna setelah ditambahkan air</b></label>
+          <input class="inputShort" id="obs3" placeholder="Contoh: kembali menjadi pink" />
+
+          <div class="divider"></div>
+
+          <div class="badge">Tujuan: membandingkan hasil pengamatan dengan hipotesis</div>
+        </div>
+      </div>
+
+      <div class="card solid" style="margin-top:16px">
+        <h2>🔎 Analisis dan Pengujian Hipotesis</h2>
+        <p class="muted" style="margin-top:-4px">
+          Jawablah pertanyaan berikut berdasarkan video percobaan yang telah kamu amati.
+        </p>
+
+        <div class="grid one-col">
+          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.62); border:1px solid rgba(13,23,46,.10)">
+            <h3>Pertanyaan 1</h3>
+            <label><b>Apa yang terjadi pada larutan setelah ditambahkan HCl?</b></label>
+            <textarea id="ans1" placeholder="Tuliskan perubahan yang kamu amati..."></textarea>
+          </div>
+
+          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.62); border:1px solid rgba(13,23,46,.10)">
+            <h3>Pertanyaan 2</h3>
+            <label><b>Apa yang terjadi setelah larutan ditambahkan air?</b></label>
+            <textarea id="ans2" placeholder="Tuliskan perubahan yang kamu amati..."></textarea>
+          </div>
+
+          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.62); border:1px solid rgba(13,23,46,.10)">
+            <h3>Pertanyaan 3</h3>
+            <label><b>Berdasarkan pengamatanmu, perubahan warna larutan menunjukkan bahwa reaksi berlangsung:</b></label>
+            <div class="radioList">
+              <label class="radioItem">
+                <input type="radio" name="analysis" value="satuarah">
+                <div>
+                  <b>Satu arah</b>
+                  <div class="muted">Reaksi hanya menghasilkan perubahan yang tidak dapat kembali.</div>
+                </div>
+              </label>
+              <label class="radioItem">
+                <input type="radio" name="analysis" value="duaarah">
+                <div>
+                  <b>Dua arah / bolak-balik</b>
+                  <div class="muted">Perubahan dapat kembali lagi ketika kondisi sistem diubah.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.62); border:1px solid rgba(13,23,46,.10)">
+            <h3>Pertanyaan 4</h3>
+            <label><b>Apakah hasil pengamatan sesuai dengan hipotesismu?</b></label>
+            <div class="radioList">
+              <label class="radioItem">
+                <input type="radio" name="matchHypothesis" value="ya">
+                <div>
+                  <b>Ya</b>
+                  <div class="muted">Hasil pengamatan mendukung hipotesis yang saya buat.</div>
+                </div>
+              </label>
+              <label class="radioItem">
+                <input type="radio" name="matchHypothesis" value="tidak">
+                <div>
+                  <b>Tidak</b>
+                  <div class="muted">Hasil pengamatan belum sesuai dengan hipotesis saya.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none; background:rgba(255,255,255,.62); border:1px solid rgba(13,23,46,.10)">
+            <h3>Kesimpulan Sementara</h3>
+            <label><b>Tuliskan kesimpulan sementaramu berdasarkan video percobaan.</b></label>
+            <textarea id="finalConclusion" placeholder="Contoh: Perubahan warna larutan menunjukkan bahwa reaksi dapat berlangsung bolak-balik ketika kondisi sistem diubah..."></textarea>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <button class="btn ghost" id="btnAutoFill">⚡ Isi contoh otomatis</button>
+            <button class="btn ghost" id="btnSaveOnly">💾 Simpan saja</button>
+          </div>
+          <button class="btn primary" id="btnNext">Simpan & Lanjut ke Halaman 5 ➜</button>
+        </div>
+
+        <p class="muted" style="margin:10px 0 0 0">
+          Setelah menyimpan jawaban, kamu akan melanjutkan ke halaman analisis konsep kesetimbangan.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite"></div>
+
+  <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div class="modalHead">
+        <b id="modalTitle">Modal</b>
+        <button class="iconBtn" id="modalClose" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalActions">
+        <button class="btn ghost" id="modalSecondary">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (q) => document.querySelector(q);
+
+    function getRadio(name){
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : "";
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function toast(type, title, message, ms=4200){
+      const wrap = $("#toastWrap");
+      const t = document.createElement("div");
+      t.className = `toast ${type}`;
+      t.innerHTML = `
+        <div class="icon">${type==="ok"?"✓":type==="bad"?"!":"i"}</div>
+        <div class="t">
+          <b>${escapeHtml(title)}</b>
+          <span>${escapeHtml(message)}</span>
+        </div>
+        <button class="x" aria-label="Tutup">✕</button>
+      `;
+      t.querySelector(".x").addEventListener("click", ()=> t.remove());
+      wrap.appendChild(t);
+      if(ms){
+        setTimeout(()=>{ if(t.isConnected) t.remove(); }, ms);
+      }
+    }
+
+    const modal = {
+      open({title, bodyHTML}){
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = bodyHTML;
+        $("#modalBackdrop").classList.add("show");
+      },
+      close(){
+        $("#modalBackdrop").classList.remove("show");
+        $("#modalBody").innerHTML = "";
+      }
+    };
+    $("#modalClose").addEventListener("click", ()=> modal.close());
+    $("#modalSecondary").addEventListener("click", ()=> modal.close());
+    $("#modalBackdrop").addEventListener("click", (e)=>{ if(e.target.id==="modalBackdrop") modal.close(); });
+
+    const DB_KEY = "KI_DB_v1";
+
+    function dbLoad(){
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || { users:{} }; }
+      catch { return { users:{} }; }
+    }
+    function dbSave(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function getCurrentUser(){
+      try { return JSON.parse(localStorage.getItem("KI_CURRENT_USER")); }
+      catch { return null; }
+    }
+
+    function saveAnswer(email, key, data){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].answers = db.users[email].answers || {};
+      db.users[email].answers[key] = { data, at: new Date().toISOString() };
+      dbSave(db);
+    }
+
+    function loadAnswer(email, key){
+      const db = dbLoad();
+      return db.users?.[email]?.answers?.[key]?.data || null;
+    }
+
+    function markProgress(email, pageKey, done=true){
+      const db = dbLoad();
+      if(!db.users[email]) return;
+      db.users[email].progress = db.users[email].progress || {};
+      db.users[email].progress[pageKey] = { done, at: new Date().toISOString() };
+      dbSave(db);
+    }
+
+    const user = getCurrentUser();
+    if(!user || !user.email){
+      alert("Kamu belum login. Kembali ke index.");
+      location.href = "index.html";
+    }
+
+    function validateForm(){
+      const obs1 = $("#obs1").value.trim();
+      const obs2 = $("#obs2").value.trim();
+      const obs3 = $("#obs3").value.trim();
+      const ans1 = $("#ans1").value.trim();
+      const ans2 = $("#ans2").value.trim();
+      const analysis = getRadio("analysis");
+      const matchHypothesis = getRadio("matchHypothesis");
+      const finalConclusion = $("#finalConclusion").value.trim();
+
+      const ok =
+        obs1.length >= 3 &&
+        obs2.length >= 5 &&
+        obs3.length >= 5 &&
+        ans1.length >= 12 &&
+        ans2.length >= 12 &&
+        analysis &&
+        matchHypothesis &&
+        finalConclusion.length >= 18;
+
+      return {
+        ok, obs1, obs2, obs3, ans1, ans2, analysis, matchHypothesis, finalConclusion
+      };
+    }
+
+    function savePage4(){
+      const v = validateForm();
+      if(!v.ok){
+        toast("bad","Jawaban belum lengkap","Lengkapi pengamatan, analisis, dan kesimpulan sementara terlebih dahulu.");
+        return null;
+      }
+
+      const data = { ...v, savedAt: new Date().toISOString() };
+      saveAnswer(user.email, "page4", data);
+      markProgress(user.email, "page4", true);
+      localStorage.setItem("KI_Page4", JSON.stringify(data));
+
+      toast("ok","Jawaban tersimpan","Hasil pengujian hipotesis berhasil disimpan.");
+      return data;
+    }
+
+    $("#btnAutoFill").addEventListener("click", ()=>{
+      $("#obs1").value = "Pink";
+      $("#obs2").value = "Berubah menjadi biru";
+      $("#obs3").value = "Kembali menjadi pink";
+      $("#ans1").value = "Setelah ditambahkan HCl, warna larutan berubah dari pink menjadi biru.";
+      $("#ans2").value = "Setelah ditambahkan air, warna larutan berubah kembali menjadi pink.";
+      document.querySelector('input[name="analysis"][value="duaarah"]').checked = true;
+      document.querySelector('input[name="matchHypothesis"][value="ya"]').checked = true;
+      $("#finalConclusion").value = "Perubahan warna larutan menunjukkan bahwa reaksi dapat berlangsung bolak-balik ketika kondisi sistem diubah, sehingga hasil pengamatan mendukung hipotesis.";
+      toast("info","Contoh terisi","Kamu boleh mengedit jawaban agar sesuai dengan pemahamanmu.");
+    });
+
+    $("#btnSaveOnly").addEventListener("click", ()=>{
+      const d = savePage4();
+      if(!d) return;
+
+      modal.open({
+        title: "Tersimpan ✅",
+        bodyHTML: `
+          <p><b>Ringkasan hasil pengujian hipotesis:</b></p>
+          <ul>
+            <li><b>Warna awal:</b> ${escapeHtml(d.obs1)}</li>
+            <li><b>Setelah HCl:</b> ${escapeHtml(d.obs2)}</li>
+            <li><b>Setelah air:</b> ${escapeHtml(d.obs3)}</li>
+            <li><b>Jenis reaksi:</b> ${d.analysis==="duaarah" ? "Dua arah / bolak-balik" : "Satu arah"}</li>
+            <li><b>Sesuai hipotesis:</b> ${d.matchHypothesis==="ya" ? "Ya" : "Tidak"}</li>
+          </ul>
+        `
+      });
+    });
+
+    $("#btnNext").addEventListener("click", ()=>{
+      const d = savePage4();
+      if(!d) return;
+      window.location.href = "hlm5.html";
+    });
+
+    $("#btnShowHypothesis").addEventListener("click", ()=>{
+  const page3 = loadAnswer(user.email, "page3");
+
+  if(!page3){
+    modal.open({
+      title: "Hipotesis Saya",
+      bodyHTML: `<p class="muted">Data hipotesis dari Halaman 3 belum ditemukan.</p>`
+    });
+    return;
+  }
+
+  modal.open({
+    title: "Hipotesis Saya (Halaman 3)",
+    bodyHTML: `
+      <ul>
+        <li><b>Hipotesis 1:</b> ${page3.h1 === "satuarah" ? "Reaksi cenderung berlangsung satu arah" : "Reaksi cenderung berlangsung dua arah"}</li>
+        <li><b>Alasan 1:</b> ${escapeHtml(page3.r1 || "-")}</li>
+        <br>
+        <li><b>Hipotesis 2:</b> ${page3.h2 === "bolakbalik" ? "Perubahan warna dapat terjadi bolak-balik" : "Perubahan warna hanya terjadi satu kali"}</li>
+        <li><b>Alasan 2:</b> ${escapeHtml(page3.r2 || "-")}</li>
+        <br>
+        <li><b>Hipotesis 3:</b> ${page3.h3 === "tertutup" ? "Kesetimbangan terjadi dalam sistem tertutup" : "Kesetimbangan dapat terjadi dalam sistem terbuka"}</li>
+        <li><b>Alasan 3:</b> ${escapeHtml(page3.r3 || "-")}</li>
+      </ul>
+    `
+  });
+});
+
+    $("#btnHelp").addEventListener("click", ()=>{
+      modal.open({
+        title: "Bantuan",
+        bodyHTML: `
+          <ol>
+            <li>Tonton video percobaan dengan saksama.</li>
+            <li>Isi ringkasan pengamatan.</li>
+            <li>Jawab pertanyaan analisis.</li>
+            <li>Bandingkan hasilnya dengan hipotesis pada Halaman 3.</li>
+            <li>Simpan lalu lanjut ke halaman berikutnya.</li>
+          </ol>
+        `
+      });
+    });
+
+    const saved = loadAnswer(user.email, "page4");
+    if(saved){
+      $("#obs1").value = saved.obs1 || "";
+      $("#obs2").value = saved.obs2 || "";
+      $("#obs3").value = saved.obs3 || "";
+      $("#ans1").value = saved.ans1 || "";
+      $("#ans2").value = saved.ans2 || "";
+      document.querySelector(`input[name="analysis"][value="${saved.analysis}"]`)?.click();
+      document.querySelector(`input[name="matchHypothesis"][value="${saved.matchHypothesis}"]`)?.click();
+      $("#finalConclusion").value = saved.finalConclusion || "";
+      toast("info","Data sebelumnya dimuat","Jawaban Halaman 4 yang terakhir tersimpan sudah ditampilkan.");
+    } else {
+      setTimeout(()=>{
+        toast("info","Mulai dari video percobaan","Amati video lalu isi pengamatan dan analisis secara bertahap.");
+      }, 700);
+    }
+  </script>
+  <script>
+/* =====================================================
+   SIMPAN DATA SISWA SUB BAB 1 KE DASHBOARD GURU
+   Tidak mengubah layout halaman
+===================================================== */
+
+const DATA_GURU_SUBBAB1_KEY = "AGENT_LEC_DATA_SUBBAB1_V1";
+
+/* GANTI BAGIAN INI SESUAI FILE HALAMAN */
+const DATA_HALAMAN_ID = "hlm4";
+const DATA_HALAMAN_JUDUL = "Halaman 4: Menguji Hipotesis";
+
+/* Ambil identitas siswa dari login utama */
+function getCurrentStudentData(){
+  try{
+    const user = JSON.parse(localStorage.getItem("KI_CURRENT_USER") || "{}");
+    return {
+      nama: user.name || user.nama || "-",
+      kelas: user.kelas || "-",
+      absen: user.absen || "-",
+      email: user.email || "-"
+    };
+  }catch(e){
+    return {
+      nama: "-",
+      kelas: "-",
+      absen: "-",
+      email: "-"
+    };
+  }
+}
+
+/* Ambil semua jawaban dari input, textarea, select, radio, checkbox */
+function collectPageAnswers(){
+  const hasil = [];
+
+  document.querySelectorAll("input, textarea, select").forEach((el, index) => {
+    const type = (el.type || "").toLowerCase();
+    const label =
+      document.querySelector(`label[for="${el.id}"]`)?.innerText?.trim() ||
+      el.closest(".field-group")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".field")?.querySelector("label")?.innerText?.trim() ||
+      el.closest(".card")?.querySelector("h2, h3")?.innerText?.trim() ||
+      el.name ||
+      el.id ||
+      `Isian ${index + 1}`;
+
+    let value = "";
+
+    if(type === "radio"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dipilih";
+    }else if(type === "checkbox"){
+      if(!el.checked) return;
+      value = el.value || el.closest("label")?.innerText?.trim() || "Dicentang";
+    }else{
+      value = el.value?.trim?.() || "";
+      if(!value) return;
+    }
+
+    hasil.push({
+      label: label,
+      jawaban: value
+    });
+  });
+
+  return hasil;
+}
+
+/* Simpan data halaman ke database guru */
+function simpanDataSubBab1KeGuru(status = "tersimpan otomatis"){
+  const siswa = getCurrentStudentData();
+  const jawaban = collectPageAnswers();
+
+  if(!siswa.email || siswa.email === "-"){
+    return;
+  }
+
+  let db = {};
+  try{
+    db = JSON.parse(localStorage.getItem(DATA_GURU_SUBBAB1_KEY) || "{}");
+  }catch(e){
+    db = {};
+  }
+
+  if(!db[siswa.email]){
+    db[siswa.email] = {
+      identitas: siswa,
+      halaman: {},
+      waktuMulai: new Date().toLocaleString("id-ID")
+    };
+  }
+
+  db[siswa.email].identitas = siswa;
+  db[siswa.email].halaman[DATA_HALAMAN_ID] = {
+    judul: DATA_HALAMAN_JUDUL,
+    status: status,
+    jawaban: jawaban,
+    waktuSimpan: new Date().toLocaleString("id-ID")
+  };
+  db[siswa.email].waktuUpdateTerakhir = new Date().toLocaleString("id-ID");
+
+  localStorage.setItem(DATA_GURU_SUBBAB1_KEY, JSON.stringify(db));
+}
+
+/* Simpan otomatis ketika siswa mengetik/memilih jawaban */
+document.addEventListener("input", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+document.addEventListener("change", () => {
+  simpanDataSubBab1KeGuru("tersimpan otomatis");
+});
+
+/* Simpan juga saat tombol apa pun diklik */
+document.addEventListener("click", (e) => {
+  if(e.target.closest("button") || e.target.closest("a")){
+    simpanDataSubBab1KeGuru("tersimpan dari aksi siswa");
+  }
+});
+
+/* Simpan saat siswa meninggalkan halaman */
+window.addEventListener("beforeunload", () => {
+  simpanDataSubBab1KeGuru("tersimpan saat keluar halaman");
+});
+
+/* Simpan awal saat halaman dibuka */
+simpanDataSubBab1KeGuru("halaman dibuka");
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 1,
+    pageKey: "hlm4",
+    pageTitle: "Halaman 4 — Menguji Hipotesis"
+  });
+});
+</script>
+
+</body>
+</html>

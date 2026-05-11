@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sub Bab 3 • Kuis Pergeseran Kesetimbangan</title>
+
+  <style>
+    :root{
+      --bg0:#06081b;
+      --bg1:#080724;
+      --text:rgba(255,255,255,.93);
+      --muted:rgba(255,255,255,.72);
+      --mag:#ff4fd8;
+      --vio:#7c4dff;
+      --blue:#2d6cff;
+      --green:#66f2a5;
+      --yellow:#ffe082;
+      --red:#ff5c8a;
+      --shadow:0 20px 80px rgba(0,0,0,.55);
+      --shadow2:0 10px 40px rgba(0,0,0,.35);
+      --r-xl:28px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{min-height:100%;}
+    body{
+      margin:0;
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 30%, rgba(124,77,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 85% 22%, rgba(255,79,216,.20), transparent 62%),
+        radial-gradient(900px 700px at 70% 90%, rgba(45,108,255,.14), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .stars,.grain,.vignette{position:fixed; inset:0; pointer-events:none; z-index:0;}
+    .stars{
+      opacity:.55;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(1px 1px at 44% 28%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 66% 40%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 86% 72%, rgba(255,255,255,.45), transparent 60%),
+        radial-gradient(1px 1px at 14% 86%, rgba(255,255,255,.35), transparent 60%);
+      animation:twinkle 6s ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.46}50%{opacity:.66}}
+    .grain{
+      opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      inset:-20%;
+      background:radial-gradient(circle at 50% 40%, transparent 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.75) 100%);
+      opacity:.65;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(10,6,28,.72), rgba(10,6,28,.18));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      background:linear-gradient(135deg, rgba(255,79,216,.55), rgba(124,77,255,.42));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 38px rgba(0,0,0,.28);
+    }
+    .brand-title{font-weight:950; letter-spacing:.2px;}
+    .brand-sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+    .btn,.btn-primary{
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      padding:11px 15px;
+      border-radius:14px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      font-weight:900;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn{background:rgba(255,255,255,.06);}
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(255,79,216,.72), rgba(124,77,255,.38));
+      box-shadow:0 12px 38px rgba(255,79,216,.13);
+    }
+    .btn:hover,.btn-primary:hover{transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.24);}
+
+    main{position:relative; z-index:2;}
+    .wrap{padding:clamp(18px,4vw,46px); display:flex; justify-content:center;}
+    .container{width:min(1120px,100%); display:grid; gap:16px;}
+
+    .pill{
+      width:fit-content;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.22);
+    }
+    .hex{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      background:linear-gradient(135deg, var(--mag), var(--vio));
+      clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+    }
+
+    .title{
+      margin:0;
+      line-height:1.04;
+      font-size:clamp(32px,4.2vw,54px);
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+    .title .accent{
+      background:linear-gradient(90deg,var(--mag),var(--vio),var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-style:italic;
+    }
+    .subtitle{
+      margin:12px 0 0;
+      max-width:920px;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .card{
+      border-radius:var(--r-xl);
+      background:
+        radial-gradient(900px 320px at 50% 0%, rgba(255,79,216,.10), transparent 60%),
+        radial-gradient(900px 380px at 70% 110%, rgba(124,77,255,.12), transparent 60%),
+        rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+    .card-inner{padding:clamp(18px,2.6vw,28px);}
+    h2,h3{margin:0 0 10px; font-weight:950; letter-spacing:.02em;}
+    h2{font-size:clamp(22px,2.4vw,30px);}
+    h3{font-size:18px;}
+    .muted{color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .info-box{
+      margin-top:14px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.32);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+      font-weight:650;
+    }
+    .info-box strong{color:#312e81;}
+
+    .quiz-card{
+      margin-top:16px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(124,77,255,.28);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+    }
+    .quiz-head{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:12px;
+    }
+    .q-num{
+      flex:0 0 auto;
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      color:#ffffff;
+      font-weight:950;
+      background:linear-gradient(135deg, #ff4fd8, #7c4dff);
+      box-shadow:0 10px 24px rgba(124,77,255,.25);
+    }
+    .question-text{
+      color:#111827;
+      line-height:1.75;
+      font-weight:800;
+    }
+    .reaction{
+      display:block;
+      margin:8px 0;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#f5f3ff;
+      border:1px solid #ddd6fe;
+      color:#312e81;
+      font-weight:950;
+      line-height:1.65;
+    }
+    .options{display:grid; gap:10px; margin-top:12px;}
+    .option{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#f9fafb;
+      border:2px solid #e5e7eb;
+      color:#111827;
+      line-height:1.55;
+      font-weight:700;
+      cursor:pointer;
+      transition:border-color .12s ease, background .12s ease, transform .12s ease;
+    }
+    .option:hover{border-color:#a78bfa; background:#f5f3ff; transform:translateY(-1px);}
+    .option input{margin-top:4px; accent-color:#7c4dff; transform:scale(1.12);}
+    .option.correct{border-color:#22c55e; background:#f0fdf4;}
+    .option.wrong{border-color:#fb7185; background:#fff1f2;}
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      padding:16px 18px;
+      border-radius:20px;
+      background:#ffffff;
+      color:#111827;
+      border:2px solid rgba(102,242,165,.35);
+      box-shadow:var(--shadow2);
+      line-height:1.7;
+    }
+    .result-box h3{color:#15803d; margin-bottom:6px;}
+    .score-big{font-size:32px; font-weight:950; color:#312e81;}
+    .review-list{margin:10px 0 0 20px; padding:0; color:#374151; font-weight:700; line-height:1.65;}
+    .review-list li{margin:8px 0;}
+
+    .feedback-mini{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff7ed;
+      color:#7c2d12;
+      border:1px solid #fdba74;
+      font-weight:800;
+      line-height:1.55;
+    }
+
+    .footer-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    @media(max-width:720px){
+      .topbar{align-items:flex-start; flex-direction:column;}
+      .quiz-head{align-items:flex-start;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <div class="brand-title">Sub Bab 3</div>
+        <div class="brand-sub">Kuis Faktor Pergeseran Kesetimbangan</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <a class="btn" href="sb34.html">⬅ Kembali</a>
+      <a class="btn-primary" href="#kuis">Mulai Kuis</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="container">
+      <div class="pill"><span class="hex"></span><span>PBL • Evaluasi</span></div>
+
+      <section class="hero">
+        <h1 class="title">🧠 Kuis <span class="accent">Sub Bab 3</span></h1>
+        <p class="subtitle">
+          Kerjakan kuis berikut untuk mengevaluasi pemahaman tentang faktor-faktor yang memengaruhi pergeseran kesetimbangan,
+          seperti perubahan konsentrasi, volume, tekanan, suhu, dan katalis berdasarkan prinsip Le Chatelier.
+        </p>
+      </section>
+
+      <section class="card">
+        <div class="card-inner">
+          <h2>📌 Petunjuk Kuis</h2>
+          <div class="info-box">
+            <strong>Petunjuk:</strong> Pilih satu jawaban yang paling benar untuk setiap soal. Setelah semua soal dijawab,
+            tekan tombol <b>Periksa Jawaban</b> untuk melihat skor dan pembahasan singkat.
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="kuis">
+        <div class="card-inner">
+          <h2>📝 Soal Pilihan Ganda</h2>
+          <div id="quizContainer"></div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
+            <button class="btn-primary" type="button" onclick="periksaJawaban()">Periksa Jawaban</button>
+            <button class="btn" type="button" onclick="ulangKuis()">Ulangi Kuis</button>
+          </div>
+          <div id="alertBox" class="feedback-mini"></div>
+          <div id="resultBox" class="result-box"></div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <a class="btn" href="h1.html">⬅ Kembali ke Penyajian Hasil</a>
+        <a class="btn-primary" href="sb36.html">Lanjut ke Refleksi ➜</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const soal = [
+      {
+        pertanyaan: `Reaksi kesetimbangan di bawah ini:<span class="reaction">2NaHCO₃(s) ⇌ Na₂CO₃(s) + H₂(g) + CO₂(g) &nbsp;&nbsp; ∆H = + α kJ</span>akan bergeser ke kanan jika ....`,
+        opsi: [
+          'Sistem didinginkan',
+          'Volume sistem diperkecil',
+          'Jumlah NaHCO₃ ditambah',
+          'Tekanan sistem diperbesar',
+          'CO₂ dikeluarkan dari sistem'
+        ],
+        benar: 4,
+        bahas: 'CO₂ merupakan produk. Jika CO₂ dikeluarkan, sistem akan bergeser ke kanan untuk mengganti produk yang berkurang.'
+      },
+      {
+        pertanyaan: `Perhatikan data reaksi kesetimbangan di bawah ini!<span class="reaction">1. PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)<br>2. N₂(g) + 2O₂(g) ⇌ 2NO₂(g)<br>3. 2SO₂(g) + 2O₂(g) ⇌ 2SO₃(g)<br>4. NH₄Cl(g) ⇌ NH₃(g) + HCl(g)</span>Pasangan reaksi kesetimbangan yang menghasilkan hasil lebih banyak jika volume diperbesar ditunjukkan oleh nomor ....`,
+        opsi: ['(1) dan (2)', '(1) dan (4)', '(2) dan (3)', '(2) dan (4)', '(3) dan (4)'],
+        benar: 1,
+        bahas: 'Volume diperbesar berarti tekanan diperkecil, sehingga kesetimbangan bergeser ke sisi dengan jumlah mol gas lebih besar. Reaksi (1) dan (4) memiliki jumlah mol gas produk lebih besar daripada reaktan.'
+      },
+      {
+        pertanyaan: `Perhatikan reaksi kesetimbangan di bawah ini!<span class="reaction">2SO₂(g) + 2O₂(g) ⇌ 2SO₃(g) &nbsp;&nbsp; ∆H = −298 kJ</span>Jika pada suhu tetap, volume diperkecil maka kesetimbangan bergeser ke ....`,
+        opsi: [
+          'Kiri, karena jumlah mol hasil reaksi < pereaksi',
+          'Kiri, karena jumlah mol hasil reaksi > pereaksi',
+          'Kanan, karena jumlah mol hasil reaksi < pereaksi',
+          'Kanan, karena jumlah mol hasil reaksi > pereaksi',
+          'Kanan, karena jumlah mol hasil reaksi = pereaksi'
+        ],
+        benar: 2,
+        bahas: 'Volume diperkecil menyebabkan tekanan meningkat. Sistem bergeser ke sisi dengan jumlah mol gas lebih kecil, yaitu kanan karena produk 2 mol dan pereaksi 4 mol.'
+      },
+      {
+        pertanyaan: `Reaksi pembuatan belerang trioksida menurut proses kontak adalah sebagai berikut.<span class="reaction">2SO₂(g) + O₂(g) ⇌ 2SO₃(g) &nbsp;&nbsp; ΔH = −44,5 kkal</span>Faktor yang memengaruhi peningkatan produksi gas SO₃ adalah ....`,
+        opsi: [
+          'Memperkecil tekanan dan menaikkan suhu',
+          'Memperkecil tekanan dan menurunkan suhu',
+          'Memperbesar tekanan dan menaikkan suhu',
+          'Memperbesar tekanan dan menurunkan suhu',
+          'Menaikkan suhu dan menambah katalis'
+        ],
+        benar: 3,
+        bahas: 'Pembentukan SO₃ bersifat eksoterm dan jumlah mol gas produk lebih sedikit. Produksi SO₃ meningkat jika tekanan diperbesar dan suhu diturunkan.'
+      },
+      {
+        pertanyaan: `Pembuatan NH₃ dilakukan menurut proses Haber-Bosch dengan persamaan reaksi:<span class="reaction">N₂(g) + 3H₂(g) ⇌ 2NH₃(g) &nbsp;&nbsp; ΔH = −188 kJ</span>Agar reaksi bergeser ke arah NH₃, maka perubahan keadaan yang benar adalah ....`,
+        opsi: [
+          'Tekanan diperbesar',
+          'Volume diperbesar',
+          'Suhu dinaikkan',
+          '[N₂] dan [H₂] diperkecil',
+          'Diberi katalis'
+        ],
+        benar: 0,
+        bahas: 'Tekanan diperbesar menggeser kesetimbangan ke sisi jumlah mol gas lebih kecil, yaitu ke kanan menghasilkan NH₃.'
+      },
+      {
+        pertanyaan: `Pada reaksi setimbang:<span class="reaction">A(g) + 2B(g) ⇌ 2C(g) &nbsp;&nbsp; ΔH = −a kJ</span>Kesetimbangan akan bergeser ke arah C jika ....`,
+        opsi: [
+          'Volume diperbesar',
+          'Panas diberikan',
+          'Tekanan diperkecil',
+          'Gas C ditambahkan',
+          'Gas B ditambahkan'
+        ],
+        benar: 4,
+        bahas: 'Penambahan gas B sebagai reaktan menyebabkan sistem bergeser ke kanan untuk mengurangi reaktan yang ditambahkan sehingga C bertambah.'
+      },
+      {
+        pertanyaan: `Diketahui persamaan reaksi:<span class="reaction">H₂(g) + I₂(g) ⇌ 2HI(g) &nbsp;&nbsp; ΔH = −x kkal</span>Jika volume diperbesar, kesetimbangan akan ....`,
+        opsi: [
+          'Bergeser ke kiri',
+          'Bergeser ke kanan',
+          'Tidak bergeser',
+          'Bergeser ke arah eksoterm',
+          'Bergeser ke arah endoterm'
+        ],
+        benar: 2,
+        bahas: 'Jumlah mol gas kiri dan kanan sama, yaitu 2 mol. Perubahan volume tidak menggeser kesetimbangan.'
+      }
+    ];
+
+    function huruf(index){return ['A','B','C','D','E'][index];}
+
+    function renderQuiz(){
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = soal.map((item, idx) => `
+        <div class="quiz-card" data-question="${idx}">
+          <div class="quiz-head">
+            <div class="q-num">${idx + 1}</div>
+            <div class="question-text">${item.pertanyaan}</div>
+          </div>
+          <div class="options">
+            ${item.opsi.map((opsi, opsiIdx) => `
+              <label class="option" data-option="${opsiIdx}">
+                <input type="radio" name="q${idx}" value="${opsiIdx}">
+                <span><b>${huruf(opsiIdx)}.</b> ${opsi}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function periksaJawaban(){
+      const alertBox = document.getElementById('alertBox');
+      const resultBox = document.getElementById('resultBox');
+      alertBox.style.display = 'none';
+
+      let skor = 0;
+      let belum = [];
+      const ulasan = [];
+
+      soal.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+        const card = document.querySelector(`.quiz-card[data-question="${idx}"]`);
+        card.querySelectorAll('.option').forEach((el) => el.classList.remove('correct','wrong'));
+
+        if(!selected){
+          belum.push(idx + 1);
+          return;
+        }
+
+        const jawaban = Number(selected.value);
+        const selectedLabel = card.querySelector(`.option[data-option="${jawaban}"]`);
+        const correctLabel = card.querySelector(`.option[data-option="${item.benar}"]`);
+
+        if(jawaban === item.benar){
+          skor++;
+          selectedLabel.classList.add('correct');
+        } else {
+          selectedLabel.classList.add('wrong');
+          correctLabel.classList.add('correct');
+        }
+
+        ulasan.push(`<li><b>Soal ${idx + 1}:</b> Jawaban benar <b>${huruf(item.benar)}</b>. ${item.bahas}</li>`);
+      });
+
+      if(belum.length){
+        alertBox.style.display = 'block';
+        alertBox.innerHTML = `Masih ada soal yang belum dijawab: ${belum.join(', ')}.`;
+        resultBox.style.display = 'none';
+        return;
+      }
+
+      const nilai = Math.round((skor / soal.length) * 100);
+      localStorage.setItem('kuisSubBab3', JSON.stringify({skor, total:soal.length, nilai, waktuSimpan:new Date().toLocaleString('id-ID')}));
+      const detailJawaban = soal.map((item, idx) => {
+  const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+  const jawabanIndex = selected ? Number(selected.value) : null;
+
+  return {
+    nomor: idx + 1,
+    jawabanSiswa: jawabanIndex === null ? "-" : huruf(jawabanIndex),
+    kunciJawaban: huruf(item.benar),
+    benar: jawabanIndex === item.benar,
+    pembahasan: item.bahas
+  };
+});
+
+const dataKuis = {
+  skor: skor,
+  total: soal.length,
+  nilai: nilai,
+  detailJawaban: detailJawaban,
+  waktuSimpan: new Date().toLocaleString("id-ID")
+};
+
+localStorage.setItem("kuisSubBab3", JSON.stringify(dataKuis));
+
+simpanKeDataSB3({
+  halaman: "sb35",
+  judul: "Kuis Faktor Pergeseran Kesetimbangan",
+  skor: nilai,
+  status: "kuis dinilai",
+  ringkasan: `Skor ${skor} dari ${soal.length}. Nilai ${nilai}.`,
+  jawaban: dataKuis,
+  kunci: detailJawaban.map(item => ({
+    nomor: item.nomor,
+    kunciJawaban: item.kunciJawaban
+  })),
+  pembahasan: detailJawaban.map(item => ({
+    nomor: item.nomor,
+    pembahasan: item.pembahasan
+  }))
+});
+
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = `
+        <h3>Hasil Kuis</h3>
+        <div class="score-big">${nilai}</div>
+        <p>Kamu menjawab benar <b>${skor}</b> dari <b>${soal.length}</b> soal.</p>
+        <h3>Pembahasan Singkat</h3>
+        <ol class="review-list">${ulasan.join('')}</ol>
+      `;
+      resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+
+    function ulangKuis(){
+      document.querySelectorAll('input[type="radio"]').forEach((el) => el.checked = false);
+      document.querySelectorAll('.option').forEach((el) => el.classList.remove('correct','wrong'));
+      document.getElementById('alertBox').style.display = 'none';
+      document.getElementById('resultBox').style.display = 'none';
+      localStorage.removeItem('kuisSubBab3');
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    renderQuiz();
+  </script>
+  <script>
+const SB3_STORAGE_KEY = "dataAdminGuruSB3";
+
+function ambilIdentitasSB3(extra = {}){
+  let user = {};
+
+  try{
+    user = JSON.parse(localStorage.getItem("KI_CURRENT_USER")) || {};
+  }catch(e){
+    user = {};
+  }
+
+  return {
+    nama: extra.nama || user.name || user.nama || "-",
+    kelas: extra.kelas || user.kelas || "-",
+    kelompok: extra.kelompok || localStorage.getItem("kelompokSubBab3") || user.kelompok || "-",
+    email: extra.email || user.email || "-"
+  };
+}
+
+function simpanKeDataSB3(payload){
+  const identitas = ambilIdentitasSB3(payload);
+
+  const dataBaru = {
+    id: payload.id || (payload.halaman + "-" + Date.now()),
+    waktu: new Date().toLocaleString("id-ID"),
+    nama: identitas.nama,
+    kelas: identitas.kelas,
+    kelompok: identitas.kelompok,
+    email: identitas.email,
+    halaman: payload.halaman || "-",
+    judul: payload.judul || "-",
+    skor: payload.skor ?? "-",
+    status: payload.status || "tersimpan",
+    ringkasan: payload.ringkasan || "-",
+    jawaban: payload.jawaban || {},
+    kunci: payload.kunci || {},
+    pembahasan: payload.pembahasan || {}
+  };
+
+  const dataLama = JSON.parse(localStorage.getItem(SB3_STORAGE_KEY)) || [];
+  dataLama.push(dataBaru);
+  localStorage.setItem(SB3_STORAGE_KEY, JSON.stringify(dataLama));
+
+  return dataBaru;
+}
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="src/firebase-config.js"></script>
+<script src="src/firebase-init.js"></script>
+<script src="src/auth.js"></script>
+<script src="src/db.js"></script>
+<script src="src/subbab-save.js"></script>
+
+<script>
+AuthApp.requireLogin(() => {
+  activateAutoSave({
+    subBab: 3,
+    pageKey: "sb35",
+    pageTitle: "Sub Bab 3 — Kuis Pergeseran Kesetimbangan"
+  });
+});
+</script>
+</body>
+</html>
